@@ -459,7 +459,7 @@ void scrollMenu(pList list, dateType type, int option) {
 		}
 	}
 	printf("                  ================================================            \n");
-	printf(" ");
+	printf("\n\n      ");
 	prOption("  新建  ", 0 == option, 13);
 	printf(" ");
 	prOption("  删除  ", 1 == option, 13);
@@ -469,183 +469,185 @@ void scrollMenu(pList list, dateType type, int option) {
 	prOption("  帮助  ", 3 == option, 13);
 	printf(" ");
 	prOption("  返回  ", 4 == option, 13);
-	while (1)
+
+	int in = getch();
+	key k = isKey(in);
+	switch (k)	//处理按键类型
 	{
-		int in = getch();
-		key k = isKey(in);
-		switch (k)	//处理按键类型
+	case up:
+		if (NULL!=list->last)
 		{
-		case up:
-			if (NULL!=list->last)
-			{
-				list = list->last;
-			}
-			scrollMenu(list, type, option);
-			break;
-		case down:
-		case tab:
-			if (NULL != list->next)
-			{
-				list = list->next;
-			}
-			scrollMenu(list, type, option);
-			break;
-		case left:
-			if (0!=option)
-			{
-				option = 5;
-			}
-			option--;
-			scrollMenu(list, type, option);
-			break;
-		case right:
-			if (4 != option)
-			{
-				option = -1;
-			}
-			option++;
-			scrollMenu(list, type, option);
-			break;
-		case enter:
+			list = list->last;
+		}
+		scrollMenu(list, type, option);
+		break;
+	case down:
+	case tab:
+		if (NULL != list->next)
 		{
-			int a[] = { 0,0 };
-			switch (option)		//处理选择项
+			list = list->next;
+		}
+		scrollMenu(list, type, option);
+		break;
+	case left:
+		if (0==option)
+		{
+			option = 5;
+		}
+		option--;
+		scrollMenu(list, type, option);
+		break;
+	case right:
+		if (4 == option)
+		{
+			option = -1;
+		}
+		option++;
+		scrollMenu(list, type, option);
+		break;
+	case enter:
+	{
+		int a[] = { 0,0 };
+		switch (option)		//处理选择项
+		{
+		case 0:
+		{
+			pList q = list;
+			while (NULL != q->next)
 			{
-			case 0:
-			{
-				pList q = list;
-				while (NULL != q->next)
-				{
-					q = q->next;
-				}
-				switch (type)		//处理链表类型
-				{
-				case d_pcType:
-				{
-					pPCtype p = (pPCtype)malloc(sizeof(PCtype));
-					p->startId = number;
-					p->num = 0;
-					p->type[0] = '\0';
-					pList pl = (pList)malloc(sizeof(List));
-					pl->last = q;
-					pl->next = NULL;
-					pl->date.pc = p;
-					pl->type = d_pcType;
-					q->next = pl;
-					editPCtype(0, pl);
-					break;
-				}
-				case  d_cardType:
-				{
-					pCardType p = (pCardType)malloc(sizeof(cardType));
-					p->name[0] = '\0';
-					p->price = 0;
-					pList pl = (pList)malloc(sizeof(List));
-					pl->last = q;
-					pl->next = NULL;
-					pl->date.card = p;
-					pl->type = d_cardType;
-					q->next = pl;
-					editCardType(0, pl);
-					break;
-				}
-				case d_admin:
-				{
-					char pass1[32];
-					char pass2[32];
-					strcpy(pass1, p->date.admin->password);
-					strcpy(pass2, p->date.admin->password);
-					pAdmin p = (pAdmin)malloc(sizeof(admin));
-					p->name[0] = '\0';
-					p->password[0] = '\0';
-					p->power = 0;
-					pList pl = (pList)malloc(sizeof(List));
-					pl->last = q;
-					pl->next = NULL;
-					pl->date.admin = p;
-					pl->type = d_admin;
-					q->next = pl;
-					editUser(0, pl, pass1, pass2);
-					break;
-				}
-				case d_rate:
-				{
-					pRate p = (pRate)malloc(sizeof(rate));
-					p->card[0] = '\0';
-					p->pc[0] = '\0';
-					p->startTime = NULL;
-					p->endTime = NULL;
-					p->rule[0] = '\0';
-					pList pl = (pList)malloc(sizeof(List));
-					pl->last = q;
-					pl->next = NULL;
-					pl->date.rate = p;
-					pl->type = d_rate;
-					q->next = pl;
-					editRate(0, a, pl);
-					break;
-				}
-				default:
-					break;
-				}
-				return;
+				q = q->next;
 			}
-			case 1:
-				if (NULL!=list->last)
-				{
-					list->last->next = list->next;
-					if (NULL != p->next)
-					{
-						list->next->last = list->last;
-					}
-					free(list);					
-				}
-				break;
-			case 2:
+			switch (type)		//处理链表类型
 			{
-				switch (type)		//处理链表类型
-				{
-				case d_pcType:
-					editPCtype(0, p->date.pcType);
-					break;
-				case  d_cardType:
-					editCardType(0, p->date.cardType);
-					break;
-				case d_admin:
-				{
-					char pass1[32];
-					char pass2[32];
-					strcpy(pass1, p->date.admin->password);
-					strcpy(pass2, p->date.admin->password);
-					editUser(0, p->date.admin,pass1,pass2);
-					break;
-				}
-				case d_rate:
-					editRate(0, a, p->date.rate);
-					break;
-				default:
-					break;
-				}
-				return;
-			}
-			case 3:
-				helpFromUser();
-				scrollMenu(list, type, 0);
+			case d_pcType:
+			{
+				pPCtype p = (pPCtype)malloc(sizeof(PCtype));
+				p->startId = number;
+				p->num = 0;
+				p->type[0] = '\0';
+				pList pl = (pList)malloc(sizeof(List));
+				pl->last = q;
+				pl->next = NULL;
+				pl->date.pc = p;
+				pl->type = d_pcType;
+				q->next = pl;
+				editPCtype(0, pl);
 				break;
-			case 4:
-				return;
+			}
+			case  d_cardType:
+			{
+				pCardType p = (pCardType)malloc(sizeof(cardType));
+				p->name[0] = '\0';
+				p->price = 0;
+				pList pl = (pList)malloc(sizeof(List));
+				pl->last = q;
+				pl->next = NULL;
+				pl->date.card = p;
+				pl->type = d_cardType;
+				q->next = pl;
+				editCardType(0, pl);
+				break;
+			}
+			case d_admin:
+			{
+				char pass1[32];
+				char pass2[32];
+				strcpy(pass1, p->date.admin->password);
+				strcpy(pass2, p->date.admin->password);
+				pAdmin p = (pAdmin)malloc(sizeof(admin));
+				p->name[0] = '\0';
+				p->password[0] = '\0';
+				p->power = 0;
+				pList pl = (pList)malloc(sizeof(List));
+				pl->last = q;
+				pl->next = NULL;
+				pl->date.admin = p;
+				pl->type = d_admin;
+				q->next = pl;
+				editUser(0, pl, pass1, pass2);
+				break;
+			}
+			case d_rate:
+			{
+				pRate p = (pRate)malloc(sizeof(rate));
+				p->card[0] = '\0';
+				p->pc[0] = '\0';
+				p->startTime = NULL;
+				p->endTime = NULL;
+				p->rule[0] = '\0';
+				pList pl = (pList)malloc(sizeof(List));
+				pl->last = q;
+				pl->next = NULL;
+				pl->date.rate = p;
+				pl->type = d_rate;
+				q->next = pl;
+				editRate(0, a, pl);
+				break;
+			}
 			default:
 				break;
 			}
-			return;
+			break;
 		}
-		case esc:
+		case 1:
+			if (NULL!=list->last)
+			{
+				pList temp = NULL!=list->next? list->next : list->last;
+				list->last->next = list->next;
+				if (NULL != list->next)
+				{
+					list->next->last = list->last;
+				}
+				free(list);
+				list = temp;
+			}
+			break;
+		case 2:
 		{
-			return;
+			switch (type)		//处理链表类型
+			{
+			case d_pcType:
+				editPCtype(0, list);
+				break;
+			case  d_cardType:
+				editCardType(0, list);
+				break;
+			case d_admin:
+			{
+				char pass1[32];
+				char pass2[32];
+				strcpy(pass1, list->date.admin->password);
+				strcpy(pass2, list->date.admin->password);
+				editUser(0, list,pass1,pass2);
+				break;
+			}
+			case d_rate:
+				editRate(0, a, list);
+				break;
+			default:
+				break;
+			}
 		}
-		break;
+		case 3:
+			if (d_admin==type)
+			{
+				helpFromUser();
+			}
+			break;
+		case 4:
+			return;
 		default:
 			break;
 		}
+		scrollMenu(list, type, option);
+		return;
+	}
+	case esc:
+	{
+		return;
+	}
+	break;
+	default:
+		break;
 	}
 }
