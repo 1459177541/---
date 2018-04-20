@@ -126,12 +126,14 @@ void paginationMenu(pList list, dateType type , int option) {
 		printf("\n      id     |        类型        |      当前用户      |      上机时间      \n");
 		break;
 	case d_card:
+		system("title 会员卡管理");
 		printf("\n                                                 ");
 		prOption("新 建", -6 == option, 9);
 		prOption("搜 索", -5 == option, 9);
 		printf("\n        id         |        类型        |       用户名       |      余额    \n");
 		break;
 	case d_history:
+		system("title 历史记录");
 		printf("\n                                                 ");
 		prOption("搜 索", -5 == option, 9);
 		printf("\n          操作类型     |     操作人     |                时间               \n");
@@ -320,7 +322,26 @@ void paginationMenu(pList list, dateType type , int option) {
 			PaginationMenu(list, type, option);
 			break;
 		default:
-			//////////////////////////////////////////////////////////
+			switch (type)
+			{
+			case d_pc:
+				showPC(op, 0);
+				break;
+			case d_card:
+			{
+				char pass1[32];
+				char pass2[32];
+				strcpy(pass1, op->date.card->password);
+				strcpy(pass2, op->date.card->password);
+				showCard(op, 0, "", pass1, pass2);
+				break;
+			}
+			case d_history:
+				/////////////////////////////////////////////////
+				break;
+			default:
+				break;
+			}
 			break;
 		}
 		return;
@@ -428,11 +449,15 @@ void scrollMenu(pList list, dateType type, int option) {
 		printf(nMore);
 	}
 	printf("                  ================================================            \n");
-	printf("\n                         ");
-	prOption("  新建  ", -2 == option, 13);
+	printf("\n         ");
+	prOption("  新建  ", 0 == type, 13);
 	printf("         ");
-	prOption("  完成  ", -1 == option, 13);
-	printf("                  ");
+	prOption("  完成  ", -1 == type, 13);
+	printf("         ");
+	if (d_admin==type)
+	{
+		prOption("  帮助  ", -2 == type, 13);
+	}
 	while (1)
 	{
 		int in = getch();
@@ -483,15 +508,53 @@ void scrollMenu(pList list, dateType type, int option) {
 			}
 			break;
 		case enter:
+		{
+			int a[] = { 0,0 };
 			if (0<option)
 			{
-				///////////////////////////////////////////////////////////////////////
+				switch (option)
+				{
+				case -1:
+					return;
+				case -2:
+					///////////////////////////////////////////////////
+					return;
+				case -3:
+					helpFromUser();
+					return;
+				default:
+					break;
+				}
 			}
 			else
 			{
+				switch (type)
+				{
+				case d_pcType:
+					editPCtype(0, p->date.pcType);
+					break;
+				case  d_cardType:
+					editCardType(0, p->date.cardType);
+					break;
+				case d_admin:
+				{
+					char pass1[32];
+					char pass2[32];
+					strcpy(pass1, p->date.admin->password);
+					strcpy(pass2, p->date.admin->password);
+					editUser(0, p->date.admin,pass1,pass2);
+					break;
+				}
+				case d_rate:
+					editRate(0, a, p->date.rate);
+					break;
+				default:
+					break;
+				}
 				return;
 			}
 			break;
+		}
 		case esc:
 		{
 			return;
