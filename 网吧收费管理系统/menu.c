@@ -220,11 +220,11 @@ void mainMenu(pAdmin user, int type) {
 			break;
 		case 2:
 //			setPCType(0);
-			scrollMenu(getPCtypeList()->next, d_pcType, 0);
+			scrollMenu(getPCtypeList(), d_pcType, 0);
 			break;
 		case 3:
 //			setCardType(0);
-			scrollMenu(getCardTypeList()->next, d_cardType, 0);
+			scrollMenu(getCardTypeList(), d_cardType, 0);
 			break;
 		case 4:
 //			rateMenu(0);
@@ -232,7 +232,7 @@ void mainMenu(pAdmin user, int type) {
 			break;
 		case 5:
 //			setUserMenu(0);
-			scrollMenu(getAdminHead()->next,d_admin,0);
+			scrollMenu(getAdminHead(),d_admin,0);
 			break;
 		case 6:
 			paginationMenu(getHistorys(), d_history, 0);

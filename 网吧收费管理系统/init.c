@@ -27,7 +27,7 @@ void setRootPassword(int type,char * pass1,char * pass2,char *text) {
 	printf("                                                         \n");
 	printf("                        用户名 ：root \n");
 	printf("                                                         \n");
-	printf("                      您的密码 ：%s\n", 2 == type ? "" : printfPassword(pass1));
+	printf("                      您的密码 ：%s\n", 1 == type ? "" : printfPassword(pass1));
 	printf("                                                         \n");
 	printf("                      再次输入 ：%s\n", 2 == type ? "" : printfPassword(pass2));
 	printf("                                                         \n");
@@ -93,6 +93,9 @@ void setting() {
 	setAttri("NR", " ");
 }
 
+/*********************************************************
+ * 已废弃
+ *********************************************************
 //初始化
 int init(int type) {
 	pr_weclome();
@@ -136,6 +139,7 @@ int init(int type) {
 	}
 	return init(type);
 }
+*/
 
 //初始化流程控制
 int initialization() {
@@ -210,10 +214,10 @@ int initialization() {
 			}
 		}
 
-		saveAdmin();
-		savePCtype();
-		saveCardType();
-		saveRate();
+		save(d_admin);
+		save(d_pcType);
+		save(d_cardType);
+		save(d_rate);
 	}
 
 	return 0;

@@ -60,7 +60,7 @@ void prRate(pRate p, int isOption) {
 
 //设置时间段
 void setTimes(pTm start,pTm end) {
-
+	//////////////////////////////////////////////////
 }
 
 //设置收费标准

@@ -50,7 +50,7 @@ pList getHistorys() {
 	return historyLists;
 }
 
-void addHistory(historyType type, pPC pp, pCard pc, pRate pr,pAdmin pa) {
+void addHistory(historyType type, date date) {
 	pList pl;
 	if (NULL==historyFinal)
 	{

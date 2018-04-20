@@ -437,7 +437,7 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 }
 
 //保存
-void save() {
+void saveBeforExit() {
 	int x = 16;
 	gotoxy(x, 8);
 	printf("=================================================");
@@ -453,21 +453,27 @@ void save() {
 	printf("|                                               |");
 	gotoxy(x, 14);
 	printf("=================================================");
+	gotoxy(x + 15, 12);
+	printf(" 正在保存管理员信息 ");
+	save(d_admin);
 	gotoxy(x + 15,12);
 	printf("    正在保存配置    ");
 	saveAttri();
 	gotoxy(x + 15, 12);
 	printf("  正在保存网吧规模  ");
-	savePCtype();
+	save(d_pcType);
 	gotoxy(x + 15, 12);
 	printf(" 正在保存会员卡类型 ");
-	saveCardType();
+	save(d_cardType);
 	gotoxy(x + 15, 12);
 	printf("  正在保存计费方案  ");
-	saveRate();
+	save(d_rate);
 	gotoxy(x + 15, 12);
 	printf("   正在保存会员卡   ");
-	saveCard();
+	save(d_card);
+	gotoxy(x + 15, 12);
+	printf("  正在保存历史记录  ");
+	save(d_history);
 }
 
 //退出
@@ -516,7 +522,7 @@ int saveExit(int type) {
 		switch (type)
 		{
 		case 0:
-			save();
+			saveBeforExit();
 		case 1:
 			gotoxy(x, 8);
 			printf("=================================================");
