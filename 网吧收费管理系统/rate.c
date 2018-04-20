@@ -137,7 +137,7 @@ void setRule(int type, pRate p) {
 }
 
 //修改计费标准
-void editRate(int type,int option[], pList p) {
+void editRate(int type,int option[], pRate p) {
 	system("cls");
 	printf("\n\n\n");
 	printf("\n\n\n            %c关联电脑类型：",0==type?'>':' ');
@@ -148,7 +148,7 @@ void editRate(int type,int option[], pList p) {
 		pPC = pPC->next;
 		i++;
 	}
-	strcpy(p->date.pcType->type, pPC->date.pcType->type);
+	strcpy(p->pc, pPC->date.pcType->type);
 	printf("%s", pPC->date.pcType->type);
 	
 	printf("\n\n               %c关联卡名称：", 1 == type ? '>' : ' ');
@@ -159,7 +159,7 @@ void editRate(int type,int option[], pList p) {
 		pCardType = pCardType->next;
 		i++;
 	}
-	strcpy(p->date.cardType->name, pCardType->date.cardType->name);
+	strcpy(p->card, pCardType->date.cardType->name);
 	printf("%s", pCardType->date.cardType->name);
 	
 	printf("\n\n              ");
@@ -168,7 +168,6 @@ void editRate(int type,int option[], pList p) {
 	prOption("   计费标准   ", 3 == type, 22);
 	printf("\n\n              ");
 	OPTION_OK(4 == type);
-	OPTION_CANCEL(5 == type);
 
 	int in = getch();
 	key k= isKey(in);
@@ -215,7 +214,7 @@ void editRate(int type,int option[], pList p) {
 			editRate(5, option, p);
 			return;
 		case 2:
-			setTimes(p->date.rate->startTime, p->date.rate->endTime);
+			setTimes(p->startTime, p->endTime);
 			editRate(type, option, p);
 			return;
 		case 3:
@@ -223,14 +222,6 @@ void editRate(int type,int option[], pList p) {
 			editRate(type, option, p);
 			return;
 		case 4:
-			return;
-		case 5:
-			p->last->next = p->next;
-			if (NULL != p->next)
-			{
-				p->next->last = p->last;
-			}
-			free(p);
 			return;
 		default:
 			break;

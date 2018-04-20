@@ -356,7 +356,6 @@ void paginationMenu(pList list, dateType type , int option) {
 //滚动菜单
 void scrollMenu(pList list, dateType type, int option) {
 	pList p = list;
-	char more[79];
 	char nMore[79];
 	int isTop = 0;
 	system("cls");
@@ -367,21 +366,21 @@ void scrollMenu(pList list, dateType type, int option) {
 		printf("\n\n                                 请设置您的网吧规模\n\n");
 		printf("                  ================================================            \n");
 		printf("                    类型         |      数量      |    起始编号               \n");
-		strcpy(more, "                      ++++++     |     ++++++     |    ++++++                \n");
+		printf("                  ---------------+----------------+---------------         \n");
 		strcpy(nMore, "                                 |                |                          \n");
 		break;
 	case d_cardType:
 		printf("\n\n                             请设置您的网吧会员卡类型\n\n");
 		printf("                  ================================================            \n");
 		printf("                        会员卡名称       |     价格           \n");
-		strcpy(more, "                              ++++++     |     ++++++               \n");
+		printf("                  -----------------------+------------------------            \n");
 		strcpy(nMore, "                                         |                                 \n");
 		break;
 	case d_admin:
 		printf("\n\n                                   请设置管理员\n\n");
 		printf("                  ================================================            \n");
 		printf("          用户名        |                        权限                          \n");
-		strcpy(more, "            ++++++     |                       ++++++                    \n");
+		printf("                  -----+------------------------------------------         \n");
 		strcpy(nMore, "                       |                                            \n");
 		break;
 	case d_rate:
@@ -389,13 +388,14 @@ void scrollMenu(pList list, dateType type, int option) {
 		printf("                  ================================================            \n");
 		printf("             开始时间          |     会员卡类型     |     收费标准            \n");
 		printf("             结束时间          |      电脑类型      |                         \n");
-		strcpy(more, "              ++++++           |       ++++++       |      ++++++            \n");
-		strcpy(nMore, "                               |                    |                         \n");
+		printf("                  -------------+--------------------+-------------            \n");
+		strcpy(nMore, "                               |                    |                         \n                               |                    |                         \n");
 		break;
 	default:
 		return;
 	}
-	for (int i = 0; i < 3; i++)
+	int length = d_rate == type ? 3 : 7;
+	for (int i = 0; i < length/2; i++)
 	{
 		if (NULL!=p && NULL!=p->last)
 		{
@@ -406,11 +406,7 @@ void scrollMenu(pList list, dateType type, int option) {
 			isTop++;
 		}
 	}
-	if (0==isTop)
-	{
-		printf(more);
-	}
-	else
+	if(0!=isTop)
 	{
 		int top = isTop;
 		while ((top--)>0)
@@ -418,34 +414,54 @@ void scrollMenu(pList list, dateType type, int option) {
 			printf(nMore);
 		}
 	}
-	for (int i = isTop; i < 7; i++)
+	for (int i = isTop; i < length; i++)
 	{
-		if (NULL!=p)
+		if (NULL != p)
 		{
-			if (3==i)
-			{
-				printf("               ------------------+----------------+------------------         \n");
-			}
 			switch (type)
 			{
 			case d_pcType:
+				if (length / 2 == i)
+				{
+					printf("               ------------------+----------------+------------------         \n");
+				}
 				prPCtype(p->date.pcType, 3 == 0);
+				if (length / 2 == i)
+				{
+					printf("               ------------------+----------------+------------------         \n");
+				}
 				break;
 			case d_cardType:
+				if (length / 2 == i)
+				{
+					printf("               --------------------------+---------------------------         \n");
+				}
 				prCardType(p->date.cardType, 3 == 0);
+				if (length / 2 == i)
+				{
+					printf("               --------------------------+---------------------------         \n");
+				}
 				break;
 			case d_admin:
+				if (length / 2 == i)
+				{
+					printf("               --------+---------------------------------------------         \n");
+				}
 				prUser(p->date.admin, 3 == 0);
+				if (length / 2 == i)
+				{
+					printf("               ----------------+--------------------+----------------         \n");
+				}
 				break;
 			case d_rate:
+				if (length / 2 == i)
+				{
+					printf("               ----------------+--------------------+----------------         \n");
+				}
 				prRate(p->date.rate, 3 == 0);
 				break;
 			default:
 				return;
-			}
-			if (3 == i)
-			{
-				printf("               ------------------+----------------+------------------         \n");
 			}
 			p = p->next;
 		}
@@ -482,7 +498,6 @@ void scrollMenu(pList list, dateType type, int option) {
 		scrollMenu(list, type, option);
 		break;
 	case down:
-	case tab:
 		if (NULL != list->next)
 		{
 			list = list->next;
@@ -497,6 +512,7 @@ void scrollMenu(pList list, dateType type, int option) {
 		option--;
 		scrollMenu(list, type, option);
 		break;
+	case tab:
 	case right:
 		if (4 == option)
 		{
@@ -531,7 +547,7 @@ void scrollMenu(pList list, dateType type, int option) {
 				pl->date.pc = p;
 				pl->type = d_pcType;
 				q->next = pl;
-				editPCtype(0, pl);
+				editPCtype(0, p);
 				break;
 			}
 			case  d_cardType:
@@ -545,7 +561,7 @@ void scrollMenu(pList list, dateType type, int option) {
 				pl->date.card = p;
 				pl->type = d_cardType;
 				q->next = pl;
-				editCardType(0, pl);
+				editCardType(0, p);
 				break;
 			}
 			case d_admin:
@@ -564,7 +580,7 @@ void scrollMenu(pList list, dateType type, int option) {
 				pl->date.admin = p;
 				pl->type = d_admin;
 				q->next = pl;
-				editUser(0, pl, pass1, pass2);
+				editUser(0, p, pass1, pass2);
 				break;
 			}
 			case d_rate:
@@ -581,7 +597,7 @@ void scrollMenu(pList list, dateType type, int option) {
 				pl->date.rate = p;
 				pl->type = d_rate;
 				q->next = pl;
-				editRate(0, a, pl);
+				editRate(0, a, p);
 				break;
 			}
 			default:
@@ -607,10 +623,10 @@ void scrollMenu(pList list, dateType type, int option) {
 			switch (type)		//处理链表类型
 			{
 			case d_pcType:
-				editPCtype(0, list);
+				editPCtype(0, list->date.pcType);
 				break;
 			case  d_cardType:
-				editCardType(0, list);
+				editCardType(0, list->date.cardType);
 				break;
 			case d_admin:
 			{
@@ -618,11 +634,11 @@ void scrollMenu(pList list, dateType type, int option) {
 				char pass2[32];
 				strcpy(pass1, list->date.admin->password);
 				strcpy(pass2, list->date.admin->password);
-				editUser(0, list,pass1,pass2);
+				editUser(0, list->date.admin,pass1,pass2);
 				break;
 			}
 			case d_rate:
-				editRate(0, a, list);
+				editRate(0, a, list->date.rate);
 				break;
 			default:
 				break;

@@ -60,7 +60,7 @@ void prPCtype(pPCtype p, int isOption) {
 }
 
 //修改电脑类型
-void editPCtype(int type, pList p) {
+void editPCtype(int type, pPCtype p) {
 	char* typeName = (char*)malloc(16 * sizeof(char));
 	char* num = (char*)malloc(16 * sizeof(char));
 	char* startID = (char*)malloc(16 * sizeof(char));
@@ -69,15 +69,15 @@ void editPCtype(int type, pList p) {
 	startID[0] = '\0';
 	if (0 != type)
 	{
-		strcpy(typeName, p->date.pcType->type);
+		strcpy(typeName, p->type);
 	}
 	if (1 != type)
 	{
-		strcpy(num, intToString(p->date.pcType->num));
+		strcpy(num, intToString(p->num));
 	}
 	if (2 != type)
 	{
-		strcpy(startID, intToString(p->date.pcType->startId));
+		strcpy(startID, intToString(p->startId));
 	}
 	int x = 16;
 	gotoxy(x, 6);
@@ -97,11 +97,9 @@ void editPCtype(int type, pList p) {
 	gotoxy(x, 13);
 	printf("|                                               |");
 	gotoxy(x, 14);
-	printf("|          ");
+	printf("|                      ");
 	OPTION_OK(3 == type);
-	printf("        ");
-	OPTION_CANCEL(4 == type);
-	printf("          |");
+	printf("                  |");
 	gotoxy(x, 15);
 	printf("|                                               |");
 	gotoxy(x, 16);
@@ -109,51 +107,26 @@ void editPCtype(int type, pList p) {
 	free(typeName);
 	free(num);
 	free(startID);
-	if (4 == type)
-	{
-		int in = getch();
-		key k = isKey(in);
-		switch (k)
-		{
-		case up:
-			editPCtype(2, p);
-			return;
-		case down:
-		case tab:
-			editPCtype(0, p);
-			return;
-		case enter:
-			p->last->next = p->next;
-			if (NULL!=p->next)
-			{
-				p->next->last = p->last;
-			}
-			free(p);
-			return;
-		default:
-			break;
-		}
-		return editPCtype(0, p);
-	}
 
 	key key;
 	char *in = (char*)malloc(sizeof(char) * 16);
 	in[0] = '\0';
 	if (0 == type)
 	{
-		key = input(x + 27, 8, p->date.pcType->type, 0, NUM | LETTER | CHINESE, NULL);
+		key = input(x + 27, 8, p->type, 0, NUM | LETTER | CHINESE, NULL);
 	}
 	else if (1 == type)
 	{
-		length -= p->date.pcType->num;
+		length -= p->num;
 		key = input(x + 27, 10, in, 0, INTER, NULL);
-		p->date.pcType->num = '\0' == in[0] ? p->date.pcType->num : stringToInt(in);
-		length += p->date.pcType->num;
+		p->num = '\0' == in[0] ? p->num : stringToInt(in);
+		length += p->num;
+		getPCtypeList()->date.pcType->num = length;
 	}
 	else
 	{
 		key = input(x + 27, 12, in, 0, INTER, NULL);
-		p->date.pcType->startId = '\0' == in[0] ? p->date.pcType->startId : stringToInt(in);
+		p->startId = '\0' == in[0] ? p->startId : stringToInt(in);
 	}
 	free(in);
 	switch (key)

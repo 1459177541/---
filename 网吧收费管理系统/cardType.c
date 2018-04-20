@@ -57,18 +57,18 @@ void prCardType(pCardType p, int isOption) {
 }
 
 //修改会员卡类型
-void editCardType(int type, pList p) {
+void editCardType(int type, pCardType p) {
 	char* typeName = (char*)malloc(16 * sizeof(char));
 	char* num = (char*)malloc(16 * sizeof(char));
 	typeName[0] = '\0';
 	num[0] = '\0';
 	if (0 != type)
 	{
-		strcpy(typeName, p->date.cardType->name);
+		strcpy(typeName, p->name);
 	}
 	if (1 != type)
 	{
-		sprintf(num, "%.2lf", p->date.cardType->price);
+		sprintf(num, "%.2lf", p->price);
 	}
 	int x = 16;
 	gotoxy(x, 7);
@@ -84,11 +84,9 @@ void editCardType(int type, pList p) {
 	gotoxy(x, 12);
 	printf("|                                               |");
 	gotoxy(x, 13);
-	printf("|          ");
-	OPTION_OK(2 == type);
-	printf("        ");
-	OPTION_CANCEL(3 == type);
-	printf("          |");
+	printf("|                      ");
+	OPTION_OK(3 == type);
+	printf("                  |");
 	gotoxy(x, 14);
 	printf("|                                               |");
 	gotoxy(x, 15);
@@ -97,43 +95,16 @@ void editCardType(int type, pList p) {
 	free(typeName);
 	free(num);
 
-	if (3 == type)
-	{
-		int in = getch();
-		key k = isKey(in);
-		switch (k)
-		{
-		case up:
-			editCardType(2, p);
-			return;
-		case down:
-		case tab:
-			editCardType(0, p);
-			return;
-		case enter:
-			p->last->next = p->next;
-			if (NULL != p->next)
-			{
-				p->next->last = p->last;
-			}
-			free(p);
-			return;
-		default:
-			break;
-		}
-		return editCardType(type, p);
-	}
-
 	key key;
 	if (0 == type)
 	{
-		key = input(x + 27, 9, p->date.cardType->name, 0, NUM | LETTER | CHINESE, NULL);
+		key = input(x + 27, 9, p->name, 0, NUM | LETTER | CHINESE, NULL);
 	}
 	else
 	{
 		char *in = (char *)malloc(sizeof(char) * 16);
 		key = input(x + 27, 11, in, 0, NUM, NULL);
-		p->date.cardType->price = '\0' == in[0] ? p->date.cardType->price : atof(in);
+		p->price = '\0' == in[0] ? p->price : atof(in);
 		free(in);
 	}
 	switch (key)

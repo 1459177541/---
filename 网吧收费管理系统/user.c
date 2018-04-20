@@ -68,58 +68,56 @@ void setRoot(pAdmin root) {
 }
 
 //修改管理员
-void editUser(int type, pList p,char *pass1,char *pass2) {
+void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 	system("cls");
 	system("mode con cols=80 lines=24");
 	printf("\n\n");
 	printf("                         -----=====修改管理员=====-----                        \n\n");
 	printf("                               -----基本信息-----                              \n\n");
-	printf("                              用户名：%s\n\n", 0 == type ? p->date.admin->name : "");
+	printf("                              用户名：%s\n\n", 0 == type ? p->name : "");
 	printf("                                密码：%s\n\n", 1 == type ? "" : printfPassword(pass1));
 	printf("                            确认密码：%s\n\n", 2 == type ? "" : printfPassword(pass2));
 	printf("                                 -----权限-----                                \n\n");
 	printf("                    电脑类型： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 3 == type ? '>' : ' ', isPower(p->date.admin->power, 14) ? getAttri("is") : getAttri("isNot")
-		, 4 == type ? '>' : ' ', isPower(p->date.admin->power, 15) ? getAttri("is") : getAttri("isNot")
-		, 5 == type ? '>' : ' ', isPower(p->date.admin->power, 16) ? getAttri("is") : getAttri("isNot")
+		, 3 == type ? '>' : ' ', isPower(p->power, 14) ? getAttri("is") : getAttri("isNot")
+		, 4 == type ? '>' : ' ', isPower(p->power, 15) ? getAttri("is") : getAttri("isNot")
+		, 5 == type ? '>' : ' ', isPower(p->power, 16) ? getAttri("is") : getAttri("isNot")
 	);
 	printf("                  会员卡类型： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 6 == type ? '>' : ' ', isPower(p->date.admin->power, 11) ? getAttri("is") : getAttri("isNot")
-		, 7 == type ? '>' : ' ', isPower(p->date.admin->power, 12) ? getAttri("is") : getAttri("isNot")
-		, 8 == type ? '>' : ' ', isPower(p->date.admin->power, 13) ? getAttri("is") : getAttri("isNot")
+		, 6 == type ? '>' : ' ', isPower(p->power, 11) ? getAttri("is") : getAttri("isNot")
+		, 7 == type ? '>' : ' ', isPower(p->power, 12) ? getAttri("is") : getAttri("isNot")
+		, 8 == type ? '>' : ' ', isPower(p->power, 13) ? getAttri("is") : getAttri("isNot")
 	);
 	printf("                   会员卡管理： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 9 == type ? '>' : ' ', isPower(p->date.admin->power, 0) ? getAttri("is") : getAttri("isNot")
-		, 10 == type ? '>' : ' ', isPower(p->date.admin->power, 1) ? getAttri("is") : getAttri("isNot")
-		, 11 == type ? '>' : ' ', isPower(p->date.admin->power, 2) ? getAttri("is") : getAttri("isNot")
+		, 9 == type ? '>' : ' ', isPower(p->power, 0) ? getAttri("is") : getAttri("isNot")
+		, 10 == type ? '>' : ' ', isPower(p->power, 1) ? getAttri("is") : getAttri("isNot")
+		, 11 == type ? '>' : ' ', isPower(p->power, 2) ? getAttri("is") : getAttri("isNot")
 	);
 	printf("                    计费标准： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 12 == type ? '>' : ' ', isPower(p->date.admin->power, 3) ? getAttri("is") : getAttri("isNot")
-		, 13 == type ? '>' : ' ', isPower(p->date.admin->power, 4) ? getAttri("is") : getAttri("isNot")
-		, 14 == type ? '>' : ' ', isPower(p->date.admin->power, 5) ? getAttri("is") : getAttri("isNot")
+		, 12 == type ? '>' : ' ', isPower(p->power, 3) ? getAttri("is") : getAttri("isNot")
+		, 13 == type ? '>' : ' ', isPower(p->power, 4) ? getAttri("is") : getAttri("isNot")
+		, 14 == type ? '>' : ' ', isPower(p->power, 5) ? getAttri("is") : getAttri("isNot")
 	);
 	printf("                  管理员管理： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 15 == type ? '>' : ' ', isPower(p->date.admin->power, 8) ? getAttri("is") : getAttri("isNot")
-		, 16 == type ? '>' : ' ', isPower(p->date.admin->power, 9) ? getAttri("is") : getAttri("isNot")
-		, 17 == type ? '>' : ' ', isPower(p->date.admin->power, 10) ? getAttri("is") : getAttri("isNot")
+		, 15 == type ? '>' : ' ', isPower(p->power, 8) ? getAttri("is") : getAttri("isNot")
+		, 16 == type ? '>' : ' ', isPower(p->power, 9) ? getAttri("is") : getAttri("isNot")
+		, 17 == type ? '>' : ' ', isPower(p->power, 10) ? getAttri("is") : getAttri("isNot")
 	);
 	printf("                  %c %3s 上/下机   %c %3s 查询记录   %c %3s 查询统计\n\n"
-		, 18 == type ? '>' : ' ', isPower(p->date.admin->power, 6) ? getAttri("is") : getAttri("isNot")
-		, 19== type ? '>' : ' ', isPower(p->date.admin->power, 7) ? getAttri("is") : getAttri("isNot")
-		, 20 == type ? '>' : ' ', isPower(p->date.admin->power, 17) ? getAttri("is") : getAttri("isNot")
+		, 18 == type ? '>' : ' ', isPower(p->power, 6) ? getAttri("is") : getAttri("isNot")
+		, 19== type ? '>' : ' ', isPower(p->power, 7) ? getAttri("is") : getAttri("isNot")
+		, 20 == type ? '>' : ' ', isPower(p->power, 17) ? getAttri("is") : getAttri("isNot")
 	);
 	printf("                 ");
 	OPTION_OK(21 == type);
-	printf("                 ");
-	OPTION_CANCEL(22 == type);
 	key k;
 	if (0==type)
 	{
-		k = input(7, 20, p->date.admin->name, 0, LETTER | CHINESE, NULL);
+		k = input(7, 20, p->name, 0, LETTER | CHINESE, NULL);
 	}
 	else if (1==type)
 	{
-		k = input(9, 20, p->date.admin->password, 1, NUM | LETTER | SYMBOL, NULL);
+		k = input(9, 20, p->password, 1, NUM | LETTER | SYMBOL, NULL);
 	}
 	else
 	{
@@ -206,63 +204,63 @@ void editUser(int type, pList p,char *pass1,char *pass2) {
 			break;
 		//使用异或运算改变选择状态
 		case 3:	
-			p->date.admin->power ^= C_PC_TYPE;
+			p->power ^= C_PC_TYPE;
 			break;
 		case 4:
-			p->date.admin->power ^= D_PC_TYPE;
+			p->power ^= D_PC_TYPE;
 			break;
 		case 5:
-			p->date.admin->power ^= U_PC_TYPE;
+			p->power ^= U_PC_TYPE;
 			break;
 		case 6:
-			p->date.admin->power ^= C_CARD_TYPE;
+			p->power ^= C_CARD_TYPE;
 			break;
 		case 7:
-			p->date.admin->power ^= D_CARD_TYPE;
+			p->power ^= D_CARD_TYPE;
 			break;
 		case 8:
-			p->date.admin->power ^= U_CARD_TYPE;
+			p->power ^= U_CARD_TYPE;
 			break;
 		case 9:
-			p->date.admin->power ^= C_CARD;
+			p->power ^= C_CARD;
 			break;
 		case 10:
-			p->date.admin->power ^= D_CARD;
+			p->power ^= D_CARD;
 			break;
 		case 11:
-			p->date.admin->power ^= U_CARD;
+			p->power ^= U_CARD;
 			break;
 		case 12:
-			p->date.admin->power ^= C_RATE;
+			p->power ^= C_RATE;
 			break;
 		case 13:
-			p->date.admin->power ^= D_RATE;
+			p->power ^= D_RATE;
 			break;
 		case 14:
-			p->date.admin->power ^= U_RATE;
+			p->power ^= U_RATE;
 			break;
 		case 15:
-			p->date.admin->power ^= C_ADMIN;
+			p->power ^= C_ADMIN;
 			break;
 		case 16:
-			p->date.admin->power ^= D_ADMIN;
+			p->power ^= D_ADMIN;
 			break;
 		case 17:
-			p->date.admin->power ^= U_ADMIN;
+			p->power ^= U_ADMIN;
 			break;
 		case 18:
-			p->date.admin->power ^= UP_DOWN;
+			p->power ^= UP_DOWN;
 			break;
 		case 19:
-			p->date.admin->power ^= HISTORY;
+			p->power ^= HISTORY;
 			break;
 		case 20:
-			p->date.admin->power ^= STATISTICS;
+			p->power ^= STATISTICS;
 			break;
 		case 21:
 			if (!strcmp(pass1,pass2)&&'/0'!=pass1[0])
 			{
-				strcpy(p->date.admin->password, pass1);
+				strcpy(p->password, pass1);
 				return;
 			}
 			else
@@ -270,14 +268,6 @@ void editUser(int type, pList p,char *pass1,char *pass2) {
 				pass1[0] = '\0';
 				pass2[0] = '\0';
 			}
-		case 22:
-			p->last->next = p->next;
-			if (NULL != p->next)
-			{
-				p->next->last = p->last;
-			}
-			free(p);
-			break;
 		default:
 			break;
 		}
