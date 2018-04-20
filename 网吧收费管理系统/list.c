@@ -459,88 +459,151 @@ void scrollMenu(pList list, dateType type, int option) {
 		}
 	}
 	printf("                  ================================================            \n");
-	printf("\n         ");
+	printf(" ");
 	prOption("  新建  ", 0 == option, 13);
-	printf("         ");
-	prOption("  完成  ", -1 == option, 13);
-	printf("         ");
-	if (d_admin==type)
-	{
-		prOption("  帮助  ", -2 == option, 13);
-	}
+	printf(" ");
+	prOption("  删除  ", 1 == option, 13);
+	printf(" ");
+	prOption("  修改  ", 2 == option, 13);
+	printf(" ");
+	prOption("  帮助  ", 3 == option, 13);
+	printf(" ");
+	prOption("  返回  ", 4 == option, 13);
 	while (1)
 	{
 		int in = getch();
 		key k = isKey(in);
-		switch (k)
+		switch (k)	//处理按键类型
 		{
 		case up:
-			if (0<=option)
+			if (NULL!=list->last)
 			{
-				if (NULL!=list->last)
-				{
-					list = list->last;
-				}
-				else
-				{
-					scrollMenu(list, type, -1);
-				}
+				list = list->last;
 			}
-			else
-			{
-				while (NULL!=list->next)
-				{
-					list = list->next;
-				}
-				scrollMenu(list, type, 0);
-			}
-			return;
+			scrollMenu(list, type, option);
+			break;
 		case down:
 		case tab:
-			if (0<=option)
+			if (NULL != list->next)
 			{
-				if (NULL != list->next)
-				{
-					list = list->next;
-				}
-				else
-				{
-					scrollMenu(list, type, -1);
-				}
+				list = list->next;
 			}
-			else
+			scrollMenu(list, type, option);
+			break;
+		case left:
+			if (0!=option)
 			{
-				while (NULL != list->last)
-				{
-					list = list->last;
-				}
-				scrollMenu(list, type, 0);
+				option = 5;
 			}
-			return;
+			option--;
+			scrollMenu(list, type, option);
+			break;
+		case right:
+			if (4 != option)
+			{
+				option = -1;
+			}
+			option++;
+			scrollMenu(list, type, option);
+			break;
 		case enter:
 		{
 			int a[] = { 0,0 };
-			if (0>=option)
+			switch (option)		//处理选择项
 			{
-				switch (option)
+			case 0:
+			{
+				pList q = list;
+				while (NULL != q->next)
 				{
-				case 0:
-					///////////////////////////////////////////////////
+					q = q->next;
+				}
+				switch (type)		//处理链表类型
+				{
+				case d_pcType:
+				{
+					pPCtype p = (pPCtype)malloc(sizeof(PCtype));
+					p->startId = number;
+					p->num = 0;
+					p->type[0] = '\0';
+					pList pl = (pList)malloc(sizeof(List));
+					pl->last = q;
+					pl->next = NULL;
+					pl->date.pc = p;
+					pl->type = d_pcType;
+					q->next = pl;
+					editPCtype(0, pl);
 					break;
-				case -1:
+				}
+				case  d_cardType:
+				{
+					pCardType p = (pCardType)malloc(sizeof(cardType));
+					p->name[0] = '\0';
+					p->price = 0;
+					pList pl = (pList)malloc(sizeof(List));
+					pl->last = q;
+					pl->next = NULL;
+					pl->date.card = p;
+					pl->type = d_cardType;
+					q->next = pl;
+					editCardType(0, pl);
 					break;
-				case -2:
-					helpFromUser();
-					scrollMenu(list, type, 0);
+				}
+				case d_admin:
+				{
+					char pass1[32];
+					char pass2[32];
+					strcpy(pass1, p->date.admin->password);
+					strcpy(pass2, p->date.admin->password);
+					pAdmin p = (pAdmin)malloc(sizeof(admin));
+					p->name[0] = '\0';
+					p->password[0] = '\0';
+					p->power = 0;
+					pList pl = (pList)malloc(sizeof(List));
+					pl->last = q;
+					pl->next = NULL;
+					pl->date.admin = p;
+					pl->type = d_admin;
+					q->next = pl;
+					editUser(0, pl, pass1, pass2);
 					break;
+				}
+				case d_rate:
+				{
+					pRate p = (pRate)malloc(sizeof(rate));
+					p->card[0] = '\0';
+					p->pc[0] = '\0';
+					p->startTime = NULL;
+					p->endTime = NULL;
+					p->rule[0] = '\0';
+					pList pl = (pList)malloc(sizeof(List));
+					pl->last = q;
+					pl->next = NULL;
+					pl->date.rate = p;
+					pl->type = d_rate;
+					q->next = pl;
+					editRate(0, a, pl);
+					break;
+				}
 				default:
 					break;
 				}
 				return;
 			}
-			else
+			case 1:
+				if (NULL!=list->last)
+				{
+					list->last->next = list->next;
+					if (NULL != p->next)
+					{
+						list->next->last = list->last;
+					}
+					free(list);					
+				}
+				break;
+			case 2:
 			{
-				switch (type)
+				switch (type)		//处理链表类型
 				{
 				case d_pcType:
 					editPCtype(0, p->date.pcType);
@@ -565,7 +628,16 @@ void scrollMenu(pList list, dateType type, int option) {
 				}
 				return;
 			}
-			break;
+			case 3:
+				helpFromUser();
+				scrollMenu(list, type, 0);
+				break;
+			case 4:
+				return;
+			default:
+				break;
+			}
+			return;
 		}
 		case esc:
 		{
