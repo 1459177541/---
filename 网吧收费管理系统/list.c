@@ -107,7 +107,7 @@ void initFinalPage(pList list) {
 	finalPage = length;
 }
 
-void paginationMenu(pList list, dateType type , int option) {
+void paginationMenu(pList list, dateType type, int index, int option) {
 	pList p = list;
 	if (-1==finalPage)
 	{
@@ -121,21 +121,17 @@ void paginationMenu(pList list, dateType type , int option) {
 	{
 	case d_pc:
 		system("title 上/下机");
-		printf("\n\n                                                          ");
-		prOption("搜 索", -5 == option, 9);
+		printf("\n");
 		printf("\n      id     |        类型        |      当前用户      |      上机时间      \n");
 		break;
 	case d_card:
 		system("title 会员卡管理");
-		printf("\n                                                 ");
-		prOption("新 建", -6 == option, 9);
-		prOption("搜 索", -5 == option, 9);
+		printf("\n");
 		printf("\n        id         |        类型        |       用户名       |      余额    \n");
 		break;
 	case d_history:
 		system("title 历史记录");
-		printf("\n                                                 ");
-		prOption("搜 索", -5 == option, 9);
+		printf("\n");
 		printf("\n          操作类型     |     操作人     |                时间               \n");
 		break;
 	default:
@@ -171,141 +167,139 @@ void paginationMenu(pList list, dateType type , int option) {
 			printf("\n             |                    |                    |                       \n");
 		}
 	}
-
 	printf("\n                     ");
-	prOption("首  页", option == -4, 9);
+	prOption("首  页", 0 == option, 9);
 	printf("   ");
-	prOption("上一页", option == -3, 9);
+	prOption("上一页", 1 == option, 9);
 	printf("   ");
-	prOption("下一页", option == -2, 9);
+	prOption("下一页", 2 == option, 9);
 	printf("   ");
-	prOption("尾  页", option == -1, 9);
-	printf("   ");
+	prOption("尾  页", 3 == option, 9);
+	printf("\n\n      ");
+	prOption("  新建  ", 4 == option, 13);
+	printf(" ");
+	prOption("  删除  ", 5 == option, 13);
+	printf(" ");
+	prOption("  修改  ", 6 == option, 13);
+	printf(" ");
+	prOption("  筛选  ", 7 == option, 13);
+	printf(" ");
+	prOption("  返回  ", 8 == option, 13);
 	int in = getch();
 	key k = isKey(in);
-	switch (k)
+	switch (k)		//处理按键类型
 	{
 	case number:
-		paginationMenu(list, type, in - '0');
+		paginationMenu(list, type, in - '0', option);
 		return;
 	case up:
-		option--;
-		if (-7 >= option)
+		index--;
+		if (0 > index)
 		{
-			option = length - 1;
+			index = length;
 		}
-		paginationMenu(list, type, option);
+		paginationMenu(list, type, index, option);
 		return;
 	case down:
-		option++;
-		if (length <= option)
+		index++;
+		if (length <= index)
 		{
-			option = -6;
+			index = 0;
 		}
-		paginationMenu(list, type, option);
+		paginationMenu(list, type, index, option);
 		return;
 	case tab:
-		if (0 <= option)
+		if (4 > option)
 		{
-			paginationMenu(list, type, -6);
+			option += 4;
 		}
 		else
 		{
-			paginationMenu(list, type, 0);
+			option -= 4;
 		}
+		paginationMenu(list, type, index, option);
 		return;
 	case left:
-		if (option<0)
+		option++;
+		if (8 < option)
 		{
-			if (-4 == option)
-			{
-				paginationMenu(list, type, 9);
-			}
-			else {
-				paginationMenu(list, type, option - 5);
-			}
+			option = 0;
 		}
-		else if (0 != thisPage)
-		{
-			for (int i = 0; i < 10; i++)
-			{
-				list = list->last;
-			}
-			thisPage--;
-			paginationMenu(list, type, option);
-		}
-		else
-		{
-			paginationMenu(list, type, option);
-		}
+		paginationMenu(list, type, index, option);
 		return;
 	case right:
-		if (option<0)
+		option--;
+		if (0 > option)
 		{
-			paginationMenu(list, type, option + 1);
+			option = 8;
 		}
-		else if (thisPage > finalPage-1) {
-			paginationMenu(list, type, option);
-		}
-		else
+		paginationMenu(list, type, index, option);
+		return;
+	case pgup:
+		if (0>=thisPage)
 		{
-			for (int i = 0; i < 10; i++)
-			{
-				list = list->next;
-			}
-			thisPage++;
-			paginationMenu(list, type, option);
+			break;
 		}
+		for (int i = 0; i < 10; i++)
+		{
+			list = list->last;
+		}
+		thisPage--;
+		paginationMenu(list, type, index, option);
+		return;
+	case pgdn:
+		if (finalPage<=thisPage)
+		{
+			break;
+		}
+		for (int i = 0; i < 10; i++)
+		{
+			list = list->next;
+		}
+		thisPage++;
+		paginationMenu(list, type, index, option);
 		return;
 	case enter:
-		switch (option)
+		switch (option)		//处理选择项
 		{
-		case -1:
-			for (int i = 0; i < 10*(finalPage-thisPage); i++)
-			{
-				list = list->next;
-			}
-			thisPage = finalPage;
-			paginationMenu(list, type, option);
-			break;
-		case -2:
-			for (int i = 0; i < 10; i++)
-			{
-				list = list->next;
-			}
-			thisPage++;
-			paginationMenu(list, type, option);
-			break;
-		case -3:
-			for (int i = 0; i < 10; i++)
-			{
-				list = list->last;
-			}
-			thisPage--;
-			paginationMenu(list, type, option);
-			break;
-		case -4:
-			for (int i = 0; i < 10*thisPage; i++)
+		case 0:
+			for (int i = 0; i < 10 * thisPage; i++)
 			{
 				list = list->next;
 			}
 			thisPage = 0;
-			paginationMenu(list, type, option);
 			break;
-		case -5:
-			switch (type)
+		case 1:
+			if (0 >= thisPage)
 			{
-			case d_pc:
-				list = selectToPC();
-				break;
-
-			default:
 				break;
 			}
-			paginationMenu(list, type, option);
+			for (int i = 0; i < 10; i++)
+			{
+				list = list->last;
+			}
+			thisPage--;
 			break;
-		case -6:
-			switch (type)
+		case 2:
+			if (finalPage <= thisPage)
+			{
+				break;
+			}
+			for (int i = 0; i < 10; i++)
+			{
+				list = list->next;
+			}
+			thisPage++;
+			break;
+		case 3:
+			for (int i = 0; i < 10 * (finalPage - thisPage); i++)
+			{
+				list = list->next;
+			}
+			thisPage = finalPage;
+			break;
+		case 4:
+			switch (type)		//处理链表类型
 			{
 			case d_card:
 			{
@@ -319,10 +313,32 @@ void paginationMenu(pList list, dateType type , int option) {
 			default:
 				break;
 			}
-			paginationMenu(list, type, option);
 			break;
-		default:
-			switch (type)
+		case 5:
+			switch (type)		//处理链表类型
+			{
+			case d_pc:
+				scrollMenu(getPCtypeList(), d_pcType, 0);
+				break;
+			case d_card:
+				if (NULL != list->last)
+				{
+					pList temp = NULL != list->next ? list->next : list->last;
+					list->last->next = list->next;
+					if (NULL != list->next)
+					{
+						list->next->last = list->last;
+					}
+					free(list);
+					list = temp;
+				}
+				break;
+			default:
+				break;
+			}
+			break;
+		case 6:
+			switch (type)		//处理链表类型
 			{
 			case d_pc:
 				showPC(op, 0);
@@ -343,14 +359,37 @@ void paginationMenu(pList list, dateType type , int option) {
 				break;
 			}
 			break;
+			break;
+		case 7:
+			switch (type)		//处理链表类型
+			{
+			case d_pc:
+				list = selectToPC();
+				break;
+			case d_card:
+				/////////////////////////////////////////////////
+				break;
+			case d_history:
+				/////////////////////////////////////////////////
+				break;
+			default:
+				break;
+			}
+			break;
+		case 8:
+			finalPage = -1;
+			return;
+		default:
+			break;
 		}
+		paginationMenu(list, type, index, option);
 		return;
 	case esc:
+		paginationMenu(list, type, index, 8);
 		return;
 	default:
 		break;
 	}
-	paginationMenu(list, type, option);
 }
 
 //滚动菜单

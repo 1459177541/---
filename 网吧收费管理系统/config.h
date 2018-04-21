@@ -171,7 +171,7 @@ void setRoot(pAdmin root);
 void setUser(pAdmin u);
 pAdmin getUser();
 void prUser(pAdmin p, int isOption);
-void editUser(int type, pList p, char *pass1, char *pass2);
+void editUser(int type, pAdmin p, char *pass1, char *pass2);
 void helpFromUser();
 
 //menu
@@ -181,7 +181,7 @@ void login(pAdmin user,int type,char* text);
 //pcType
 pList getPCtypeList();
 void prPCtype(pPCtype p, int isOption);
-void editPCtype(int type, pList p);
+void editPCtype(int type, pPCtype p);
 
 //PC
 pList getPCs();
@@ -193,7 +193,7 @@ int showPC(pList p, int type);
 //cardType
 pList getCardTypeList();
 void prCardType(pCardType p, int isOption);
-void editCardType(int type, pList p);
+void editCardType(int type, pCardType p);
 
 //card
 pCard getCard(int id);
@@ -205,7 +205,7 @@ int showCard(pCard p, int type, char * text, char *password, char *password2);
 pList getRateList();
 double results(pPC pc, pCard user);
 void prRate(pRate p, int isOption);
-void editRate(int type, int option[], pList p);
+void editRate(int type, int option[], pRate p);
 
 //history
 pList getHistorys();
@@ -214,5 +214,5 @@ void prHistory(pHistory p, int isOption);
 //list
 void save(dateType type);
 void saveAll();
-void paginationMenu(pList list, dateType type, int option);	//上/下机、会员卡、历史记录
+void paginationMenu(pList list, dateType type, int index, int option);	//上/下机、会员卡、历史记录
 void scrollMenu(pList list, dateType type, int option);		//电脑类型、会员卡类型、管理员、收费标准

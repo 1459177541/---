@@ -211,31 +211,25 @@ void mainMenu(pAdmin user, int type) {
 		switch (type)
 		{
 		case 0:
-//			PCmenu(getPCs(), 0, 0);
-			paginationMenu(getPCs(), d_pc, 0);
+			paginationMenu(getPCs(), d_pc, 0, 0);
 			break;
 		case 1:
-//			CardMenu(getCards(), 0, 0);
-			paginationMenu(getCards(), d_card, 0);
+			paginationMenu(getCards(), d_card, 0, 0);
 			break;
 		case 2:
-//			setPCType(0);
 			scrollMenu(getPCtypeList(), d_pcType, 0);
 			break;
 		case 3:
-//			setCardType(0);
 			scrollMenu(getCardTypeList(), d_cardType, 0);
 			break;
 		case 4:
-//			rateMenu(0);
 			scrollMenu(getRateList(), d_rate, 0);
 			break;
 		case 5:
-//			setUserMenu(0);
 			scrollMenu(getAdminHead(),d_admin,0);
 			break;
 		case 6:
-			paginationMenu(getHistorys(), d_history, 0);
+			paginationMenu(getHistorys(), d_history, 0, 0);
 			break;
 		case 7:
 			////Í³¼Æ////

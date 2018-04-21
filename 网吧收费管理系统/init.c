@@ -93,54 +93,6 @@ void setting() {
 	setAttri("NR", " ");
 }
 
-/*********************************************************
- * 已废弃
- *********************************************************
-//初始化
-int init(int type) {
-	pr_weclome();
-	printf("                我们检测到您是第一次运行该程序，是否进入快速设置？   \n");
-	printf("                                                         \n");
-	printf("                                                         \n");
-	printf("           	                  ");
-	prOption("快速设置", 1 == type, 12);
-	printf("\n                                                         \n");
-	printf("                                                         \n");
-	printf("           	                  ");
-	prOption("恢复备份", 2 == type, 12);
-	printf("\n                                                         \n");
-	printf("                                                         \n");
-	int in = getch();
-	key k = isKey(in);
-	switch (k)
-	{
-	case tab:
-	case down:
-	case up:
-		if (1==type)
-		{
-			return init(2);
-		}
-		else
-		{
-			return init(1);
-		}
-		break;
-	case enter:
-		return type;
-	case esc:
-		if (!saveExit(0))
-		{
-			return init(type);
-		}
-		break;
-	default:
-		break;
-	}
-	return init(type);
-}
-*/
-
 //初始化流程控制
 int initialization() {
 	setting();
