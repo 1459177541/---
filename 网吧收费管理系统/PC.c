@@ -42,6 +42,10 @@ void initPCToArray() {
 		}
 		pcTypeList = pcTypeList->next;
 	}
+	pList t = pcList;
+	pcList = pcList->next;
+	pcList->last = NULL;
+	free(t);
 	return;
 }
 
@@ -65,7 +69,7 @@ void prPC(pPC p, int isOption) {
 	{
 		user[0] = '\0';
 	}
-	printf("\n%3s%9d |%19s |%19s |%19s% -3s\n"
+	printf("\n%3s%9d |%19s |%19s |%19s% -3s"
 		, isOption ? getAttri("L") : getAttri("NL"), p->id, p->type, user, prTime(p->startTime, TIME), isOption ? getAttri("R") : getAttri("NR"));
 }
 
@@ -175,19 +179,20 @@ void logoutPC(pPC p) {
 //全部下机
 void logoutPCAll() {
 	int x = 16;
-	gotoxy(x, 8);
+	int y = 8;
+	gotoxy(x, y++);
 	printf("=================================================");
-	gotoxy(x, 9);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 10);
+	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
-	gotoxy(x, 11);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 12);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 13);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 14);
+	gotoxy(x, y++);
 	printf("=================================================");
 	gotoxy(x + 15, 9);
 	printf("    正在结算金额    ");
@@ -203,6 +208,7 @@ void logoutPCAll() {
 		}
 		i++;
 		logoutPC(list->date.pc);
+		list = list->next;
 	}
 }
 
@@ -416,6 +422,7 @@ pPC selectPC(int type, pCriteriaPC criteria,pPC p) {
 		printf("\n\n");
 		printf("                                ");
 		OPTION_OK(3 == type);
+		k = isKey(getch());
 	}
 	else if (1==criteria->type)
 	{

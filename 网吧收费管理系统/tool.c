@@ -33,6 +33,10 @@ int stringToInt(char * string) {
 
 //整形转换为字符
 char * intToString(int num) {
+	if (0 == num)
+	{
+		return "0";
+	}
 	char *str = (char *)malloc(sizeof(char) * 34);
 	str[33] = '\0';
 	for (int i = 0; i < 33; i++)
@@ -176,6 +180,80 @@ char* prOption(char * name,int isOption,int length) {
 	str[11] = (length / 6) % 10 + '0';
 	str[6] = (length - length / 6 * 2) % 10 + '0';
 	printf(str, isOption ? getAttri("L") : getAttri("NL"),name, isOption ? getAttri("R") : getAttri("NR"));
+}
+
+//输出提示框
+void prPrompt(char *title, char *body) {
+	char *text1 = (char*)malloc(sizeof(char));
+	char *text2 = (char*)malloc(sizeof(char));
+	char *text3 = (char*)malloc(sizeof(char));
+	text1[0] = '\0';
+	text2[0] = '\0';
+	text3[0] = '\0';
+	char *p = text1;
+	int row = 0;
+	int i = 0;
+	int j = 0;
+	while ('\0'!=body[i])
+	{
+		p[j] = body[i];
+		if ('\n'==body[i])
+		{
+			p[j] = '\0';
+			row++;
+			j = 0;
+			if (1==row)
+			{
+				p = text2;
+			}
+			else if (2 == row)
+			{
+				p = text3;
+			}
+		}
+		j++;
+		i++;
+	}
+	int x = 16;
+	int y = 8;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x + 25 - strlen(title) / 2, 9);
+	printf("%s", title);
+	if (0==row)
+	{
+		gotoxy(x + 25 - strlen(body) / 2, 12);
+		printf("%s", body);
+	}
+	else if (1==row)
+	{
+		gotoxy(x + 25 - strlen(text1) / 2, 12);
+		printf("%s", text1);
+		gotoxy(x + 25 - strlen(text2) / 2, 13);
+		printf("%s", text2);
+	}
+	else if (2==row)
+	{
+		gotoxy(x + 25 - strlen(text1) / 2, 12);
+		printf("%s", text1);
+		gotoxy(x + 25 - strlen(text2) / 2, 13);
+		printf("%s", text2);
+		gotoxy(x + 25 - strlen(text3) / 2, 14);
+		printf("%s", text3);
+	}
+	gotoxy(0, 23);
 }
 
 //输出时间
@@ -438,41 +516,19 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 
 //保存
 void saveBeforExit() {
-	int x = 16;
-	gotoxy(x, 8);
-	printf("=================================================");
-	gotoxy(x, 9);
-	printf("|                    正在保存                   |");
-	gotoxy(x, 10);
-	printf("|        -------------------------------        |");
-	gotoxy(x, 11);
-	printf("|                                               |");
-	gotoxy(x, 12);
-	printf("|                                               |");
-	gotoxy(x, 13);
-	printf("|                                               |");
-	gotoxy(x, 14);
-	printf("=================================================");
-	gotoxy(x + 15, 12);
-	printf(" 正在保存管理员信息 ");
+	prPrompt("正在保存","正在保存管理员信息");
 	save(d_admin);
-	gotoxy(x + 15,12);
-	printf("    正在保存配置    ");
+	prPrompt("正在保存", "正在保存配置");
 	saveAttri();
-	gotoxy(x + 15, 12);
-	printf("  正在保存网吧规模  ");
+	prPrompt("正在保存", "正在保存网吧规模");
 	save(d_pcType);
-	gotoxy(x + 15, 12);
-	printf(" 正在保存会员卡类型 ");
+	prPrompt("正在保存", "正在保存会员卡类型");
 	save(d_cardType);
-	gotoxy(x + 15, 12);
-	printf("  正在保存计费方案  ");
+	prPrompt("正在保存", "正在保存计费方案");
 	save(d_rate);
-	gotoxy(x + 15, 12);
-	printf("   正在保存会员卡   ");
+	prPrompt("正在保存", "正在保存会员卡");
 	save(d_card);
-	gotoxy(x + 15, 12);
-	printf("  正在保存历史记录  ");
+	prPrompt("正在保存", "正在保存历史记录");
 	save(d_history);
 }
 
@@ -524,27 +580,9 @@ int saveExit(int type) {
 		case 0:
 			saveBeforExit();
 		case 1:
-			gotoxy(x, 8);
-			printf("=================================================");
-			gotoxy(x, 9);
-			printf("|                    正在退出                   |");
-			gotoxy(x, 10);
-			printf("|        -------------------------------        |");
-			gotoxy(x, 11);
-			printf("|                                               |");
-			gotoxy(x, 12);
-			printf("|                                               |");
-			gotoxy(x, 13);
-			printf("|                                               |");
-			gotoxy(x, 14);
-			printf("=================================================");
-			gotoxy(x + 15, 12);
-			printf("    正在结算金额    ");
+			prPrompt("退出", "正在结算金额");
 			logoutPCAll();
-			gotoxy(x + 15, 9);
-			printf("     已成功关闭     ");
-			gotoxy(x + 15, 12);
-			printf("    感谢您的使用    ");
+			prPrompt("已成功关闭", "感谢您的使用");
 			gotoxy(x + 15, 13);
 			exit(0);
 			return 1;

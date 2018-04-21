@@ -43,37 +43,37 @@ void save(dateType type) {
 		switch (type)
 		{
 		case d_admin:
-			if (fwrite(p->date.admin, sizeof(admin), 1, fp))
+			if (fwrite(p->date.admin, sizeof(admin), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_pcType:
-			if (fwrite(p->date.pcType, sizeof(PCtype), 1, fp))
+			if (fwrite(p->date.pcType, sizeof(PCtype), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_cardType:
-			if (fwrite(p->date.cardType, sizeof(cardType), 1, fp))
+			if (fwrite(p->date.cardType, sizeof(cardType), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_rate:
-			if (fwrite(p->date.rate, sizeof(rate), 1, fp))
+			if (fwrite(p->date.rate, sizeof(rate), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_history:
-			if (fwrite(p->date.history, sizeof(history), 1, fp))
+			if (fwrite(p->date.history, sizeof(history), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_card:
-			if (fwrite(p->date.card, sizeof(card), 1, fp))
+			if (fwrite(p->date.card, sizeof(card), 1, fp)>0)
 			{
 				p = p->next;
 			}
@@ -104,7 +104,7 @@ void initFinalPage(pList list) {
 		length++;
 		list = list->next;
 	}
-	finalPage = length;
+	finalPage = length/10;
 }
 
 void paginationMenu(pList list, dateType type, int index, int option) {
@@ -121,8 +121,10 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 	{
 	case d_pc:
 		system("title 上/下机");
-		printf("\n");
-		printf("\n      id     |        类型        |      当前用户      |      上机时间      \n");
+		printf("\n                             ---===上/下机===---\n");
+		printf("\n-------------+--------------------+--------------------+------------------------");
+		printf("\n      id     |        类型        |      当前用户      |      上机时间      ");
+		printf("\n-------------+--------------------+--------------------+------------------------");
 		break;
 	case d_card:
 		system("title 会员卡管理");
@@ -146,27 +148,51 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			switch (type)
 			{
 			case d_pc:
-				prPC(p->date.pc, i == option);
+				prPC(p->date.pc, i == index);
 				break;
 			case d_card:
-				prCard(p->date.card, i == option);
+				prCard(p->date.card, i == index);
 				break;
 			case d_history:
-				prHistory(p->date.history, i == option);
+				prHistory(p->date.history, i == index);
 				break;
 			default:
 				break;
 			}
-			if (i == option)
+			if (i == index)
 			{
 				op = p;
 			}
 			p = p->next;
 		}
 		else {
-			printf("\n             |                    |                    |                       \n");
+			switch (type)
+			{
+			case d_pc:
+				printf("\n             |                    |                    |                       "); 
+				break;
+			case d_card:
+				break;
+			case d_history:
+				break;
+			default:
+				break;
+			}
 		}
 	}
+	switch (type)
+	{
+	case d_pc:
+		printf("\n-------------+--------------------+--------------------+------------------------");
+		break;
+	case d_card:
+		break;
+	case d_history:
+		break;
+	default:
+		break;
+	}
+	printf("                              %5d / %-5d\n", thisPage+1, finalPage+1);
 	printf("\n                     ");
 	prOption("首  页", 0 == option, 9);
 	printf("   ");
@@ -220,18 +246,18 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 		paginationMenu(list, type, index, option);
 		return;
 	case left:
-		option++;
-		if (8 < option)
-		{
-			option = 0;
-		}
-		paginationMenu(list, type, index, option);
-		return;
-	case right:
 		option--;
 		if (0 > option)
 		{
 			option = 8;
+		}
+		paginationMenu(list, type, index, option);
+		return;
+	case right:
+		option++;
+		if (8 < option)
+		{
+			option = 0;
 		}
 		paginationMenu(list, type, index, option);
 		return;
@@ -266,7 +292,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 		case 0:	//首页
 			for (int i = 0; i < 10 * thisPage; i++)
 			{
-				list = list->next;
+				list = list->last;
 			}
 			thisPage = 0;
 			break;
@@ -304,6 +330,8 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			switch (type)		
 			{
 			case d_pc:
+				prPrompt("即将进入网吧规模", "按任意键继续");
+				getch();
 				scrollMenu(getPCtypeList(), d_pcType, 0);
 				break;
 			case d_card:
@@ -313,6 +341,12 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				pass1[0] = '\0';
 				pass2[0] = '\0';
 				showCard(op, 1, "", pass1, pass2);
+				free(pass1);
+				free(pass2);
+				break;
+			case d_history:
+				prPrompt("禁止！！！", "只能通过程序自动创建\n无法手动创建\n按任意键返回");
+				getch();
 				break;
 			}
 			default:
@@ -324,6 +358,8 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			switch (type)		
 			{
 			case d_pc:
+				prPrompt("即将进入网吧规模", "按任意键继续");
+				getch();
 				scrollMenu(getPCtypeList(), d_pcType, 0);
 				break;
 			case d_card:
@@ -338,6 +374,9 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 					free(list);
 					list = temp;
 				}
+			case d_history:
+				prPrompt("禁止！！！", "删除历史记录会导致不可预见的事情发生\n禁止随意删除\n按任意键返回");
+				getch();
 				break;
 			default:
 				break;
@@ -352,11 +391,13 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				break;
 			case d_card:
 			{
-				char pass1[32];
-				char pass2[32];
+				char *pass1 = (char *)malloc(sizeof(char) * 16);
+				char *pass2 = (char *)malloc(sizeof(char) * 16);
 				strcpy(pass1, op->date.card->password);
 				strcpy(pass2, op->date.card->password);
 				showCard(op, 0, "", pass1, pass2);
+				free(pass1);
+				free(pass2);
 				break;
 			}
 			case d_history:
@@ -585,7 +626,7 @@ void scrollMenu(pList list, dateType type, int option) {
 			case d_pcType:
 			{
 				pPCtype p = (pPCtype)malloc(sizeof(PCtype));
-				p->startId = number;
+				p->startId = getPCtypeList()->date.pcType->num;
 				p->num = 0;
 				p->type[0] = '\0';
 				pList pl = (pList)malloc(sizeof(List));
@@ -613,8 +654,8 @@ void scrollMenu(pList list, dateType type, int option) {
 			}
 			case d_admin:
 			{
-				char pass1[32];
-				char pass2[32];
+				char *pass1 = (char *)malloc(sizeof(char) * 16);
+				char *pass2 = (char *)malloc(sizeof(char) * 16);
 				strcpy(pass1, p->date.admin->password);
 				strcpy(pass2, p->date.admin->password);
 				pAdmin p = (pAdmin)malloc(sizeof(admin));
@@ -628,6 +669,8 @@ void scrollMenu(pList list, dateType type, int option) {
 				pl->type = d_admin;
 				q->next = pl;
 				editUser(0, p, pass1, pass2);
+				free(pass1);
+				free(pass2);
 				break;
 			}
 			case d_rate:
@@ -677,11 +720,13 @@ void scrollMenu(pList list, dateType type, int option) {
 				break;
 			case d_admin:
 			{
-				char pass1[32];
-				char pass2[32];
+				char *pass1 = (char *)malloc(sizeof(char) * 16);
+				char *pass2 = (char *)malloc(sizeof(char) * 16);
 				strcpy(pass1, list->date.admin->password);
 				strcpy(pass2, list->date.admin->password);
 				editUser(0, list->date.admin,pass1,pass2);
+				free(pass1);
+				free(pass2);
 				break;
 			}
 			case d_rate:
@@ -706,10 +751,7 @@ void scrollMenu(pList list, dateType type, int option) {
 		return;
 	}
 	case esc:
-	{
 		return;
-	}
-	break;
 	default:
 		break;
 	}

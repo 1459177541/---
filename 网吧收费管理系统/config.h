@@ -131,6 +131,7 @@ int isPower(int powerCode, int point);
 	#define OPTION_OK(isOption) prOption("确定", isOption, 7);
 	#define OPTION_CANCEL(isOption) prOption("取消/删除", isOption, 15);
 char* prOption(char * name, int isOption, int length);
+void prPrompt(char *title, char *body);
 char * prTime(pTm p, int style);
 void prTimes(pTm start, pTm end, char * text);
 key input(int x, int y, char *in, int isPassword, int power, char * other);
