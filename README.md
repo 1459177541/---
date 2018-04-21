@@ -3,7 +3,9 @@
 #
 # 欢迎提出建议
 #
-# GitHub:https://github.com/1459177541/Network-bar-charge-management-system
-# Email:1459177541@qq.com
-# QQ:1459177541
-# 
+
+GitHub:https://github.com/1459177541/Network-bar-charge-management-system
+
+Email:1459177541@qq.com
+
+QQ:1459177541
