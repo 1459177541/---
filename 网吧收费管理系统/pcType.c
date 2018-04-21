@@ -61,52 +61,32 @@ void prPCtype(pPCtype p, int isOption) {
 
 //修改电脑类型
 void editPCtype(int type, pPCtype p) {
-	char* typeName = (char*)malloc(16 * sizeof(char));
-	char* num = (char*)malloc(16 * sizeof(char));
-	char* startID = (char*)malloc(16 * sizeof(char));
-	typeName[0] = '\0';
-	num[0] = '\0';
-	startID[0] = '\0';
-	if (0 != type)
-	{
-		strcpy(typeName, p->type);
-	}
-	if (1 != type)
-	{
-		strcpy(num, intToString(p->num));
-	}
-	if (2 != type)
-	{
-		strcpy(startID, intToString(p->startId));
-	}
 	int x = 16;
-	gotoxy(x, 6);
+	int y = 6;
+	gotoxy(x, y++);
 	printf("=================================================");
-	gotoxy(x, 7);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 8);
-	printf("|                类型名称：%-21s|", typeName);
-	gotoxy(x, 9);
+	gotoxy(x, y++);
+	printf("|                类型名称：%-21s|", 0 == type ? "" : p->type);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 10);
-	printf("|                数    量：%-21s|", num);
-	gotoxy(x, 11);
+	gotoxy(x, y++);
+	printf("|                数    量：%-21s|", 1 == type ? "" : intToString(p->num));
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 12);
-	printf("|                起始编号：%-21s|", startID);
-	gotoxy(x, 13);
+	gotoxy(x, y++);
+	printf("|                起始编号：%-21s|", 2 == type ? "" : intToString(p->startId));
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 14);
+	gotoxy(x, y++);
 	printf("|                      ");
 	OPTION_OK(3 == type);
 	printf("                  |");
-	gotoxy(x, 15);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 16);
+	gotoxy(x, y++);
 	printf("=================================================");
-	free(typeName);
-	free(num);
-	free(startID);
 
 	key key;
 	char *in = (char*)malloc(sizeof(char) * 16);

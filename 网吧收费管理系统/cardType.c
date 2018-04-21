@@ -58,41 +58,34 @@ void prCardType(pCardType p, int isOption) {
 
 //修改会员卡类型
 void editCardType(int type, pCardType p) {
-	char* typeName = (char*)malloc(16 * sizeof(char));
 	char* num = (char*)malloc(16 * sizeof(char));
-	typeName[0] = '\0';
 	num[0] = '\0';
-	if (0 != type)
-	{
-		strcpy(typeName, p->name);
-	}
 	if (1 != type)
 	{
 		sprintf(num, "%.2lf", p->price);
 	}
 	int x = 16;
-	gotoxy(x, 7);
+	int y = 7;
+	gotoxy(x, y++);
 	printf("=================================================");
-	gotoxy(x, 8);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 9);
-	printf("|              会员卡名称：%-21s|", typeName);
-	gotoxy(x, 10);
+	gotoxy(x, y++);
+	printf("|              会员卡名称：%-21s|", 0 == type ? "":p->name);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 11);
+	gotoxy(x, y++);
 	printf("|                价    格：%-21s|", num);
-	gotoxy(x, 12);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 13);
+	gotoxy(x, y++);
 	printf("|                      ");
 	OPTION_OK(3 == type);
 	printf("                  |");
-	gotoxy(x, 14);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 15);
+	gotoxy(x, y++);
 	printf("=================================================");
-	gotoxy(x, 16);
-	free(typeName);
 	free(num);
 
 	key key;

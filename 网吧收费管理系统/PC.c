@@ -207,30 +207,31 @@ void logoutPCAll() {
 }
 
 //PC界面
-int showPC(pList p, int type) {
+int showPC(pPC p, int type) {
 	char name[16] = "";
-	if (NULL!=p->date.pc->user)
+	if (NULL!=p->user)
 	{
-		strcpy(name, p->date.pc->user->masterName);
+		strcpy(name, p->user->masterName);
 	}
 	int x = 16;
-	gotoxy(x, 6);
+	int y = 6;
+	gotoxy(x, y++);
 	printf("=================================================");
-	gotoxy(x, 7);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 8);
-	printf("|                  id: %-25d|", p->date.pc->id);
-	gotoxy(x, 9);
+	gotoxy(x, y++);
+	printf("|                  id: %-25d|", p->id);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 10);
-	printf("|                 类型: %-24s|", p->date.pc->type);
-	gotoxy(x, 11);
+	gotoxy(x, y++);
+	printf("|                 类型: %-24s|", p->type);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 12);
+	gotoxy(x, y++);
 	printf("|              当前用户: %-23s|", name);
-	gotoxy(x, 13);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 14);
+	gotoxy(x, y++);
 	printf("|      ");
 	prOption("上机", 1 == type, 6);
 	printf("        ");
@@ -238,9 +239,9 @@ int showPC(pList p, int type) {
 	printf("        ");
 	prOption("取消", 3 == type, 6);
 	printf("       |");
-	gotoxy(x, 15);
+	gotoxy(x, y++);
 	printf("|                                               |");
-	gotoxy(x, 16); 
+	gotoxy(x, y++);
 	printf("=================================================");
 	key k = isKey(getch());
 	switch (k)
@@ -271,18 +272,12 @@ int showPC(pList p, int type) {
 		}
 		else if(2 == type)
 		{
-			logoutPC(p->date.pc);
+			logoutPC(p);
 			showPC(p, 1);
 			return;
 		}
 		else if (3==type)
 		{
-			p->last->next = p->next;
-			if (NULL != p->next)
-			{
-				p->next->last = p->last;
-			}
-			free(p);
 			return;
 		}
 		break;

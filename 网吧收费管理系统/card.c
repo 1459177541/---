@@ -69,26 +69,8 @@ void prCard(pCard p, int isOption) {
 }
 
 int showCard(pCard p, int type,char * text, char *password, char *password2) {
-	char* id = (char*)malloc(16 * sizeof(char));
-	char* cardType = (char*)malloc(16 * sizeof(char));
-	char* masterName = (char*)malloc(16 * sizeof(char));
 	char* balance = (char*)malloc(16 * sizeof(char));
-	id[0] = '\0';
-	cardType[0] = '\0';
-	masterName[0] = '\0';
 	balance[0] = '\0';
-	if (0 != type)
-	{
-		sprintf(id, "%d", p->id);
-	}
-	if (1 != type)
-	{
-		strcpy(cardType, p->type);
-	}
-	if (2 != type)
-	{
-		strcpy(masterName, p->masterName);
-	}
 	if (5 != type)
 	{
 		sprintf(balance, "%.2lf", p->balance);
@@ -100,15 +82,15 @@ int showCard(pCard p, int type,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                      id：%-21s|", id);
+	printf("|                      id：%-21s|", 0 == type ? "" : itoa(p->id, NULL, 10));
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    类型：%-21s|", cardType);
+	printf("|                    类型：%-21s|", 1 == type ? "" : p->type);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                  用户名：%-21s|", masterName);
+	printf("|                  用户名：%-21s|", 2 == type ? "" : p->masterName);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
@@ -129,39 +111,15 @@ int showCard(pCard p, int type,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                    %10s                 |",text);
 	gotoxy(x, y++);
-	printf("|          ");
+	printf("|                      ");
 	OPTION_OK(6 == type);
-	printf("        ");
-	OPTION_CANCEL(7 == type);
-	printf("          |");
+	printf("                  |");
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
 	printf("=================================================");
-	gotoxy(x, 16);
-	free(id);
-	free(cardType);
-	free(masterName);
+	gotoxy(x, y++);
 	free(balance);
-
-	if (7 == type)
-	{
-		int in = getch();
-		key k = isKey(in);
-		switch (k)
-		{
-		case up:
-			return showCard(6, p, text, password,password2);
-		case down:
-		case tab:
-			return showCard(0, p, text, password, password2);
-		case enter:
-			return 1;
-		default:
-			break;
-		}
-		return showCard(type, p, text, password, password2);
-	}
 
 	key k;
 	switch (type)

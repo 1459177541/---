@@ -180,7 +180,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 	printf(" ");
 	prOption("  删除  ", 5 == option, 13);
 	printf(" ");
-	prOption("  修改  ", 6 == option, 13);
+	prOption("  详细  ", 6 == option, 13);
 	printf(" ");
 	prOption("  筛选  ", 7 == option, 13);
 	printf(" ");
@@ -260,16 +260,17 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 		paginationMenu(list, type, index, option);
 		return;
 	case enter:
-		switch (option)		//处理选择项
+		//处理选择项
+		switch (option)		
 		{
-		case 0:
+		case 0:	//首页
 			for (int i = 0; i < 10 * thisPage; i++)
 			{
 				list = list->next;
 			}
 			thisPage = 0;
 			break;
-		case 1:
+		case 1:	//上一页
 			if (0 >= thisPage)
 			{
 				break;
@@ -280,7 +281,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			}
 			thisPage--;
 			break;
-		case 2:
+		case 2:	//下一页
 			if (finalPage <= thisPage)
 			{
 				break;
@@ -291,16 +292,20 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			}
 			thisPage++;
 			break;
-		case 3:
+		case 3:	//尾页
 			for (int i = 0; i < 10 * (finalPage - thisPage); i++)
 			{
 				list = list->next;
 			}
 			thisPage = finalPage;
 			break;
-		case 4:
-			switch (type)		//处理链表类型
+		case 4:	//新建
+			//处理链表类型
+			switch (type)		
 			{
+			case d_pc:
+				scrollMenu(getPCtypeList(), d_pcType, 0);
+				break;
 			case d_card:
 			{
 				char *pass1 = (char *)malloc(sizeof(char) * 16);
@@ -314,8 +319,9 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				break;
 			}
 			break;
-		case 5:
-			switch (type)		//处理链表类型
+		case 5:	//删除
+			//处理链表类型
+			switch (type)		
 			{
 			case d_pc:
 				scrollMenu(getPCtypeList(), d_pcType, 0);
@@ -337,11 +343,12 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				break;
 			}
 			break;
-		case 6:
-			switch (type)		//处理链表类型
+		case 6:	//详细
+			//处理链表类型
+			switch (type)		
 			{
 			case d_pc:
-				showPC(op, 0);
+				showPC(op->date.pc, 0);
 				break;
 			case d_card:
 			{
@@ -360,8 +367,9 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			}
 			break;
 			break;
-		case 7:
-			switch (type)		//处理链表类型
+		case 7:	//筛选
+			//处理链表类型
+			switch (type)		
 			{
 			case d_pc:
 				list = selectToPC();
@@ -376,7 +384,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				break;
 			}
 			break;
-		case 8:
+		case 8:	//返回
 			finalPage = -1;
 			return;
 		default:
@@ -519,7 +527,7 @@ void scrollMenu(pList list, dateType type, int option) {
 	printf(" ");
 	prOption("  删除  ", 1 == option, 13);
 	printf(" ");
-	prOption("  修改  ", 2 == option, 13);
+	prOption("  详细  ", 2 == option, 13);
 	printf(" ");
 	prOption("  帮助  ", 3 == option, 13);
 	printf(" ");
