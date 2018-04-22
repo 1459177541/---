@@ -128,13 +128,17 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 		break;
 	case d_card:
 		system("title 会员卡管理");
-		printf("\n");
-		printf("\n        id         |        类型        |       用户名       |      余额    \n");
+		printf("\n                          ---===会员卡管理===---\n");
+		printf("\n-------------------+--------------------+--------------------+------------------");
+		printf("\n        id         |        类型        |       用户名       |      余额    ");
+		printf("\n-------------------+--------------------+--------------------+------------------");
 		break;
 	case d_history:
 		system("title 历史记录");
-		printf("\n");
+		printf("\n                           ---===历史记录===---\n");
+		printf("\n----------------------+-----------------+---------------------------------------");
 		printf("\n          操作类型     |     操作人     |                时间               \n");
+		printf("\n----------------------+-----------------+---------------------------------------");
 		break;
 	default:
 		return;
@@ -172,8 +176,10 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				printf("\n             |                    |                    |                       "); 
 				break;
 			case d_card:
+				printf("\n                   |                    |                    |                  ");
 				break;
 			case d_history:
+				printf("\n                      |                 |                                       ");
 				break;
 			default:
 				break;
@@ -186,8 +192,10 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n-------------+--------------------+--------------------+------------------------");
 		break;
 	case d_card:
+		printf("\n-------------------+--------------------+--------------------+------------------");
 		break;
 	case d_history:
+		printf("\n----------------------+-----------------+---------------------------------------");
 		break;
 	default:
 		break;
@@ -417,7 +425,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				break;
 			}
 			case d_history:
-				/////////////////////////////////////////////////
+				showHistory(op->date.history);
 				break;
 			default:
 				break;

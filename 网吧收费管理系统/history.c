@@ -50,7 +50,131 @@ pList getHistorys() {
 	return historyLists;
 }
 
-void addHistory(historyType type, date date) {
+char *getHistoryType(pHistory p) {
+	char type[15];
+	switch (p->type)
+	{
+	case C_ADMIN_T:
+		strcpy(type, "创建管理员");
+		break;
+	case D_ADMIN_T:
+		strcpy(type, "删除管理员");
+		break;
+	case U_ADMIN_T:
+		strcpy(type, "修改管理员");
+		break;
+	case C_RATE_T:
+		strcpy(type, "新建计费标准");
+		break;
+	case D_RATE_T:
+		strcpy(type, "删除计费标准");
+		break;
+	case U_RATE_T:
+		strcpy(type, "修改计费标准");
+		break;
+	case C_CARD_T:
+		strcpy(type, "注册会员卡");
+		break;
+	case D_CARD_T:
+		strcpy(type, "注销会员卡");
+		break;
+	case U_CARD_T:
+		strcpy(type, "修改会员卡信息");
+		break;
+	case C_PC_TYPE_T:
+		strcpy(type, "新增电脑类型");
+		break;
+	case D_PC_TYPE_T:
+		strcpy(type, "删除电脑类型");
+		break;
+	case U_PC_TYPE_T:
+		strcpy(type, "修改电脑类型");
+		break;
+	case C_CARD_TYPE_T:
+		strcpy(type, "新增会员卡类型");
+		break;
+	case D_CARD_TYPE_T:
+		strcpy(type, "删除会员卡类型");
+		break;
+	case U_CARD_TYPE_T:
+		strcpy(type, "修改会员卡类型");
+		break;
+	case UP_T:
+		strcpy(type, "上机");
+		break;
+	case DOWN_T:
+		strcpy(type, "下机");
+		break;
+	default:
+		strcpy(type, "ERROR");
+		break;
+	}
+	return type;
+}
+
+void showHistory(pHistory p) {
+	char *textTime1 = (char *)malloc(sizeof(char) * 33);
+	char *textTime2 = (char *)malloc(sizeof(char) * 33);
+	char *text1 = (char *)malloc(sizeof(char) * 33);
+	char *text2 = (char *)malloc(sizeof(char) * 33);
+	char *text3 = (char *)malloc(sizeof(char) * 33);
+	textTime1[0] = '\0';
+	textTime2[0] = '\0';
+	text1[0] = '\0';
+	text2[0] = '\0';
+	text3[0] = '\0';
+	splitString(p->time, textTime1, 0, 32);
+	splitString(p->time, textTime2, 33, 64);
+	splitString(p->text, text1, 0, 32);
+	splitString(p->text, text1, 33, 64);
+	splitString(p->text, text1, 65, 96);
+	int x = 8;
+	int y = 1;
+	gotoxy(x, y++);
+	printf("=========================================================");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|               类型: %-24s             |", getHistoryType(p));
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|             操作人: %-22s             |", p->editor);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|               时间: %-32s         |", textTime1);
+	gotoxy(x, y++);
+	printf("|                    %-32s         |", textTime2);
+	gotoxy(x, y++);
+	printf("|                                                   |");
+	gotoxy(x, y++);
+	printf("|               详细:%-32s         |", text1);
+	gotoxy(x, y++);
+	printf("|                    %-32s         |", text2);
+	gotoxy(x, y++);
+	printf("|                    %-32s         |", text3);
+	gotoxy(x, y++);
+	printf("|                                                   |");
+	gotoxy(x, y++);
+	printf("|            -------------------------------            |");
+	gotoxy(x, y++);
+	printf("|                          ");
+	OPTION_OK(1);
+	printf("                      |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("=========================================================");
+	while (enter != isKey(getch()))	{}
+	free(text3);
+	free(text2);
+	free(text1);
+	free(textTime2);
+	free(textTime1);
+}
+
+void addHistory(historyType type, date date, void* other) {
 	char * prPower(int power);
 	pList pl;
 	if (NULL==historyFinal)
@@ -120,7 +244,7 @@ void addHistory(historyType type, date date) {
 		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑上机", date.pc->user->id, date.pc->type, date.pc->id);
 		break;
 	case DOWN_T:
-		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑下机", date.pc->user->id, date.pc->type, date.pc->id);
+		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5lf元", date.pc->user->id, date.pc->type, date.pc->id, (double*)other);
 		break;
 	default:
 		strcpy(pl->date.history->text, "ERROR");
@@ -129,64 +253,6 @@ void addHistory(historyType type, date date) {
 }
 
 void prHistory(pHistory p, int isOption) {
-	char type[15];
-	switch (p->type)
-	{
-	case C_ADMIN_T:
-		strcpy(type, "创建管理员");
-		break;
-	case D_ADMIN_T:
-		strcpy(type, "删除管理员");
-		break;
-	case U_ADMIN_T:
-		strcpy(type, "修改管理员");
-		break;
-	case C_RATE_T:
-		strcpy(type, "新建计费标准");
-		break;
-	case D_RATE_T:
-		strcpy(type, "删除计费标准");
-		break;
-	case U_RATE_T:
-		strcpy(type, "修改计费标准");
-		break;
-	case C_CARD_T:
-		strcpy(type, "注册会员卡");
-		break;
-	case D_CARD_T:
-		strcpy(type, "注销会员卡");
-		break;
-	case U_CARD_T:
-		strcpy(type, "修改会员卡信息");
-		break;
-	case C_PC_TYPE_T:
-		strcpy(type, "新增电脑类型");
-		break;
-	case D_PC_TYPE_T:
-		strcpy(type, "删除电脑类型");
-		break;
-	case U_PC_TYPE_T:
-		strcpy(type, "修改电脑类型");
-		break;
-	case C_CARD_TYPE_T:
-		strcpy(type, "新增会员卡类型");
-		break;
-	case D_CARD_TYPE_T:
-		strcpy(type, "删除会员卡类型");
-		break;
-	case U_CARD_TYPE_T:
-		strcpy(type, "修改会员卡类型");
-		break;
-	case UP_T:
-		strcpy(type, "上机");
-		break;
-	case DOWN_T:
-		strcpy(type, "下机");
-		break;
-	default:
-		strcpy(type, "ERROR");
-		break;
-	}
 	printf("%6s%16s |%15s  |%19s %-6s\n"
-		, isOption ? getAttri("L") : getAttri("NL"), type, p->editor, p->time, isOption ? getAttri("R") : getAttri("NR"));
+		, isOption ? getAttri("L") : getAttri("NL"), getHistoryType(p), p->editor, p->time, isOption ? getAttri("R") : getAttri("NR"));
 }

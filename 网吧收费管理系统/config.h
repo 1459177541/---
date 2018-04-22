@@ -211,6 +211,7 @@ void editRate(int type, int option[], pRate p);
 //history
 pList getHistorys();
 void prHistory(pHistory p, int isOption);
+void showHistory(pHistory p);
 
 //list
 void save(dateType type);
