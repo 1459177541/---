@@ -336,13 +336,21 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				break;
 			case d_card:
 			{
-				char *pass1 = (char *)malloc(sizeof(char) * 16);
-				char *pass2 = (char *)malloc(sizeof(char) * 16);
-				pass1[0] = '\0';
-				pass2[0] = '\0';
-				showCard(op, 1, "", pass1, pass2);
-				free(pass1);
-				free(pass2);
+				if (isPower(getUser()->power, 0))
+				{
+					char *pass1 = (char *)malloc(sizeof(char) * 16);
+					char *pass2 = (char *)malloc(sizeof(char) * 16);
+					pass1[0] = '\0';
+					pass2[0] = '\0';
+					showCard(op, 1, "", pass1, pass2);
+					free(pass1);
+					free(pass2);
+				}
+				else
+				{
+					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+					getch();
+				}
 				break;
 			case d_history:
 				prPrompt("禁止！！！", "只能通过程序自动创建\n无法手动创建\n按任意键返回");
@@ -363,16 +371,24 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				scrollMenu(getPCtypeList(), d_pcType, 0);
 				break;
 			case d_card:
-				if (NULL != list->last)
+				if (isPower(getUser()->power, 1))
 				{
-					pList temp = NULL != list->next ? list->next : list->last;
-					list->last->next = list->next;
-					if (NULL != list->next)
+					if (NULL != list->last)
 					{
-						list->next->last = list->last;
+						pList temp = NULL != list->next ? list->next : list->last;
+						list->last->next = list->next;
+						if (NULL != list->next)
+						{
+							list->next->last = list->last;
+						}
+						free(list);
+						list = temp;
 					}
-					free(list);
-					list = temp;
+				}
+				else
+				{
+					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+					getch();
 				}
 			case d_history:
 				prPrompt("禁止！！！", "删除历史记录会导致不可预见的事情发生\n禁止随意删除\n按任意键返回");
@@ -625,69 +641,101 @@ void scrollMenu(pList list, dateType type, int option) {
 			{
 			case d_pcType:
 			{
-				pPCtype p = (pPCtype)malloc(sizeof(PCtype));
-				p->startId = getPCtypeList()->date.pcType->num;
-				p->num = 0;
-				p->type[0] = '\0';
-				pList pl = (pList)malloc(sizeof(List));
-				pl->last = q;
-				pl->next = NULL;
-				pl->date.pc = p;
-				pl->type = d_pcType;
-				q->next = pl;
-				editPCtype(0, p);
+				if (isPower(getUser()->power,14))
+				{
+					pPCtype p = (pPCtype)malloc(sizeof(PCtype));
+					p->startId = getPCtypeList()->date.pcType->num;
+					p->num = 0;
+					p->type[0] = '\0';
+					pList pl = (pList)malloc(sizeof(List));
+					pl->last = q;
+					pl->next = NULL;
+					pl->date.pc = p;
+					pl->type = d_pcType;
+					q->next = pl;
+					editPCtype(0, p);
+				}
+				else
+				{
+					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+					getch();
+				}
 				break;
 			}
 			case  d_cardType:
 			{
-				pCardType p = (pCardType)malloc(sizeof(cardType));
-				p->name[0] = '\0';
-				p->price = 0;
-				pList pl = (pList)malloc(sizeof(List));
-				pl->last = q;
-				pl->next = NULL;
-				pl->date.card = p;
-				pl->type = d_cardType;
-				q->next = pl;
-				editCardType(0, p);
+				if (isPower(getUser()->power, 11))
+				{
+					pCardType p = (pCardType)malloc(sizeof(cardType));
+					p->name[0] = '\0';
+					p->price = 0;
+					pList pl = (pList)malloc(sizeof(List));
+					pl->last = q;
+					pl->next = NULL;
+					pl->date.card = p;
+					pl->type = d_cardType;
+					q->next = pl;
+					editCardType(0, p);
+				}
+				else
+				{
+					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+					getch();
+				}
 				break;
 			}
 			case d_admin:
 			{
-				char *pass1 = (char *)malloc(sizeof(char) * 16);
-				char *pass2 = (char *)malloc(sizeof(char) * 16);
-				strcpy(pass1, p->date.admin->password);
-				strcpy(pass2, p->date.admin->password);
-				pAdmin p = (pAdmin)malloc(sizeof(admin));
-				p->name[0] = '\0';
-				p->password[0] = '\0';
-				p->power = 0;
-				pList pl = (pList)malloc(sizeof(List));
-				pl->last = q;
-				pl->next = NULL;
-				pl->date.admin = p;
-				pl->type = d_admin;
-				q->next = pl;
-				editUser(0, p, pass1, pass2);
-				free(pass1);
-				free(pass2);
+				if (isPower(getUser()->power, 8))
+				{
+					char *pass1 = (char *)malloc(sizeof(char) * 16);
+					char *pass2 = (char *)malloc(sizeof(char) * 16);
+					strcpy(pass1, p->date.admin->password);
+					strcpy(pass2, p->date.admin->password);
+					pAdmin p = (pAdmin)malloc(sizeof(admin));
+					p->name[0] = '\0';
+					p->password[0] = '\0';
+					p->power = 0;
+					pList pl = (pList)malloc(sizeof(List));
+					pl->last = q;
+					pl->next = NULL;
+					pl->date.admin = p;
+					pl->type = d_admin;
+					q->next = pl;
+					editUser(0, p, pass1, pass2);
+					free(pass1);
+					free(pass2);
+				}
+				else
+				{
+					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+					getch();
+				}
 				break;
 			}
 			case d_rate:
 			{
-				pRate p = (pRate)malloc(sizeof(rate));
-				p->card[0] = '\0';
-				p->pc[0] = '\0';
-				p->startTime = NULL;
-				p->endTime = NULL;
-				p->rule[0] = '\0';
-				pList pl = (pList)malloc(sizeof(List));
-				pl->last = q;
-				pl->next = NULL;
-				pl->date.rate = p;
-				pl->type = d_rate;
-				q->next = pl;
-				editRate(0, a, p);
+				if (isPower(getUser()->power, 3))
+				{
+					pRate p = (pRate)malloc(sizeof(rate));
+					p->card[0] = '\0';
+					p->pc[0] = '\0';
+					p->startTime = NULL;
+					p->endTime = NULL;
+					p->rule[0] = '\0';
+					pList pl = (pList)malloc(sizeof(List));
+					pl->last = q;
+					pl->next = NULL;
+					pl->date.rate = p;
+					pl->type = d_rate;
+					q->next = pl;
+					editRate(0, a, p);
+				}
+				else
+				{
+					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+					getch();
+				}
 				break;
 			}
 			default:
@@ -696,16 +744,48 @@ void scrollMenu(pList list, dateType type, int option) {
 			break;
 		}
 		case 1:
-			if (NULL!=list->last)
+			if ((isPower(getUser()->power, 15) && d_pcType == type)
+					|| (isPower(getUser()->power, 12) && d_cardType == type)
+					|| (isPower(getUser()->power, 9) && d_admin == type)
+					|| (isPower(getUser()->power, 4) && d_rate == type)
+				)
 			{
-				pList temp = NULL!=list->next? list->next : list->last;
-				list->last->next = list->next;
-				if (NULL != list->next)
+				if (NULL!=list->last)
 				{
-					list->next->last = list->last;
+					pList temp = NULL!=list->next? list->next : list->last;
+					list->last->next = list->next;
+					if (NULL != list->next)
+					{
+						list->next->last = list->last;
+					}
+					free(list);
+					list = temp;
 				}
-				free(list);
-				list = temp;
+				else if (NULL!=list->next)
+				{
+					if (d_pcType == type || d_cardType == type)
+					{
+						prPrompt("删除失败", "无法删除该项\n按任意键返回");
+						getch();
+					}
+					else
+					{
+						pList temp = list->next;
+						list->next->last = NULL;
+						free(list);
+						list = temp;
+					}
+
+				}
+				else
+				{
+					list = NULL;
+				}
+			}
+			else
+			{
+				prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+				getch();
 			}
 			break;
 		case 2:
