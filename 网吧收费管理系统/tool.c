@@ -184,36 +184,48 @@ char* prOption(char * name,int isOption,int length) {
 
 //输出提示框
 void prPrompt(char *title, char *body) {
-	char *text1 = (char*)malloc(sizeof(char));
-	char *text2 = (char*)malloc(sizeof(char));
-	char *text3 = (char*)malloc(sizeof(char));
+	char *text1 = (char*)malloc(sizeof(char) * 46);
+	char *text2 = (char*)malloc(sizeof(char) * 46);
+	char *text3 = (char*)malloc(sizeof(char) * 46);
 	text1[0] = '\0';
 	text2[0] = '\0';
 	text3[0] = '\0';
-	char *p = text1;
 	int row = 0;
 	int i = 0;
 	int j = 0;
-	while ('\0'!=body[i])
+	while ('\0' != body[i] && '\n' != body[i])
 	{
-		p[j] = body[i];
-		if ('\n'==body[i])
-		{
-			p[j] = '\0';
-			row++;
-			j = 0;
-			if (1==row)
-			{
-				p = text2;
-			}
-			else if (2 == row)
-			{
-				p = text3;
-			}
-		}
+		text1[j] = body[i];
 		j++;
 		i++;
 	}
+	if ('\n' == body[i])
+	{
+		row++;
+	}
+	text1[j] = '\0';
+	j = 0;
+	i++;
+	while ('\0'!=body[i]&&'\n'!=body[i])
+	{
+		text2[j] = body[i];
+		j++;
+		i++;
+	}
+	if ('\n' == body[i])
+	{
+		row++;
+	}
+	text2[j] = '\0';
+	j = 0;
+	i++;
+	while ('\0' != body[i] && '\n' != body[i])
+	{
+		text3[j] = body[i];
+		j++;
+		i++;
+	}
+	text3[j] = '\0';
 	int x = 16;
 	int y = 8;
 	gotoxy(x, y++);
@@ -246,14 +258,17 @@ void prPrompt(char *title, char *body) {
 	}
 	else if (2==row)
 	{
-		gotoxy(x + 25 - strlen(text1) / 2, 12);
+		gotoxy(x + 25 - strlen(text1) / 2, 11);
 		printf("%s", text1);
-		gotoxy(x + 25 - strlen(text2) / 2, 13);
+		gotoxy(x + 25 - strlen(text2) / 2, 12);
 		printf("%s", text2);
-		gotoxy(x + 25 - strlen(text3) / 2, 14);
+		gotoxy(x + 25 - strlen(text3) / 2, 13);
 		printf("%s", text3);
 	}
 	gotoxy(0, 23);
+	free(text1);
+	free(text2);
+	free(text3);
 }
 
 //输出时间
