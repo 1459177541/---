@@ -39,13 +39,11 @@ pList getCards() {
 	{
 		if (initCard())
 		{
-			/*
-			cardLists = (pCard)malloc(sizeof(card));
-			cardLists->next = NULL;
+			cardLists = (pList)malloc(sizeof(List));
+			cardLists->date.card = NULL;
 			cardLists->last = NULL;
-			cardLists->date = NULL;
-			*/
-			return NULL;
+			cardLists->next = NULL;
+			cardLists->type = d_card;
 		}
 	}
 	return cardLists;
@@ -64,11 +62,11 @@ pCard getCard(int id) {
 }
 
 void prCard(pCard p, int isOption) {
-	printf("%6s%19d |%19s |%19s |%13.2lf %-6s\n"
+	printf("%3s%15d |%19s |%19s |%13.2lf %-3s"
 		, isOption ? getAttri("L") : getAttri("NL"), p->id, p->type, p->masterName, p->balance, isOption ? getAttri("R") : getAttri("NR"));
 }
 
-int showCard(pCard p, int type,char * text, char *password, char *password2) {
+int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	char* balance = (char*)malloc(16 * sizeof(char));
 	balance[0] = '\0';
 	if (5 != type)
@@ -82,11 +80,11 @@ int showCard(pCard p, int type,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                      id：%-21s|", 0 == type ? "" : itoa(p->id, NULL, 10));
+	printf("|                      id：%-21s|", 0 == type ? "" : intToString(p->id));
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    类型：%-21s|", 1 == type ? "" : p->type);
+	printf("|                    类型：%-21s|", p->type);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
@@ -128,7 +126,7 @@ int showCard(pCard p, int type,char * text, char *password, char *password2) {
 	{
 		char * temp = (char*)malloc(16 * sizeof(char));
 		temp[0] = '\0';
-		k = input(x + 27, 5, temp, 0, INTER, NULL);
+		k = input(x + 27, 4, temp, 0, INTER, NULL);
 		if ('\0'!=temp)
 		{
 			p->id = atoi(temp);
@@ -137,22 +135,58 @@ int showCard(pCard p, int type,char * text, char *password, char *password2) {
 		break;
 	}
 	case 1:
-		k = input(x + 27, 5, p->type, 0, NUM | LETTER | CHINESE, NULL);
+	{
+		/////////////////////////////////////////////////////////////
+		pList typeList = getCardTypeList();
+		if ('\0'==p->type[0])
+		{
+			strcpy(p->type, typeList->date.cardType->name);
+		}
+		else
+		{
+			while (0!=strcmp(p->type,typeList->date.cardType->name) && NULL!=typeList->next)
+			{
+				typeList = typeList->next;
+			}
+			k = isKey(getch());
+			switch (k)
+			{
+			case left:
+				if (NULL!=typeList->last)
+				{
+					strcpy(p->type, typeList->last->date.cardType->name);
+				}
+				showCard(type, p, text, password, password2);
+				return;
+			case right:
+				if (NULL != typeList->next)
+				{
+					strcpy(p->type, typeList->next->date.cardType->name);
+				}
+				showCard(type, p, text, password, password2);
+				return;
+			default:
+				break;
+			}
+		}
 		break;
+	}
 	case 2:
-		k = input(x + 27, 5, p->masterName, 0, LETTER | CHINESE, NULL);
+	{
+		k = input(x + 27, 8, p->masterName, 0, NUM | LETTER | CHINESE, NULL);
 		break;
+	}
 	case 3:
-		k = input(x + 27, 5, password, 0, INTER, NULL);
+		k = input(x + 27, 10, password, 1, INTER | LETTER | SYMBOL, NULL);
 		break;
 	case 4:
-		k = input(x + 27, 5, password2, 0, INTER, NULL);
+		k = input(x + 27, 12, password2, 1, INTER | LETTER | SYMBOL, NULL);
 		break;
 	case 5:
 	{
 		char * temp = (char*)malloc(16 * sizeof(char));
 		temp[0] = '\0';
-		k = input(x + 27, 5, temp, 0, NUM, NULL);
+		k = input(x + 27, 14, temp, 0, NUM, NULL);
 		if ('\0' != temp)
 		{
 			p->balance = atof(temp);
@@ -161,6 +195,7 @@ int showCard(pCard p, int type,char * text, char *password, char *password2) {
 		break;
 	}
 	default:
+		k = isKey(getch());
 		break;
 	}
 	switch (k)
@@ -168,7 +203,7 @@ int showCard(pCard p, int type,char * text, char *password, char *password2) {
 	case up:
 		if (0 == type)
 		{
-			showCard(7, p, text, password, password2);
+			showCard(6, p, text, password, password2);
 		}
 		else {
 			showCard(type-1, p, text, password, password2);
@@ -176,7 +211,7 @@ int showCard(pCard p, int type,char * text, char *password, char *password2) {
 		break;
 	case down:
 	case tab:
-		if (7 == type)
+		if (6 == type)
 		{
 			showCard(0, p, text, password, password2);
 		}

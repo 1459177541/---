@@ -381,16 +381,16 @@ pList getListFromCriteria(pCriteriaPC criteria) {
 	return list;
 }
 
-//搜索
-pPC selectPC(int type, pCriteriaPC criteria,pPC p) {
+//筛选
+pList selectPC(int type, pCriteriaPC criteria,pList p) {
 	key k;
 	pList pt = getPCtypeList();
-	system("title 上/下机");
+	system("title 筛选");
 	system("cls");
 	system("mode con cols=80 lines=24");
 	printf("\n\n");
-	printf("                       ============= 搜 索 =============                       \n\n");
-	printf("                         搜索方式:");
+	printf("                       ============= 筛 选 =============                       \n\n");
+	printf("                             方式:");
 	if (0==criteria->type)
 	{
 		printf("条件搜索\n\n");

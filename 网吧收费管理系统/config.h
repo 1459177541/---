@@ -200,7 +200,7 @@ void editCardType(int type, pCardType p);
 pCard getCard(int id);
 pList getCards();
 void prCard(pCard p, int isOption);
-int showCard(pCard p, int type, char * text, char *password, char *password2);
+int showCard(int type, pCard p, char * text, char *password, char *password2);
 
 //rate
 pList getRateList();

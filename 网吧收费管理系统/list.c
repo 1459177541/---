@@ -113,7 +113,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 	{
 		initFinalPage(list);
 	}
-	pList op = NULL;
+	pList op = list;
 	int length = 0;
 	system("cls");
 	system("mode con cols=80 lines=24");
@@ -137,7 +137,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 		system("title 历史记录");
 		printf("\n                           ---===历史记录===---\n");
 		printf("\n----------------------+-----------------+---------------------------------------");
-		printf("\n          操作类型     |     操作人     |                时间               \n");
+		printf("\n         操作类型     |      操作人     |                时间               ");
 		printf("\n----------------------+-----------------+---------------------------------------");
 		break;
 	default:
@@ -146,7 +146,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 
 	for (int i = 0; i < 10; i++)
 	{
-		if (NULL != p)
+		if (NULL != p && NULL != p->date.admin)
 		{
 			length++;
 			switch (type)
@@ -350,9 +350,15 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 					char *pass2 = (char *)malloc(sizeof(char) * 16);
 					pass1[0] = '\0';
 					pass2[0] = '\0';
-					showCard(op, 1, "", pass1, pass2);
-					free(pass1);
-					free(pass2);
+					pCard p = (pCard)malloc(sizeof(card));
+					p->balance = 0;
+					p->id = 0;
+					p->idcardNum[0] = '\0';
+					p->masterName[0] = '\0';
+					p->password[0] = '\0';
+					strcpy(p->type, getCardTypeList()->date.cardType->name);
+					op->date.card = p;
+					showCard(0, op->date.card, "", pass1, pass2);
 				}
 				else
 				{
@@ -419,7 +425,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				char *pass2 = (char *)malloc(sizeof(char) * 16);
 				strcpy(pass1, op->date.card->password);
 				strcpy(pass2, op->date.card->password);
-				showCard(op, 0, "", pass1, pass2);
+				showCard(0, op, "", pass1, pass2);
 				free(pass1);
 				free(pass2);
 				break;
