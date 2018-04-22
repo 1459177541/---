@@ -51,6 +51,7 @@ pList getHistorys() {
 }
 
 void addHistory(historyType type, date date) {
+	char * prPower(int power);
 	pList pl;
 	if (NULL==historyFinal)
 	{
@@ -68,59 +69,58 @@ void addHistory(historyType type, date date) {
 	pHistory d = (pHistory)malloc(sizeof(history));
 	strcpy(d->editor, getUser()->name);
 	strcpy(d->time, prTime(localtime(NULL),DATE|TIME));
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	switch (type)
 	{
 	case C_ADMIN_T:
-
+		sprintf(d->text, "新建管理员: %-16s 权限: %-40s ", date.admin->name, prPower(date.admin->power));
 		break;
 	case D_ADMIN_T:
-
+		sprintf(d->text, "删除管理员: %-16s", date.admin->name);
 		break;
 	case U_ADMIN_T:
-
+		sprintf(d->text, "修改管理员信息: %-16s --> %-16s ", date.admin->name);
 		break;
 	case C_RATE_T:
-
+		sprintf(d->text, "新建计费方案: %-16s 对于 %s 在 %s 上机适用", date.rate->rule, date.rate->card, date.rate->pc);
 		break;
 	case D_RATE_T:
-
+		sprintf(d->text, "删除计费方案: %s", date.rate->rule);
 		break;
 	case U_RATE_T:
-
+		sprintf(d->text, "修改计费方案: %s --> %s", date.rate->rule);
 		break;
 	case C_CARD_T:
-
+		sprintf(d->text, "开户: %s(证件号: %s)，开通%s", date.card->masterName, date.card->idcardNum, date.card->type);
 		break;
 	case D_CARD_T:
-
+		sprintf(d->text, "注销: %s(证件号: %s)，注销%s", date.card->masterName, date.card->idcardNum, date.card->type);
 		break;
 	case U_CARD_T:
-
+		sprintf(d->text, "修改: %s(证件号: %s)，注销%s", date.card->masterName, date.card->idcardNum, date.card->type);
 		break;
 	case C_PC_TYPE_T:
-
+		sprintf(d->text, "新增电脑类型%s %d台，编号: %d~%d", date.pcType->type, date.pcType->num, date.pcType->startId, date.pcType->startId + date.pcType->num);
 		break;
 	case D_PC_TYPE_T:
-
+		sprintf(d->text, "删除%s类型电脑", date.pcType->type);
 		break;
 	case U_PC_TYPE_T:
-
+		sprintf(d->text, "修改%s类型电脑", date.pcType->type);
 		break;
 	case C_CARD_TYPE_T:
-
+		sprintf(d->text, "新增会员卡类型%s，售价: %lf", date.cardType->name, date.cardType->price);
 		break;
 	case D_CARD_TYPE_T:
-
+		sprintf(d->text, "删除会员卡类型%s", date.cardType->name);
 		break;
 	case U_CARD_TYPE_T:
-
+		sprintf(d->text, "修改类型%s的会员卡", date.cardType->name);
 		break;
 	case UP_T:
-
+		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑上机", date.pc->user->id, date.pc->type, date.pc->id);
 		break;
 	case DOWN_T:
-
+		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑下机", date.pc->user->id, date.pc->type, date.pc->id);
 		break;
 	default:
 		strcpy(pl->date.history->text, "ERROR");

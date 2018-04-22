@@ -80,7 +80,7 @@ typedef enum {
 //¼ÇÂ¼
 typedef struct {
 	historyType type;
-	char text[64];
+	char text[128];
 	char editor[16];
 	char time[64];
 }history,* pHistory;
