@@ -20,6 +20,7 @@ int initHistory() {
 	pList q = historyLists;
 	q->type = d_history;
 	q->date.history = p;
+	p = (pHistory)malloc(sizeof(history));
 	while (fread(p, sizeof(history), 1, fp)>0)
 	{
 		o->date.history = p;
@@ -31,7 +32,10 @@ int initHistory() {
 		p = (pHistory)malloc(sizeof(history));
 		o = (pList)malloc(sizeof(List));
 	}
-	historyFinal = q->last;
+	historyFinal = q;
+	free(p);
+	free(o);
+	fclose(fp);
 	return 0;
 }
 

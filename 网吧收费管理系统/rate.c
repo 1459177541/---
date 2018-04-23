@@ -1,5 +1,5 @@
 #include"config.h"
-pRate rateLists = NULL;
+pList rateLists = NULL;
 
 //³õÊ¼»¯
 int initRate() {
@@ -8,9 +8,17 @@ int initRate() {
 	{
 		return 1;
 	}
+	pRate p = (pRate)malloc(sizeof(rate));
+	if (NULL==rateLists && fread(p,sizeof(rate),1,fp)>0)
+	{
+		rateLists = (pList)malloc(sizeof(List));
+		rateLists->last = NULL;
+		rateLists->next = NULL;
+		rateLists->date.rate = p;
+	}
 	pList q = getRateList();
 	pList o = (pList)malloc(sizeof(List));
-	pRate p = (pRate)malloc(sizeof(card));
+	p = (pRate)malloc(sizeof(rate));
 	while (fread(p, sizeof(card), 1, fp)>0)
 	{
 		o->type = d_rate;
@@ -22,6 +30,9 @@ int initRate() {
 		p = (pRate)malloc(sizeof(rate));
 		o = (pList)malloc(sizeof(List));
 	}
+	free(p);
+	free(o);
+	fclose(fp);
 	return 0;
 }
 

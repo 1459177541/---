@@ -30,6 +30,9 @@ int initCardType() {
 		p = (pCardType)malloc(sizeof(cardType));
 		o = (pList)malloc(sizeof(List));
 	}
+	free(p);
+	free(o);
+	fclose(fp);
 	return 0;
 }
 

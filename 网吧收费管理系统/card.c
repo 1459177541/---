@@ -21,6 +21,7 @@ int initCard() {
 	pList q = cardLists;
 	q->date.card = p;
 	q->type = d_card;
+	p = (pCard)malloc(sizeof(card));;
 	while (fread(p, sizeof(card), 1, fp)>0)
 	{
 		if (p->id>maxCardId)
@@ -36,6 +37,9 @@ int initCard() {
 		p = (pCard)malloc(sizeof(card));
 		o = (pList)malloc(sizeof(List));
 	}
+	free(p);
+	free(o);
+	fclose(fp);
 	return 0;
 }
 

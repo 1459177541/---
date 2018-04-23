@@ -32,6 +32,9 @@ int initPCType() {
 		p = (pPCtype)malloc(sizeof(PCtype));
 		o = (pList)malloc(sizeof(List));
 	}
+	free(p);
+	free(o);
+	fclose(fp);
 	return 0;
 }
 

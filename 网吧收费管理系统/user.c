@@ -18,6 +18,7 @@ int initAdminList() {
 	}
 	pList o = (pList)malloc(sizeof(List));
 	pList q = adminLists;
+	p = (pAdmin)malloc(sizeof(admin));
 	while (fread(p, sizeof(admin), 1, fp)>0)
 	{
 		o->type = d_admin;
@@ -29,6 +30,9 @@ int initAdminList() {
 		p = (pAdmin)malloc(sizeof(admin));
 		o = (pList)malloc(sizeof(List));
 	}
+	free(p);
+	free(o);
+	fclose(fp);
 	return 0;
 }
 
