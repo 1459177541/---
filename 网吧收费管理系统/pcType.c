@@ -19,6 +19,7 @@ int initPCType() {
 	}
 	pList q = pcTypeList;
 	pList o = (pList)malloc(sizeof(List));
+	p = (pPCtype)malloc(sizeof(PCtype));
 	while (fread(p, sizeof(PCtype), 1, fp)>0)
 	{
 		length += p->num;

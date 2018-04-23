@@ -1,5 +1,6 @@
 #include"config.h"
 
+int maxCardId = 1;
 pList cardLists = NULL;
 int CardLength = 0;
 int initCard() {
@@ -22,6 +23,10 @@ int initCard() {
 	q->type = d_card;
 	while (fread(p, sizeof(card), 1, fp)>0)
 	{
+		if (p->id>maxCardId)
+		{
+			maxCardId = p->id;
+		}
 		o->type = d_card;
 		o->date.card = p;
 		o->last = q;
@@ -67,6 +72,11 @@ void prCard(pCard p, int isOption) {
 }
 
 int showCard(int type, pCard p,char * text, char *password, char *password2) {
+	if (0 > p->id)
+	{
+		p->id = maxCardId;
+		maxCardId++;
+	}
 	char* balance = (char*)malloc(16 * sizeof(char));
 	balance[0] = '\0';
 	if (5 != type)
@@ -80,20 +90,21 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                      id：%-21s|", 0 == type ? "" : intToString(p->id));
+	printf("|                      id：%-21d|", p->id);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    类型：%-21s|", p->type);
+	printf("|                   %c类型：%-21s|",0==type?'>':' ', p->type);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                  用户名：%-21s|", 2 == type ? "" : p->masterName);
+	printf("|                  用户名：%-21s|", 1 == type ? "" : p->masterName);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
 	printf("|                    密码：%-21s|", "");
-	gotoxy(x + 27, y - 1); printfPassword(password);
+	gotoxy(x + 27, y - 1); 
+	printfPassword(password);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
@@ -110,7 +121,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	printf("|                    %10s                 |",text);
 	gotoxy(x, y++);
 	printf("|                      ");
-	OPTION_OK(6 == type);
+	OPTION_OK(5 == type);
 	printf("                  |");
 	gotoxy(x, y++);
 	printf("|                                               |");
@@ -124,19 +135,6 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	{
 	case 0:
 	{
-		char * temp = (char*)malloc(16 * sizeof(char));
-		temp[0] = '\0';
-		k = input(x + 27, 4, temp, 0, INTER, NULL);
-		if ('\0'!=temp)
-		{
-			p->id = atoi(temp);
-		}
-		free(temp);
-		break;
-	}
-	case 1:
-	{
-		/////////////////////////////////////////////////////////////
 		pList typeList = getCardTypeList();
 		if ('\0'==p->type[0])
 		{
@@ -171,18 +169,18 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		}
 		break;
 	}
-	case 2:
+	case 1:
 	{
 		k = input(x + 27, 8, p->masterName, 0, NUM | LETTER | CHINESE, NULL);
 		break;
 	}
-	case 3:
+	case 2:
 		k = input(x + 27, 10, password, 1, INTER | LETTER | SYMBOL, NULL);
 		break;
-	case 4:
+	case 3:
 		k = input(x + 27, 12, password2, 1, INTER | LETTER | SYMBOL, NULL);
 		break;
-	case 5:
+	case 4:
 	{
 		char * temp = (char*)malloc(16 * sizeof(char));
 		temp[0] = '\0';
@@ -191,7 +189,6 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		{
 			p->balance = atof(temp);
 		}
-		free(temp);
 		break;
 	}
 	default:
@@ -203,7 +200,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	case up:
 		if (0 == type)
 		{
-			showCard(6, p, text, password, password2);
+			showCard(5, p, text, password, password2);
 		}
 		else {
 			showCard(type-1, p, text, password, password2);
@@ -211,7 +208,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		break;
 	case down:
 	case tab:
-		if (6 == type)
+		if (5 == type)
 		{
 			showCard(0, p, text, password, password2);
 		}
@@ -220,7 +217,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		}
 		break;
 	case enter:
-		if (6 == type)
+		if (5 == type)
 		{
 			if ('\0' == password[0] || '\0' == password2[0])
 			{
@@ -232,10 +229,6 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 			if (0 == strcmp(password, password2))
 			{
 				strcpy(p->password, password);
-				strcpy(password, "***************");
-				strcpy(password2, "***************");
-				free(password);
-				free(password2);
 				return;
 			}
 			else
@@ -248,7 +241,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		}
 		else
 		{
-			showCard(6, p, text, password, password2);
+			showCard(5, p, text, password, password2);
 		}
 		break;
 	default:

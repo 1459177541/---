@@ -352,13 +352,17 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 					pass2[0] = '\0';
 					pCard p = (pCard)malloc(sizeof(card));
 					p->balance = 0;
-					p->id = 0;
+					p->id = -1;
 					p->idcardNum[0] = '\0';
 					p->masterName[0] = '\0';
 					p->password[0] = '\0';
 					strcpy(p->type, getCardTypeList()->date.cardType->name);
 					op->date.card = p;
 					showCard(0, op->date.card, "", pass1, pass2);
+					strcpy(pass1, "***************");
+					strcpy(pass2, "***************");
+					free(pass1);
+					free(pass2);
 				}
 				else
 				{
@@ -426,6 +430,8 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				strcpy(pass1, op->date.card->password);
 				strcpy(pass2, op->date.card->password);
 				showCard(0, op, "", pass1, pass2);
+				strcpy(pass1, "***************");
+				strcpy(pass2, "***************");
 				free(pass1);
 				free(pass2);
 				break;
