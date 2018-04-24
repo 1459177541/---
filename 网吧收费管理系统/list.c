@@ -272,7 +272,8 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 	case pgup:
 		if (0>=thisPage)
 		{
-			break;
+			paginationMenu(list, type, index, option);
+			return;
 		}
 		for (int i = 0; i < 10; i++)
 		{
@@ -284,7 +285,8 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 	case pgdn:
 		if (finalPage<=thisPage)
 		{
-			break;
+			paginationMenu(list, type, index, option);
+			return;
 		}
 		for (int i = 0; i < 10; i++)
 		{
@@ -445,11 +447,14 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			break;
 			break;
 		case 7:	//筛选
+		{
+			pList p;
 			//处理链表类型
 			switch (type)		
 			{
 			case d_pc:
-				list = selectToPC();
+				finalPage = -1;
+				p = selectToPC();
 				break;
 			case d_card:
 				/////////////////////////////////////////////////
@@ -460,9 +465,19 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			default:
 				break;
 			}
-			break;
+			paginationMenu(p, type, index, option);
+			pList q = p->next;
+			while (NULL!=q)
+			{
+				free(p);
+				p = q;
+				q = q->next;
+			}
+			return;
+		}
 		case 8:	//返回
 			finalPage = -1;
+			thisPage = 0;
 			return;
 		default:
 			break;

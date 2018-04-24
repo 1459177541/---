@@ -316,32 +316,30 @@ pList getListFromCriteria(pCriteriaPC criteria) {
 	list->next = NULL;
 	pList o = list;
 	pList p = getPCs();
-	int isAdd = 0;
+	int isAdd = 1;
 	char temp[32];
 	while (NULL!=p)
 	{
 		switch (criteria->type)
 		{
 		case 0:
-			if (!strcmp(criteria->PCType,"所有类型"))
+			if (0 != strcmp(criteria->PCType,"所有类型"))
 			{
-				isAdd = 1;
+				if (0!=strcmp(criteria->PCType,p->date.pc->type))
+				{
+					isAdd = 0;
+				}
 			}
-			else if (!strcmp(criteria->PCType,p->date.pc->type))
+			if (0 != criteria->isUse)
 			{
-				isAdd = 1;
-			}
-			if (0==criteria->isUse)
-			{
-				isAdd = 1;
-			}
-			else if (1==criteria->isUse&&NULL!=p->date.pc->user)
-			{
-				isAdd = 1;
-			}
-			else if (2==criteria->isUse&&NULL==p->date.pc->user)
-			{
-				isAdd = 1;
+				if (1 != criteria->isUse&&NULL != p->date.pc->user)
+				{
+					isAdd = 0;
+				}
+				else if (2 != criteria->isUse&&NULL == p->date.pc->user)
+				{
+					isAdd = 0;
+				}
 			}
 			break;
 		case 1:
@@ -373,12 +371,12 @@ pList getListFromCriteria(pCriteriaPC criteria) {
 			q->date = p->date;
 			o->next = q;
 
-			isAdd = 0;
+			isAdd = 1;
 			o = o->next;
-			p = p->next;
 		}
+		p = p->next;
 	}
-	return list;
+	return list->next;
 }
 
 //筛选
@@ -390,11 +388,11 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 	system("mode con cols=80 lines=24");
 	printf("\n\n");
 	printf("                       ============= 筛 选 =============                       \n\n");
-	printf("                             方式:");
+	printf("                            %c方式:", 0 == type ? '>' : ' ');
 	if (0==criteria->type)
 	{
 		printf("条件搜索\n\n");
-		printf("                            电脑类型：");
+		printf("                           %c电脑类型：",1==type?'>':' ');
 		while (strcmp(criteria->PCType,pt->date.pcType->type)!=0&&pt->next!=NULL)
 		{
 			pt = pt->next;
@@ -404,7 +402,7 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 			pt = getPCtypeList();
 		}
 		printf("%s\n\n", pt->date.pcType->type);
-		printf("                            当前状态：");
+		printf("                            当前状态：", 2 == type ? '>' : ' ');
 		switch (criteria->isUse)
 		{
 		case 0:
@@ -427,8 +425,11 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 	else if (1==criteria->type)
 	{
 		printf("模糊搜索\n\n");
-		printf("                         含有的内容：");
+		printf("                         含有的内容：", 1 == type ? '>' : ' ');
 		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
+		printf("\n\n");
+		printf("                                ");
+		OPTION_OK(2 == type);
 	}
 	switch (k)
 	{
@@ -504,7 +505,7 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 			{
 				if (NULL!=pt->next)
 				{
-					strcpy(criteria->PCType, pt->last->date.pcType->type);
+					strcpy(criteria->PCType, pt->next->date.pcType->type);
 				}
 				return selectPC(type, criteria, p);
 			}
@@ -540,14 +541,20 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 				type = 3;
 				return selectPC(type, criteria, p);
 			}
+			break;
 		case 1:
+			if (2!=type)
+			{
+				type = 2;
+				return selectPC(type, criteria, p);
+			}
 			break;
 		default:
 			break;
 		}
 		return getListFromCriteria(criteria);
 	default:
-		break;
+		return selectPC(type, criteria, p);
 	}
 }
 
