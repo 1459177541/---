@@ -268,7 +268,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	case number:
 	{
 		ret = paginationMenu(list, type, in - '0', option);
-		return ret;
+		break;
 	}
 	case up:
 		index--;
@@ -276,16 +276,14 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		{
 			index = length;
 		}
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+		break;
 	case down:
 		index++;
 		if (length <= index)
 		{
 			index = 0;
 		}
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+		break;
 	case tab:
 		if (4 > option)
 		{
@@ -295,24 +293,21 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		{
 			option -= 4;
 		}
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+		break;
 	case left:
 		option--;
 		if (0 > option)
 		{
 			option = optionLength;
 		}
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+		break;
 	case right:
 		option++;
 		if (optionLength < option)
 		{
 			option = 0;
 		}
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+		break;
 	case pgup:
 		if (0>=thisPage)
 		{
@@ -324,8 +319,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			list = list->last;
 		}
 		thisPage--;
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+		break;
 	case pgdn:
 		if (finalPage<=thisPage)
 		{
@@ -337,8 +331,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			list = list->next;
 		}
 		thisPage++;
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+		break;
 	case enter:
 		//处理选择项
 		switch (option)		
@@ -429,8 +422,16 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			switch (type)		
 			{
 			case d_pc:			//上/下机
-
+			{
+				int	ttp = thisPage;
+				int tfp = finalPage;
+				thisPage = 0;
+				finalPage = -1;
+				logPC(op->date.pc);
+				thisPage = ttp;
+				finalPage = tfp;
 				break;
+			}
 			case d_card:		//删除
 				if (isPower(getUser()->power, 1))
 				{
@@ -452,7 +453,17 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					getch();
 				}
 			case d_history:		//筛选
-
+				finalPage = -1;
+				p = selectToHistory();
+				ret = paginationMenu(p, type, index, option);
+				pList q = p->next;
+				while (NULL != q)
+				{
+					free(p);
+					p = q;
+					q = q->next;
+				}
+				return ret;
 			default:
 				break;
 			}
@@ -465,7 +476,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				showPC(op->date.pc, 0);
 				break;
 			case d_card:		//充值
-
+				recharge(op->date.card);
+				break;
 			case d_history:		//退出
 				finalPage = -1;
 				thisPage = 0;
@@ -473,7 +485,6 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			default:
 				break;
 			}
-			break;
 			break;
 		case 7:	
 		{
@@ -546,20 +557,22 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			default:
 				break;
 			}
+		ret = paginationMenu(list, type, index, option);
+		return ret;
 		}
 		default:
 			break;
 		}
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+		return paginationMenu(list, type, index, option);
 	case esc:
 	{
-		ret = paginationMenu(list, type, index, 8);
-		return ret;
+		return NULL;
 	}
 	default:
 		break;
 	}
+	ret = paginationMenu(list, type, index, 8);
+	return ret;
 }
 
 //滚动菜单

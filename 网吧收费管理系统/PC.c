@@ -73,103 +73,14 @@ void prPC(pPC p, int isOption) {
 		, isOption ? getAttri("L") : getAttri("NL"), p->id, p->type, user, prTime(p->startTime, TIME), isOption ? getAttri("R") : getAttri("NR"));
 }
 
-//上机
-int loginPC(int type, char *text, pPC p) {
-	int x = 16;
-	gotoxy(x, 6);
-	printf("=================================================");
-	gotoxy(x, 7);
-	printf("|                                               |");
-	gotoxy(x, 8);
-	printf("|                请输入上机会员卡号             |");
-	gotoxy(x, 9);
-	printf("|                                               |");
-	gotoxy(x, 10);
-	printf("|        -------------------------------        |");
-	gotoxy(x, 11);
-	printf("|                                               |");
-	gotoxy(x, 12);
-	printf("|             卡号：___________                 |");
-	gotoxy(x, 13);
-	printf("|                                               |");
-	gotoxy(x, 14);
-	printf("|               %19s             |",text);
-	gotoxy(x, 15);
-	printf("|            ");
-	OPTION_OK(1 == type);
-	printf("        ");
-	OPTION_CANCEL(2 == type);
-	printf("            |");
-	gotoxy(x, 16);
-	printf("|                                               |");
-	gotoxy(x, 17);
-	printf("=================================================");
-	char *in = (char *)malloc(sizeof(char) * 16);
-	char *name;
-	char *text2 = (char *)malloc(sizeof(char) * 24);
-	text2[0] = '\0';
-	static int id;
-	key k;
-	if (0==type)
+
+//上/下机
+void logPC(pPC p) {
+	if (NULL!=p->user)
 	{
-		k = input(36,12,in,0,NUM, NULL);
-		id = stringToInt(in);
+		p->user = paginationMenu(getCards(), d_card, 0, 0)->date.card;
 	}
 	else
-	{
-		name = getCard(id)->masterName;
-		strcpy(text2, "卡主：");
-		strcat(text2, name);
-	}
-	k = isKey(getch());
-	switch (k)
-	{
-	case down:
-	case right:
-	case tab:
-		if (2 == type)
-		{
-			type = -1;
-		}
-		return loginPC(type + 1, text2, p);
-	case left:
-	case up:
-		if (0 == type)
-		{
-			type = 3;
-		}
-		return loginPC(type-1,text2, p);
-	case enter:
-		switch (type)
-		{
-		case 0:
-			name = getCard(id)->masterName;
-			strcpy(text2, "卡主：");
-			strcat(text2, name);
-			return loginPC(1,text2,p);
-		case 1:
-			p->user = getCard(id);
-			if (p->user!=NULL)
-			{
-				p->startTime = localtime(time(NULL));
-				return 1;
-			}
-			return loginPC(type, "未知用户", p);
-		case 2:
-			return 0;
-		default:
-			break;
-		}
-	default:
-		saveExit(type);
-		break;
-	}
-	return 1;
-}
-
-//下机
-void logoutPC(pPC p) {
-	if (NULL != p && p->user != NULL)
 	{
 		p->user->balance -= results(p, p->user);
 		p->user = NULL;
@@ -199,7 +110,7 @@ void logoutPCAll() {
 	gotoxy(x + 5, 12);
 	int i = 0;
 	pList list = getPCs();
-	while (NULL!=list)
+	while (NULL!=list && d_pc == list->type)
 	{
 		if (i>pcLength/40)
 		{
@@ -207,7 +118,7 @@ void logoutPCAll() {
 			i = 0;
 		}
 		i++;
-		logoutPC(list->date.pc);
+		logPC(list->date.pc);
 		list = list->next;
 	}
 }
@@ -402,7 +313,7 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 			pt = getPCtypeList();
 		}
 		printf("%s\n\n", pt->date.pcType->type);
-		printf("                            当前状态：", 2 == type ? '>' : ' ');
+		printf("                          %c 当前状态：", 2 == type ? '>' : ' ');
 		switch (criteria->isUse)
 		{
 		case 0:
@@ -425,7 +336,7 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 	else if (1==criteria->type)
 	{
 		printf("模糊搜索\n\n");
-		printf("                         含有的内容：", 1 == type ? '>' : ' ');
+		printf("                       %c 含有的内容：", 1 == type ? '>' : ' ');
 		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
 		printf("\n\n");
 		printf("                                ");

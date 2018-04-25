@@ -54,10 +54,13 @@ pList getHistorys() {
 	return historyLists;
 }
 
-char *getHistoryType(pHistory p) {
+char *getHistoryType(historyType p) {
 	char type[15];
-	switch (p->type)
+	switch (p)
 	{
+	case ALL_T:
+		strcpy(type, "全部");
+		break;
 	case C_ADMIN_T:
 		strcpy(type, "创建管理员");
 		break;
@@ -109,6 +112,9 @@ char *getHistoryType(pHistory p) {
 	case DOWN_T:
 		strcpy(type, "下机");
 		break;
+	case RECHARGE_T:
+		strcpy(type, "充值");
+		break;
 	default:
 		strcpy(type, "ERROR");
 		break;
@@ -139,7 +145,7 @@ void showHistory(pHistory p) {
 	gotoxy(x, y++);
 	printf("|                                                       |");
 	gotoxy(x, y++);
-	printf("|               类型: %-24s             |", getHistoryType(p));
+	printf("|               类型: %-24s             |", getHistoryType(p->type));
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
@@ -250,6 +256,8 @@ void addHistory(historyType type, date date, void* other) {
 	case DOWN_T:
 		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5lf元", date.pc->user->id, date.pc->type, date.pc->id, (double*)other);
 		break;
+	case RECHARGE_T:
+		sprintf(d->text, "用户: %16d 充值了 %16lf 元", date.card->id, (double*)other);
 	default:
 		strcpy(pl->date.history->text, "ERROR");
 		break;
@@ -258,5 +266,257 @@ void addHistory(historyType type, date date, void* other) {
 
 void prHistory(pHistory p, int isOption) {
 	printf("%6s%16s |%15s  |%19s %-6s\n"
-		, isOption ? getAttri("L") : getAttri("NL"), getHistoryType(p), p->editor, p->time, isOption ? getAttri("R") : getAttri("NR"));
+		, isOption ? getAttri("L") : getAttri("NL"), getHistoryType(p->type), p->editor, p->time, isOption ? getAttri("R") : getAttri("NR"));
+}
+
+//搜索条件
+typedef struct
+{
+	int type;
+	historyType hType;
+	char editor[16];
+	char Criteria[16];
+}CriteriaHistory, *pCriteriaHistory;
+pCriteriaHistory getDefaultCriteriaHistory() {
+	pCriteriaHistory p = (pCriteriaHistory)malloc(sizeof(CriteriaHistory));
+	p->type = 0;
+	p->hType = ALL_T;
+	strcpy(p->editor, "所有管理员");
+	p->Criteria[0] = '\0';
+	return p;
+}
+
+//依据条件获得列表
+pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
+	pList list = (pList)malloc(sizeof(List));
+	list->last = NULL;
+	list->next = NULL;
+	pList o = list;
+	pList p = getPCs();
+	int isAdd;
+	char temp[32];
+	while (NULL != p)
+	{
+		switch (criteria->type)
+		{
+		case 0:
+			isAdd = 1;
+			if (0 != strcmp(criteria->editor, "所有管理员"))
+			{
+				if (0 != strcmp(criteria->editor, p->date.history->editor))
+				{
+					isAdd = 0;
+				}
+			}
+			if (ALL_T != criteria->hType)
+			{
+				if (criteria->hType != p->type)
+				{
+					isAdd = 0;
+				}
+			}
+			break;
+		case 1:
+			isAdd = 0;
+			if (NULL != strstr(getHistorys(p->date.history->type),criteria->Criteria))
+			{
+				isAdd = 1;
+			}
+			if (NULL != strstr(p->date.history->editor,criteria->Criteria))
+			{
+				isAdd = 1;
+			}
+			break;
+		default:
+			break;
+		}
+		if (isAdd)
+		{
+			pList q = (pList)malloc(sizeof(List));
+			q->next = NULL;
+			q->last = o;
+			q->date = p->date;
+			o->next = q;
+			o = o->next;
+		}
+		p = p->next;
+	}
+	return list->next;
+}
+
+//筛选
+pList selectHistory(int type, pCriteriaHistory criteria, pList p) {
+	key k;
+	historyType ht = ALL_T;
+	pList admin = getAdminHead();
+	system("title 筛选");
+	system("cls");
+	system("mode con cols=80 lines=24");
+	printf("\n\n");
+	printf("                       ============= 筛 选 =============                       \n\n");
+	printf("                            %c方式:", 0 == type ? '>' : ' ');
+	if (0 == criteria->type)
+	{
+		printf("条件搜索\n\n");
+		printf("                            操作人：", 1 == type ? '>' : ' ');
+		while (strcmp(criteria->editor, admin->date.admin->name) != 0 && admin->next != NULL)
+		{
+			admin = admin->next;
+		}
+		if (NULL == admin->next)
+		{
+			admin = getAdminHead();
+		}
+		printf(admin->date.admin->name);
+		printf("                           %c类型：", 2 == type ? '>' : ' ');
+		while ( ht != criteria->hType && FINAL_T != criteria->hType)
+		{
+			ht = (historyType)((int)ht + 1);
+		}
+		if (FINAL_T == ht)
+		{
+			ht = ALL_T;
+		}
+		printf(getHistoryType(ht));
+		printf("\n\n");
+		printf("                                ");
+		OPTION_OK(3 == type);
+		k = isKey(getch());
+	}
+	else if (1 == criteria->type)
+	{
+		printf("模糊搜索\n\n");
+		printf("                         含有的内容：", 1 == type ? '>' : ' ');
+		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
+		printf("\n\n");
+		printf("                                ");
+		OPTION_OK(2 == type);
+	}
+	switch (k)
+	{
+	case esc:
+		return p;
+	case left:
+		if (0 == type)
+		{
+			criteria->type--;
+			if (0>criteria->type)
+			{
+				criteria->type = 1;
+			}
+			return selectHistory(type, criteria, p);
+		}
+		if (criteria->type == 0)
+		{
+			switch (type)
+			{
+			case 1:
+			{
+				if (NULL != admin->last)
+				{
+					strcpy(criteria->editor, admin->last->date.admin->name);
+				}
+				return selectHistory(type, criteria, p);
+			}
+			case 2:
+				if (ALL_T!=criteria->hType)
+				{
+					criteria->hType = (historyType)((int)criteria->hType - 1);
+				}
+				break;
+			default:
+				break;
+			}
+			return selectHistory(type, criteria, p);
+		}
+	case up:
+		type--;
+		if (type<0)
+		{
+			switch (criteria->type)
+			{
+			case 0:
+				type = 3;
+				break;
+			case 1:
+			case 2:
+				type = 2;
+				break;
+			default:
+				break;
+			}
+		}
+		return selectHistory(type, criteria, p);
+	case right:
+		if (0 == type)
+		{
+			criteria->type++;
+			if (1<criteria->type)
+			{
+				criteria->type = 0;
+			}
+			return selectHistory(type, criteria, p);
+		}
+		if (criteria->type == 0)
+		{
+			switch (type)
+			{
+			case 1:
+			{
+				if (NULL != admin->next)
+				{
+					strcpy(criteria->editor, admin->next->date.admin->name);
+				}
+				return selectHistory(type, criteria, p);
+			}
+			case 2:
+				if (FINAL_T != criteria->hType)
+				{
+					criteria->hType = (historyType)((int)criteria->hType + 1);
+				}
+				break;
+			default:
+				break;
+			}
+			return selectHistory(type, criteria, p);
+		}
+	case down:
+		type++;
+		if (criteria->type == 0 && type>3)
+		{
+			type = 0;
+		}
+		else if (criteria->type != 0 && type>2)
+		{
+			type = 0;
+		}
+		return selectHistory(type, criteria, p);
+	case enter:
+		switch (criteria->type)
+		{
+		case 0:
+			if (3 != type)
+			{
+				type = 3;
+				return selectHistory(type, criteria, p);
+			}
+			break;
+		case 1:
+			if (2 != type)
+			{
+				type = 2;
+				return selectHistory(type, criteria, p);
+			}
+			break;
+		default:
+			break;
+		}
+		return getListFromHistoryCriteria(criteria);
+	default:
+		return selectHistory(type, criteria, p);
+	}
+}
+
+pList selectToHistory() {
+	return selectHistory(0, getDefaultCriteriaPC(), getPCs());
 }

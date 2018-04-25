@@ -69,12 +69,14 @@ typedef struct {
 
 //历史记录类型
 typedef enum {
-	 C_CARD_T, D_CARD_T, U_CARD_T
+	ALL_T
+	,C_CARD_T, D_CARD_T, U_CARD_T
 	,C_RATE_T, D_RATE_T, U_RATE_T
 	,C_ADMIN_T, D_ADMIN_T, U_ADMIN_T
 	,C_CARD_TYPE_T, D_CARD_TYPE_T, U_CARD_TYPE_T
 	,C_PC_TYPE_T, D_PC_TYPE_T, U_PC_TYPE_T
-	,UP_T, DOWN_T
+	,UP_T, DOWN_T, RECHARGE_T
+	,FINAL_T
 }historyType;
 
 //记录
@@ -190,6 +192,7 @@ void logoutPCAll();
 void prPC(pPC p, int isOption);
 pList selectToPC();
 int showPC(pPC p, int type);
+void logPC(pPC p);
 
 //cardType
 pList getCardTypeList();
@@ -202,6 +205,7 @@ pList getCards();
 void prCard(pCard p, int isOption);
 int showCard(int type, pCard p, char * text, char *password, char *password2);
 pList selectToCard();
+void recharge(pCard p);
 
 //rate
 pList getRateList();
@@ -213,6 +217,7 @@ void editRate(int type, int option[], pRate p);
 pList getHistorys();
 void prHistory(pHistory p, int isOption);
 void showHistory(pHistory p);
+pList selectToHistory();
 
 //list
 void save(dateType type);

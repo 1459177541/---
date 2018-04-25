@@ -294,7 +294,22 @@ pList getListFromCardCriteria(pCriteriaCard criteria) {
 			break;
 		case 1:
 			isAdd = 0;
-			///////////////////////////////////////////////////////
+			if (NULL != strstr(p->date.card->idcardNum,criteria->Criteria))
+			{
+				isAdd = 1;
+			}
+			if (NULL != strstr(intToString(p->date.card->id),criteria->Criteria))
+			{
+				isAdd = 1;
+			}
+			if (NULL != strstr(p->date.card->masterName,criteria->Criteria))
+			{
+				isAdd = 1;
+			}
+			if (NULL != strstr(p->date.card->type, criteria->Criteria))
+			{
+				isAdd = 1;
+			}
 			break;
 		default:
 			break;
@@ -420,3 +435,36 @@ pList selectToCard() {
 	return selectCard(0, getDefaultCriteriaCard(), getCards());
 }
 
+void recharge(pCard p) {
+	int x = 16;
+	int y = 8;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|         ¿¨ºÅ: %-23d         |",p->id);
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|         ½ð¶î:                                 |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	char money[16];
+	key k = input(x + 16, 13, money, 0, NUM, NULL);
+	if (enter == k)
+	{
+		double mon = atof(money);
+		p->balance += mon;
+	}
+	else if (esc == k)
+	{
+		return;
+	}
+	else
+	{
+		recharge(p);
+	}
+}
