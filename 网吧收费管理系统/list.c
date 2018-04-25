@@ -107,7 +107,7 @@ void initFinalPage(pList list) {
 	finalPage = length/10;
 }
 
-void paginationMenu(pList list, dateType type, int index, int option) {
+pList paginationMenu(pList list, dateType type, int index, int option) {
 	pList p = list;
 	if (-1==finalPage)
 	{
@@ -141,7 +141,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n----------------------+-----------------+---------------------------------------");
 		break;
 	default:
-		return;
+		return NULL;
 	}
 
 	for (int i = 0; i < 10; i++)
@@ -224,24 +224,26 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 	switch (k)		//处理按键类型
 	{
 	case number:
-		paginationMenu(list, type, in - '0', option);
-		return;
+	{
+		pList ret = paginationMenu(list, type, in - '0', option);
+		return ret;
+	}
 	case up:
 		index--;
 		if (0 > index)
 		{
 			index = length;
 		}
-		paginationMenu(list, type, index, option);
-		return;
+		pList ret = paginationMenu(list, type, index, option);
+		return ret;
 	case down:
 		index++;
 		if (length <= index)
 		{
 			index = 0;
 		}
-		paginationMenu(list, type, index, option);
-		return;
+		pList ret = paginationMenu(list, type, index, option);
+		return ret;
 	case tab:
 		if (4 > option)
 		{
@@ -251,50 +253,50 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 		{
 			option -= 4;
 		}
-		paginationMenu(list, type, index, option);
-		return;
+		pList ret = paginationMenu(list, type, index, option);
+		return ret;
 	case left:
 		option--;
 		if (0 > option)
 		{
 			option = 8;
 		}
-		paginationMenu(list, type, index, option);
-		return;
+		pList ret = paginationMenu(list, type, index, option);
+		return ret;
 	case right:
 		option++;
 		if (8 < option)
 		{
 			option = 0;
 		}
-		paginationMenu(list, type, index, option);
-		return;
+		pList ret = paginationMenu(list, type, index, option);
+		return ret;
 	case pgup:
 		if (0>=thisPage)
 		{
-			paginationMenu(list, type, index, option);
-			return;
+			pList ret = paginationMenu(list, type, index, option);
+			return ret;
 		}
 		for (int i = 0; i < 10; i++)
 		{
 			list = list->last;
 		}
 		thisPage--;
-		paginationMenu(list, type, index, option);
-		return;
+		pList ret = paginationMenu(list, type, index, option);
+		return ret;
 	case pgdn:
 		if (finalPage<=thisPage)
 		{
-			paginationMenu(list, type, index, option);
-			return;
+			pList ret = paginationMenu(list, type, index, option);
+			return ret;
 		}
 		for (int i = 0; i < 10; i++)
 		{
 			list = list->next;
 		}
 		thisPage++;
-		paginationMenu(list, type, index, option);
-		return;
+		pList ret = paginationMenu(list, type, index, option);
+		return ret;
 	case enter:
 		//处理选择项
 		switch (option)		
@@ -457,7 +459,8 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				p = selectToPC();
 				break;
 			case d_card:
-				/////////////////////////////////////////////////
+				finalPage = -1;
+				p = selectToCard();
 				break;
 			case d_history:
 				/////////////////////////////////////////////////
@@ -465,7 +468,7 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 			default:
 				break;
 			}
-			paginationMenu(p, type, index, option);
+			pList ret = paginationMenu(p, type, index, option);
 			pList q = p->next;
 			while (NULL!=q)
 			{
@@ -473,28 +476,31 @@ void paginationMenu(pList list, dateType type, int index, int option) {
 				p = q;
 				q = q->next;
 			}
-			return;
+			return ret;
 		}
 		case 8:	//返回
 			finalPage = -1;
 			thisPage = 0;
-			return;
+			return ret;
 		default:
 			break;
 		}
-		paginationMenu(list, type, index, option);
-		return;
+		pList ret = paginationMenu(list, type, index, option);
+		return ret;
 	case esc:
-		paginationMenu(list, type, index, 8);
-		return;
+	{
+		pList ret = paginationMenu(list, type, index, 8);
+		return ret;
+	}
 	default:
 		break;
 	}
 }
 
 //滚动菜单
-void scrollMenu(pList list, dateType type, int option) {
+pList scrollMenu(pList list, dateType type, int option) {
 	pList p = list;
+	pList ret;
 	char nMore[79];
 	int isTop = 0;
 	system("cls");
@@ -531,7 +537,7 @@ void scrollMenu(pList list, dateType type, int option) {
 		strcpy(nMore, "                               |                    |                         \n                               |                    |                         \n");
 		break;
 	default:
-		return;
+		return NULL;
 	}
 	int length = d_rate == type ? 3 : 7;
 	for (int i = 0; i < length/2; i++)
@@ -557,6 +563,10 @@ void scrollMenu(pList list, dateType type, int option) {
 	{
 		if (NULL != p)
 		{
+			if (length / 2 == i)
+			{
+				ret = p;
+			}
 			switch (type)
 			{
 			case d_pcType:
@@ -600,7 +610,7 @@ void scrollMenu(pList list, dateType type, int option) {
 				prRate(p->date.rate, 3 == 0);
 				break;
 			default:
-				return;
+				return ret;
 			}
 			p = p->next;
 		}
@@ -634,14 +644,14 @@ void scrollMenu(pList list, dateType type, int option) {
 		{
 			list = list->last;
 		}
-		scrollMenu(list, type, option);
+		ret = scrollMenu(list, type, option);
 		break;
 	case down:
 		if (NULL != list->next)
 		{
 			list = list->next;
 		}
-		scrollMenu(list, type, option);
+		ret= scrollMenu(list, type, option);
 		break;
 	case left:
 		if (0==option)
@@ -649,7 +659,7 @@ void scrollMenu(pList list, dateType type, int option) {
 			option = 5;
 		}
 		option--;
-		scrollMenu(list, type, option);
+		ret = scrollMenu(list, type, option);
 		break;
 	case tab:
 	case right:
@@ -658,7 +668,7 @@ void scrollMenu(pList list, dateType type, int option) {
 			option = -1;
 		}
 		option++;
-		scrollMenu(list, type, option);
+		ret = scrollMenu(list, type, option);
 		break;
 	case enter:
 	{
@@ -858,16 +868,17 @@ void scrollMenu(pList list, dateType type, int option) {
 			}
 			break;
 		case 4:
-			return;
+			return ret;;
 		default:
 			break;
 		}
-		scrollMenu(list, type, option);
-		return;
+		ret = scrollMenu(list, type, option);
+		return ret;
 	}
 	case esc:
-		return;
+		return ret;
 	default:
 		break;
 	}
+	return ret;
 }

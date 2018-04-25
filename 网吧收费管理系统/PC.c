@@ -293,7 +293,7 @@ int showPC(pPC p, int type) {
 }
 
 //搜索条件
-typedef struct Criteria
+typedef struct
 {
 	int type;
 	char PCType[16];
@@ -310,19 +310,20 @@ pCriteriaPC getDefaultCriteriaPC() {
 }
 
 //依据条件获得列表
-pList getListFromCriteria(pCriteriaPC criteria) {
+pList getListFromPcCriteria(pCriteriaPC criteria) {
 	pList list = (pList)malloc(sizeof(List));
 	list->last = NULL;
 	list->next = NULL;
 	pList o = list;
 	pList p = getPCs();
-	int isAdd = 1;
+	int isAdd;
 	char temp[32];
 	while (NULL!=p)
 	{
 		switch (criteria->type)
 		{
 		case 0:
+			isAdd = 1;
 			if (0 != strcmp(criteria->PCType,"所有类型"))
 			{
 				if (0!=strcmp(criteria->PCType,p->date.pc->type))
@@ -343,6 +344,7 @@ pList getListFromCriteria(pCriteriaPC criteria) {
 			}
 			break;
 		case 1:
+			isAdd = 0;
 			if (NULL!=strstr(itoa(p->date.pc->id,temp,10),criteria->Criteria))
 			{
 				isAdd = 1;
@@ -370,8 +372,6 @@ pList getListFromCriteria(pCriteriaPC criteria) {
 			q->last = o;
 			q->date = p->date;
 			o->next = q;
-
-			isAdd = 1;
 			o = o->next;
 		}
 		p = p->next;
@@ -552,7 +552,7 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 		default:
 			break;
 		}
-		return getListFromCriteria(criteria);
+		return getListFromPcCriteria(criteria);
 	default:
 		return selectPC(type, criteria, p);
 	}

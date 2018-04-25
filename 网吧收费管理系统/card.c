@@ -253,3 +253,170 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		break;
 	}
 }
+
+//搜索条件
+typedef struct
+{
+	int type;
+	char CardType[16];
+	char Criteria[16];
+}CriteriaCard, *pCriteriaCard;
+pCriteriaCard getDefaultCriteriaCard() {
+	pCriteriaCard p = (pCriteriaCard)malloc(sizeof(CriteriaCard));
+	p->type = 0;
+	strcpy(p->CardType, getCardTypeList()->date.card->type);
+	p->Criteria[0] = '\0';
+	return p;
+}
+
+//依据条件获得列表
+pList getListFromCardCriteria(pCriteriaCard criteria) {
+	pList list = (pList)malloc(sizeof(List));
+	list->last = NULL;
+	list->next = NULL;
+	pList o = list;
+	pList p = getCards();
+	int isAdd;
+	char temp[32];
+	while (NULL != p)
+	{
+		switch (criteria->type)
+		{
+		case 0:
+			isAdd = 1;
+			if (0 != strcmp(criteria->CardType, "所有类型"))
+			{
+				if (0 != strcmp(criteria->CardType, p->date.card->type))
+				{
+					isAdd = 0;
+				}
+			}
+			break;
+		case 1:
+			isAdd = 0;
+			///////////////////////////////////////////////////////
+			break;
+		default:
+			break;
+		}
+		if (isAdd)
+		{
+			pList q = (pList)malloc(sizeof(List));
+			q->next = NULL;
+			q->last = o;
+			q->date = p->date;
+			o->next = q;
+			o = o->next;
+		}
+		p = p->next;
+	}
+	return list->next;
+}
+
+//筛选
+pList selectCard(int type, pCriteriaCard criteria, pList p) {
+	key k;
+	pList pt = getCardTypeList();
+	system("title 筛选");
+	system("cls");
+	system("mode con cols=80 lines=24");
+	printf("\n\n");
+	printf("                       ============= 筛 选 =============                       \n\n");
+	printf("                            %c方式:", 0 == type ? '>' : ' ');
+	if (0 == criteria->type)
+	{
+		printf("条件搜索\n\n");
+		printf("                         %c会员卡类型：", 1 == type ? '>' : ' ');
+		while (strcmp(criteria->CardType, pt->date.cardType->name) != 0 && pt->next != NULL)
+		{
+			pt = pt->next;
+		}
+		if (NULL == pt->next)
+		{
+			pt = getCardTypeList();
+		}
+		printf("%s\n\n", pt->date.cardType->name);
+		printf("\n\n");
+		printf("                                ");
+		OPTION_OK(2 == type);
+		k = isKey(getch());
+	}
+	else if (1 == criteria->type)
+	{
+		printf("模糊搜索\n\n");
+		printf("                         含有的内容：", 1 == type ? '>' : ' ');
+		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
+		printf("\n\n");
+		printf("                                ");
+		OPTION_OK(2 == type);
+	}
+	switch (k)
+	{
+	case esc:
+		return p;
+	case left:
+		if (0 == type)
+		{
+			criteria->type--;
+			if (0>criteria->type)
+			{
+				criteria->type = 1;
+			}
+			return selectCard(type, criteria, p);
+		}
+		if (criteria->type == 0)
+		{
+			if (NULL != pt->last)
+			{
+				strcpy(criteria->CardType, pt->last->date.cardType->name);
+			}
+			return selectCard(type, criteria, p);
+		}
+	case up:
+		type--;
+		if (type<0)
+		{
+			type = 2;
+		}
+		return selectCard(type, criteria, p);
+	case right:
+		if (0 == type)
+		{
+			criteria->type++;
+			if (1<criteria->type)
+			{
+				criteria->type = 0;
+			}
+			return selectCard(type, criteria, p);
+		}
+		if (criteria->type == 0)
+		{
+			if (NULL != pt->next)
+			{
+				strcpy(criteria->CardType, pt->next->date.cardType->name);
+			}
+			return selectCard(type, criteria, p);
+		}
+	case down:
+		type++;
+		if (criteria->type != 0 && type>2)
+		{
+			type = 0;
+		}
+		return selectCard(type, criteria, p);
+	case enter:
+		if (2 != type)
+		{
+			type = 2;
+			return selectCard(type, criteria, p);
+		}
+		return getListFromCardCriteria(criteria);
+	default:
+		return selectCard(type, criteria, p);
+	}
+}
+
+pList selectToCard() {
+	return selectCard(0, getDefaultCriteriaCard(), getCards());
+}
+
