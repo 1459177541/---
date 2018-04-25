@@ -214,7 +214,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		break;
 	}
 	printf("                              %5d / %-5d\n", thisPage+1, finalPage+1);
-	printf("\n                     ");
+	printf("\n                  ");
 	prOption("首  页", 0 == option, 9);
 	printf("   ");
 	prOption("上一页", 1 == option, 9);
@@ -225,36 +225,39 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	switch (type)
 	{
 	case d_pc:
-		printf("\n\n  ");
+		printf("\n\n           ");
 		prOption("转到网吧规模", 4 == option, 18);
 		printf(" ");
 		prOption("上/下机", 5 == option, 12);
-		printf(" ");
+		printf("   ");
 		prOption("详细", 6 == option, 6);
-		printf(" ");
+		printf("   ");
 		prOption("筛选", 7 == option, 6);
-		printf(" ");
+		printf("   ");
 		prOption("返回", 8 == option, 6);
+		break;
 	case d_card:
-		printf("\n\n  ");
+		printf("\n\n            ");
 		prOption("新建", 4 == option, 6);
-		printf(" ");
+		printf("    ");
 		prOption("删除", 5 == option, 6);
-		printf(" ");
+		printf("    ");
 		prOption("充值", 6 == option, 6);
-		printf(" ");
+		printf("    ");
 		prOption("详细", 7 == option, 6);
-		printf(" ");
+		printf("    ");
 		prOption("筛选", 8 == option, 6);
-		printf(" ");
+		printf("    ");
 		prOption("返回", 9 == option, 6);
+		break;
 	case d_history:
-		printf("\n\n  ");
+		printf("\n\n                    ");
 		prOption("详细", 4 == option, 6);
-		printf(" ");
+		printf("            ");
 		prOption("筛选", 5 == option, 6);
-		printf(" ");
+		printf("            ");
 		prOption("返回", 6 == option, 6);
+		break;
 	default:
 		break;
 	}
@@ -489,7 +492,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					p = q;
 					q = q->next;
 				}
-				break;
+				return ret;
 			case d_card:		//详细
 			{
 				char *pass1 = (char *)malloc(sizeof(char) * 16);
@@ -527,6 +530,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					p = q;
 					q = q->next;
 				}
+				return ret;
 			default:
 				break;
 			}
