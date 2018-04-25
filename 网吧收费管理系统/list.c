@@ -86,11 +86,19 @@ void save(dateType type) {
 
 //全部保存
 void saveAll() {
+	prPrompt("正在保存", "正在保存管理员信息");
 	save(d_admin);
-	save(d_card);
-	save(d_cardType);
+	prPrompt("正在保存", "正在保存配置");
+	saveAttri();
+	prPrompt("正在保存", "正在保存网吧规模");
 	save(d_pcType);
+	prPrompt("正在保存", "正在保存会员卡类型");
+	save(d_cardType);
+	prPrompt("正在保存", "正在保存计费方案");
 	save(d_rate);
+	prPrompt("正在保存", "正在保存会员卡");
+	save(d_card);
+	prPrompt("正在保存", "正在保存历史记录");
 	save(d_history);
 }
 
@@ -113,8 +121,10 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	{
 		initFinalPage(list);
 	}
+	pList ret = NULL;
 	pList op = list;
 	int length = 0;
+	int optionLength;
 	system("cls");
 	system("mode con cols=80 lines=24");
 	switch (type)
@@ -125,6 +135,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n-------------+--------------------+--------------------+------------------------");
 		printf("\n      id     |        类型        |      当前用户      |      上机时间      ");
 		printf("\n-------------+--------------------+--------------------+------------------------");
+		optionLength = 8;
 		break;
 	case d_card:
 		system("title 会员卡管理");
@@ -132,6 +143,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n-------------------+--------------------+--------------------+------------------");
 		printf("\n        id         |        类型        |       用户名       |      余额    ");
 		printf("\n-------------------+--------------------+--------------------+------------------");
+		optionLength = 9;
 		break;
 	case d_history:
 		system("title 历史记录");
@@ -139,6 +151,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n----------------------+-----------------+---------------------------------------");
 		printf("\n         操作类型     |      操作人     |                时间               ");
 		printf("\n----------------------+-----------------+---------------------------------------");
+		optionLength = 6;
 		break;
 	default:
 		return NULL;
@@ -209,23 +222,49 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	prOption("下一页", 2 == option, 9);
 	printf("   ");
 	prOption("尾  页", 3 == option, 9);
-	printf("\n\n      ");
-	prOption("  新建  ", 4 == option, 13);
-	printf(" ");
-	prOption("  删除  ", 5 == option, 13);
-	printf(" ");
-	prOption("  详细  ", 6 == option, 13);
-	printf(" ");
-	prOption("  筛选  ", 7 == option, 13);
-	printf(" ");
-	prOption("  返回  ", 8 == option, 13);
+	switch (type)
+	{
+	case d_pc:
+		printf("\n\n  ");
+		prOption("转到网吧规模", 4 == option, 18);
+		printf(" ");
+		prOption("上/下机", 5 == option, 12);
+		printf(" ");
+		prOption("详细", 6 == option, 6);
+		printf(" ");
+		prOption("筛选", 7 == option, 6);
+		printf(" ");
+		prOption("返回", 8 == option, 6);
+	case d_card:
+		printf("\n\n  ");
+		prOption("新建", 4 == option, 6);
+		printf(" ");
+		prOption("删除", 5 == option, 6);
+		printf(" ");
+		prOption("充值", 6 == option, 6);
+		printf(" ");
+		prOption("详细", 7 == option, 6);
+		printf(" ");
+		prOption("筛选", 8 == option, 6);
+		printf(" ");
+		prOption("返回", 9 == option, 6);
+	case d_history:
+		printf("\n\n  ");
+		prOption("详细", 4 == option, 6);
+		printf(" ");
+		prOption("筛选", 5 == option, 6);
+		printf(" ");
+		prOption("返回", 6 == option, 6);
+	default:
+		break;
+	}
 	int in = getch();
 	key k = isKey(in);
 	switch (k)		//处理按键类型
 	{
 	case number:
 	{
-		pList ret = paginationMenu(list, type, in - '0', option);
+		ret = paginationMenu(list, type, in - '0', option);
 		return ret;
 	}
 	case up:
@@ -234,7 +273,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		{
 			index = length;
 		}
-		pList ret = paginationMenu(list, type, index, option);
+		ret = paginationMenu(list, type, index, option);
 		return ret;
 	case down:
 		index++;
@@ -242,7 +281,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		{
 			index = 0;
 		}
-		pList ret = paginationMenu(list, type, index, option);
+		ret = paginationMenu(list, type, index, option);
 		return ret;
 	case tab:
 		if (4 > option)
@@ -253,28 +292,28 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		{
 			option -= 4;
 		}
-		pList ret = paginationMenu(list, type, index, option);
+		ret = paginationMenu(list, type, index, option);
 		return ret;
 	case left:
 		option--;
 		if (0 > option)
 		{
-			option = 8;
+			option = optionLength;
 		}
-		pList ret = paginationMenu(list, type, index, option);
+		ret = paginationMenu(list, type, index, option);
 		return ret;
 	case right:
 		option++;
-		if (8 < option)
+		if (optionLength < option)
 		{
 			option = 0;
 		}
-		pList ret = paginationMenu(list, type, index, option);
+		ret = paginationMenu(list, type, index, option);
 		return ret;
 	case pgup:
 		if (0>=thisPage)
 		{
-			pList ret = paginationMenu(list, type, index, option);
+			ret = paginationMenu(list, type, index, option);
 			return ret;
 		}
 		for (int i = 0; i < 10; i++)
@@ -282,12 +321,12 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			list = list->last;
 		}
 		thisPage--;
-		pList ret = paginationMenu(list, type, index, option);
+		ret = paginationMenu(list, type, index, option);
 		return ret;
 	case pgdn:
 		if (finalPage<=thisPage)
 		{
-			pList ret = paginationMenu(list, type, index, option);
+			ret = paginationMenu(list, type, index, option);
 			return ret;
 		}
 		for (int i = 0; i < 10; i++)
@@ -295,7 +334,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			list = list->next;
 		}
 		thisPage++;
-		pList ret = paginationMenu(list, type, index, option);
+		ret = paginationMenu(list, type, index, option);
 		return ret;
 	case enter:
 		//处理选择项
@@ -337,16 +376,16 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			}
 			thisPage = finalPage;
 			break;
-		case 4:	//新建
+		case 4:
 			//处理链表类型
 			switch (type)		
 			{
-			case d_pc:
+			case d_pc:			//网吧规模
 				prPrompt("即将进入网吧规模", "按任意键继续");
 				getch();
 				scrollMenu(getPCtypeList(), d_pcType, 0);
 				break;
-			case d_card:
+			case d_card:		//新建
 			{
 				if (isPower(getUser()->power, 0))
 				{
@@ -374,25 +413,22 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					getch();
 				}
 				break;
-			case d_history:
-				prPrompt("禁止！！！", "只能通过程序自动创建\n无法手动创建\n按任意键返回");
-				getch();
+			case d_history:		//详细
+				showHistory(op->date.history);
 				break;
 			}
 			default:
 				break;
 			}
 			break;
-		case 5:	//删除
+		case 5:
 			//处理链表类型
 			switch (type)		
 			{
-			case d_pc:
-				prPrompt("即将进入网吧规模", "按任意键继续");
-				getch();
-				scrollMenu(getPCtypeList(), d_pcType, 0);
+			case d_pc:			//上/下机
+
 				break;
-			case d_card:
+			case d_card:		//删除
 				if (isPower(getUser()->power, 1))
 				{
 					if (NULL != list->last)
@@ -412,22 +448,49 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
 					getch();
 				}
-			case d_history:
-				prPrompt("禁止！！！", "删除历史记录会导致不可预见的事情发生\n禁止随意删除\n按任意键返回");
-				getch();
-				break;
+			case d_history:		//筛选
+
 			default:
 				break;
 			}
 			break;
-		case 6:	//详细
+		case 6:
 			//处理链表类型
 			switch (type)		
 			{
-			case d_pc:
+			case d_pc:			//详细
 				showPC(op->date.pc, 0);
 				break;
-			case d_card:
+			case d_card:		//充值
+
+			case d_history:		//退出
+				finalPage = -1;
+				thisPage = 0;
+				return op;
+			default:
+				break;
+			}
+			break;
+			break;
+		case 7:	
+		{
+			pList p;
+			//处理链表类型
+			switch (type)		
+			{
+			case d_pc:			//筛选
+				finalPage = -1;
+				p = selectToPC();
+				ret = paginationMenu(p, type, index, option);
+				pList q = p->next;
+				while (NULL != q)
+				{
+					free(p);
+					p = q;
+					q = q->next;
+				}
+				break;
+			case d_card:		//详细
 			{
 				char *pass1 = (char *)malloc(sizeof(char) * 16);
 				char *pass2 = (char *)malloc(sizeof(char) * 16);
@@ -440,56 +503,54 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				free(pass2);
 				break;
 			}
-			case d_history:
-				showHistory(op->date.history);
-				break;
 			default:
 				break;
-			}
-			break;
-			break;
-		case 7:	//筛选
-		{
-			pList p;
-			//处理链表类型
-			switch (type)		
-			{
-			case d_pc:
-				finalPage = -1;
-				p = selectToPC();
-				break;
-			case d_card:
-				finalPage = -1;
-				p = selectToCard();
-				break;
-			case d_history:
-				/////////////////////////////////////////////////
-				break;
-			default:
-				break;
-			}
-			pList ret = paginationMenu(p, type, index, option);
-			pList q = p->next;
-			while (NULL!=q)
-			{
-				free(p);
-				p = q;
-				q = q->next;
 			}
 			return ret;
 		}
-		case 8:	//返回
-			finalPage = -1;
-			thisPage = 0;
-			return ret;
+		case 8:	
+		{
+			switch (type)
+			{
+			case d_pc:			//退出
+				finalPage = -1;
+				thisPage = 0;
+				return op;
+			case d_card:		//筛选
+				finalPage = -1;
+				p = selectToCard();
+				ret = paginationMenu(p, type, index, option);
+				pList q = p->next;
+				while (NULL != q)
+				{
+					free(p);
+					p = q;
+					q = q->next;
+				}
+			default:
+				break;
+			}
+		}
+		case 9:
+		{
+			switch (type)
+			{
+			case d_card:		//退出
+				finalPage = -1;
+				thisPage = 0;
+				return op;
+			default:
+				break;
+			}
+		}
 		default:
 			break;
 		}
-		pList ret = paginationMenu(list, type, index, option);
+		ret = paginationMenu(list, type, index, option);
 		return ret;
 	case esc:
 	{
-		pList ret = paginationMenu(list, type, index, 8);
+		ret = paginationMenu(list, type, index, 8);
 		return ret;
 	}
 	default:

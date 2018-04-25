@@ -529,24 +529,6 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 	}
 }
 
-//保存
-void saveBeforExit() {
-	prPrompt("正在保存","正在保存管理员信息");
-	save(d_admin);
-	prPrompt("正在保存", "正在保存配置");
-	saveAttri();
-	prPrompt("正在保存", "正在保存网吧规模");
-	save(d_pcType);
-	prPrompt("正在保存", "正在保存会员卡类型");
-	save(d_cardType);
-	prPrompt("正在保存", "正在保存计费方案");
-	save(d_rate);
-	prPrompt("正在保存", "正在保存会员卡");
-	save(d_card);
-	prPrompt("正在保存", "正在保存历史记录");
-	save(d_history);
-}
-
 //退出
 int saveExit(int type) {
 	int x = 16;
@@ -593,9 +575,9 @@ int saveExit(int type) {
 		switch (type)
 		{
 		case 0:
-			saveBeforExit();
+			saveAll();
 		case 1:
-			prPrompt("退出", "正在结算金额");
+			prPrompt("退出中", "正在结算金额");
 			logoutPCAll();
 			prPrompt("已成功关闭", "感谢您的使用");
 			gotoxy(x + 15, 13);
