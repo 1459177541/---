@@ -191,7 +191,7 @@ pList getPCs();
 void logoutPCAll();
 void prPC(pPC p, int isOption);
 pList selectToPC();
-int showPC(pPC p, int type);
+int showPC(pPC p);
 void logPC(pPC p);
 
 //cardType

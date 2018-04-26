@@ -473,7 +473,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			switch (type)		
 			{
 			case d_pc:			//ÏêÏ¸
-				showPC(op->date.pc, 0);
+				showPC(op->date.pc);
 				break;
 			case d_card:		//³äÖµ
 				recharge(op->date.card);

@@ -124,7 +124,7 @@ void logoutPCAll() {
 }
 
 //PC界面
-int showPC(pPC p, int type) {
+int showPC(pPC p) {
 	char name[16] = "";
 	if (NULL!=p->user)
 	{
@@ -149,57 +149,21 @@ int showPC(pPC p, int type) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|      ");
-	prOption("上机", 1 == type, 6);
-	printf("        ");
-	prOption("下机", 2 == type, 6);
-	printf("        ");
-	prOption("取消", 3 == type, 6);
-	printf("       |");
+	printf("|                ");
+	prOption("完成",1, 6);
+	printf("                |");
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
 	printf("=================================================");
 	key k = isKey(getch());
-	switch (k)
+	if (enter == k)
 	{
-	case up:
-	case left:
-		type--;
-		if (0>type)
-		{
-			type = 3;
-		}
-		showPC(p, type);
-		break;
-	case down:
-	case right:
-	case tab:
-		type++;
-		if (3<type)
-		{
-			type = 1;
-		}
-		showPC(p, type);
-		break;
-	case enter:
-		if (1 == type)
-		{
-			loginPC(0, "" ,p);
-		}
-		else if(2 == type)
-		{
-			logoutPC(p);
-			showPC(p, 1);
-			return;
-		}
-		else if (3==type)
-		{
-			return;
-		}
-		break;
-	default:
-		break;
+		return;
+	}
+	else
+	{
+		showPC(p);
 	}
 }
 
