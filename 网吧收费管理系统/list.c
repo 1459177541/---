@@ -34,7 +34,7 @@ void save(dateType type) {
 	default:
 		break;
 	}
-	if (NULL == (fp = fopen(fileName, "wb")))
+	if (NULL == (fp = fopen(fileName, "wb")) || NULL == p->date.admin)
 	{
 		return;
 	}
@@ -82,6 +82,7 @@ void save(dateType type) {
 			break;
 		}
 	}
+	fclose(fp);
 }
 
 //È«²¿±£´æ

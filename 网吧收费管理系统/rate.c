@@ -343,6 +343,10 @@ double result(pPC pc, pCard user, pRate rate, double src) {
 
 //计算价格(全部规则)
 double results(pPC pc, pCard user) {
+	if (NULL==getRateList() || NULL==user)
+	{
+		return;
+	}
 	pList p = getRateList()->next;
 	double money = 0;
 	while (NULL!=p)

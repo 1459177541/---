@@ -14,6 +14,7 @@ int initAdminList() {
 		adminLists = (pList)malloc(sizeof(List));
 		adminLists->next = NULL;
 		adminLists->last = NULL;
+		adminLists->type = d_admin;
 		adminLists->date.admin = p;
 	}
 	pList o = (pList)malloc(sizeof(List));
@@ -42,7 +43,11 @@ pList getAdminHead() {
 	{
 		if (initAdminList())
 		{
-			//
+			adminLists = (pList)malloc(sizeof(List));
+			adminLists->next = NULL;
+			adminLists->last = NULL;
+			adminLists->date.admin = NULL;
+			adminLists->type = d_admin;
 		}
 	}
 	return adminLists;
@@ -58,17 +63,8 @@ pAdmin getUser() {
 
 //设置超级管理员
 void setRoot(pAdmin root) {
-	if (NULL == getAdminHead())
-	{
-		adminLists = (pList)malloc(sizeof(List));
-		adminLists->next = NULL;
-		adminLists->last = NULL;
-		adminLists->date.admin = root;
-		return;
-	}
 	pList p = getAdminHead();
 	p->date.admin = root;
-	free(p);
 }
 
 //修改管理员

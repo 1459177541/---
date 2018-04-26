@@ -63,6 +63,7 @@ void setRootPassword(int type,char * pass1,char * pass2,char *text) {
 			strcpy(root->password, pass1);
 			root->power = ~0;
 			setRoot(root);
+			setUser(root);
 			strcpy(pass1, "***************");
 			strcpy(pass2, "***************");
 			free(pass1);
@@ -165,7 +166,7 @@ int initialization() {
 				break;
 			}
 		}
-
+		setUser(NULL);
 		save(d_admin);
 		save(d_pcType);
 		save(d_cardType);
