@@ -9,18 +9,17 @@ int initCard() {
 	{
 		return 1;
 	}
-	if (NULL== cardLists)
+	pCard p = (pCard)malloc(sizeof(card));
+	if (NULL== cardLists && fread(p, sizeof(card),1,fp)>0)
 	{
 		cardLists = (pList)malloc(sizeof(List));
 		cardLists->next = NULL;
 		cardLists->last = NULL;
-		cardLists->date.card = NULL;
+		cardLists->type = d_card;
+		cardLists->date.card = p;
 	}
-	pList o = (pList)malloc(sizeof(List));
-	pCard p = (pCard)malloc(sizeof(card));
 	pList q = cardLists;
-	q->date.card = p;
-	q->type = d_card;
+	pList o = (pList)malloc(sizeof(List));
 	p = (pCard)malloc(sizeof(card));;
 	while (fread(p, sizeof(card), 1, fp)>0)
 	{
@@ -44,7 +43,7 @@ int initCard() {
 }
 
 pList getCards() {
-	if (NULL== cardLists)
+	if (NULL == cardLists)
 	{
 		if (initCard())
 		{
@@ -71,7 +70,7 @@ pCard getCard(int id) {
 }
 
 void prCard(pCard p, int isOption) {
-	printf("%3s%15d |%19s |%19s |%13.2lf %-3s"
+	printf("%3s%15d |%19s |%19s |%13.2lf %-3s "
 		, isOption ? getAttri("L") : getAttri("NL"), p->id, p->type, p->masterName, p->balance, isOption ? getAttri("R") : getAttri("NR"));
 }
 
@@ -453,7 +452,7 @@ void recharge(pCard p) {
 	gotoxy(x, y++);
 	printf("=================================================");
 	char money[16];
-	key k = input(x + 16, 13, money, 0, NUM, NULL);
+	key k = input(x + 16, 12, money, 0, NUM, NULL);
 	if (enter == k)
 	{
 		double mon = atof(money);

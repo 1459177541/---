@@ -15,6 +15,7 @@ int initPCType() {
 		pcTypeList = (pList)malloc(sizeof(List));
 		pcTypeList->next = NULL;
 		pcTypeList->last = NULL;
+		pcTypeList->type = d_pcType;
 		pcTypeList->date.pcType = p;
 	}
 	pList q = pcTypeList;

@@ -34,12 +34,17 @@ void save(dateType type) {
 	default:
 		break;
 	}
-	if (NULL == (fp = fopen(fileName, "wb")) || NULL == p->date.admin)
+	if (NULL==p || NULL == (fp = fopen(fileName, "wb")))
 	{
 		return;
 	}
 	while (NULL != p)
 	{
+		if (NULL == p->date.admin)
+		{
+			p = p->next;
+			continue;
+		}
 		switch (type)
 		{
 		case d_admin:
@@ -160,27 +165,33 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 
 	for (int i = 0; i < 10; i++)
 	{
-		if (NULL != p && NULL != p->date.admin)
+		if (NULL != p)
 		{
-			length++;
-			switch (type)
+			if (NULL != p->date.admin)
 			{
-			case d_pc:
-				prPC(p->date.pc, i == index);
-				break;
-			case d_card:
-				prCard(p->date.card, i == index);
-				break;
-			case d_history:
-				prHistory(p->date.history, i == index);
-				break;
-			default:
-				break;
+				length++;
+				switch (type)
+				{
+				case d_pc:
+					prPC(p->date.pc, i == index);
+					break;
+				case d_card:
+					prCard(p->date.card, i == index);
+					break;
+				case d_history:
+					prHistory(p->date.history, i == index);
+					break;
+				default:
+					break;
+				}
+				if (i == index)
+				{
+					op = p;
+				}
+				p = p->next;
+				continue;
 			}
-			if (i == index)
-			{
-				op = p;
-			}
+			i--;
 			p = p->next;
 		}
 		else {
@@ -397,8 +408,18 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					p->masterName[0] = '\0';
 					p->password[0] = '\0';
 					strcpy(p->type, getCardTypeList()->date.cardType->name);
-					op->date.card = p;
-					showCard(0, op->date.card, "", pass1, pass2);
+					pList pl = list;
+					while (NULL!=pl->next)
+					{
+						pl = pl->next;
+					}
+					pList ql = (pList)malloc(sizeof(List));
+					ql->date.card = p;
+					ql->next = NULL;
+					ql->last = pl;
+					ql->type = d_card;
+					pl->next = ql;
+					showCard(0, p, "", pass1, pass2);
 					strcpy(pass1, "***************");
 					strcpy(pass2, "***************");
 					free(pass1);
@@ -572,7 +593,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	default:
 		break;
 	}
-	ret = paginationMenu(list, type, index, 8);
+	ret = paginationMenu(list, type, index, option);
 	return ret;
 }
 

@@ -247,7 +247,7 @@ void mainMenu(pAdmin user, int type) {
 				mainMenu(user, type);
 				return;
 			}
-			break;
+			return;
 		default:
 			break;
 		}
@@ -316,7 +316,7 @@ void login(pAdmin user, int type, char* text) {
 			 login(user, type, "");
 			 return;
 		}
-		return user;
+		return;
 	default:
 		login(user, type, "");
 		return;

@@ -9,17 +9,17 @@ int initHistory() {
 	{
 		return 1;
 	}
-	if (NULL == historyLists)
+	pHistory p = (pHistory)malloc(sizeof(history));
+	if (NULL == historyLists && fread(p, sizeof(history), 1, fp)>0)
 	{
 		historyLists = (pList)malloc(sizeof(List));
 		historyLists->next = NULL;
 		historyLists->last = NULL;
+		historyLists->type = d_history;
+		historyLists->date.history = p;
 	}
 	pList o = (pList)malloc(sizeof(List));
-	pHistory p = (pHistory)malloc(sizeof(history));
 	pList q = historyLists;
-	q->type = d_history;
-	q->date.history = p;
 	p = (pHistory)malloc(sizeof(history));
 	while (fread(p, sizeof(history), 1, fp)>0)
 	{

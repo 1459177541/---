@@ -76,7 +76,7 @@ void prPC(pPC p, int isOption) {
 
 //ио/об╩З
 void logPC(pPC p) {
-	if (NULL!=p->user)
+	if (NULL == p->user)
 	{
 		p->user = paginationMenu(getCards(), d_card, 0, 0)->date.card;
 	}
@@ -118,7 +118,10 @@ void logoutPCAll() {
 			i = 0;
 		}
 		i++;
-		logPC(list->date.pc);
+		if (NULL!=list->date.pc->user)
+		{
+			logPC(list->date.pc);
+		}
 		list = list->next;
 	}
 }
