@@ -402,7 +402,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					pass1[0] = '\0';
 					pass2[0] = '\0';
 					pCard p = (pCard)malloc(sizeof(card));
-					p->balance = 0;
+					p->balance = 0.0;
 					p->id = -1;
 					p->idcardNum[0] = '\0';
 					p->masterName[0] = '\0';

@@ -80,12 +80,6 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		p->id = maxCardId;
 		maxCardId++;
 	}
-	char* balance = (char*)malloc(16 * sizeof(char));
-	balance[0] = '\0';
-	if (5 != type)
-	{
-		sprintf(balance, "%.2lf", p->balance);
-	}
 	int x = 16;
 	int y = 2;
 	gotoxy(x, y++);
@@ -105,33 +99,38 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    密码：%-21s|", "");
-	gotoxy(x + 27, y - 1); 
-	printfPassword(password);
+	printf("|                    密码：                     |");
+	if (2!=type)
+	{
+		gotoxy(x + 27, y - 1); 
+		printfPassword(password);
+	}
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                再次输入：%-21s|", "");
-	gotoxy(x + 27, y - 1);
-	printfPassword(password2);
+	printf("|                再次输入：                     |");
+	if (3!=type)
+	{
+		gotoxy(x + 27, y - 1);
+		printfPassword(password2);
+	}
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    余额：%-21s|", balance);
+	printf("|                    余额：%-21lf|", p->balance);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
 	printf("|                    %10s                 |",text);
 	gotoxy(x, y++);
 	printf("|                      ");
-	OPTION_OK(5 == type);
+	OPTION_OK(4 == type);
 	printf("                  |");
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
 	printf("=================================================");
 	gotoxy(x, y++);
-	free(balance);
 
 	key k;
 	switch (type)
@@ -141,7 +140,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		pList typeList = getCardTypeList();
 		if ('\0'==p->type[0])
 		{
-			strcpy(p->type, typeList->date.cardType->name);
+			strcpy(p->type, typeList->next->date.cardType->name);
 		}
 		else
 		{
@@ -184,16 +183,8 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		k = input(x + 27, 12, password2, 1, INTER | LETTER | SYMBOL, NULL);
 		break;
 	case 4:
-	{
-		char * temp = (char*)malloc(16 * sizeof(char));
-		temp[0] = '\0';
-		k = input(x + 27, 14, temp, 0, NUM, NULL);
-		if ('\0' != temp)
-		{
-			p->balance = atof(temp);
-		}
+		k = isKey(getch());
 		break;
-	}
 	default:
 		k = isKey(getch());
 		break;
@@ -203,7 +194,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	case up:
 		if (0 == type)
 		{
-			showCard(5, p, text, password, password2);
+			showCard(4, p, text, password, password2);
 		}
 		else {
 			showCard(type-1, p, text, password, password2);
@@ -211,7 +202,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		break;
 	case down:
 	case tab:
-		if (5 == type)
+		if (4 == type)
 		{
 			showCard(0, p, text, password, password2);
 		}
@@ -220,8 +211,18 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 		}
 		break;
 	case enter:
-		if (5 == type)
+		if (4 == type)
 		{
+			if (strcmp(getCardTypeList()->date.card->type,p->type)==0)
+			{
+				showCard(type, p, "[     err:错误的类型     ]", password, password2);
+				return;
+			}
+			if ('\0' == p->masterName)
+			{
+				showCard(type, p, "[     err:请输入用户名   ]", password, password2);
+				return;
+			}
 			if ('\0' == password[0] || '\0' == password2[0])
 			{
 				password[0] = '\0';
@@ -238,13 +239,13 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 			{
 				password[0] = '\0';
 				password2[0] = '\0';
-				showCard(type, p, "[err:两次输入的密码不一样]", password, password2);
+				showCard(type, p, "[ err:两次输入的密码不同 ]", password, password2);
 				return;
 			}
 		}
 		else
 		{
-			showCard(5, p, text, password, password2);
+			showCard(4, p, text, password, password2);
 		}
 		break;
 	default:
