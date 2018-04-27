@@ -397,6 +397,16 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			{
 				if (isPower(getUser()->power, 0))
 				{
+					while (NULL==getCardTypeList()->next)
+					{
+						prPrompt("没有会员卡类型", "按任意键转到会员卡类型列表\n按esc键取消新建");
+						key k = isKey(getch());
+						if (esc == k)
+						{
+							return paginationMenu(list, type, index, option);							
+						}
+						scrollMenu(getCardTypeList(), d_cardType, 0);
+					}
 					char *pass1 = (char *)malloc(sizeof(char) * 16);
 					char *pass2 = (char *)malloc(sizeof(char) * 16);
 					pass1[0] = '\0';
@@ -457,16 +467,22 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_card:		//删除
 				if (isPower(getUser()->power, 1))
 				{
-					if (NULL != list->last)
+					if (NULL != op->last)
 					{
-						pList temp = NULL != list->next ? list->next : list->last;
-						list->last->next = list->next;
-						if (NULL != list->next)
+						pList temp = NULL != op->next ? op->next : op->last;
+						op->last->next = op->next;
+						if (NULL != op->next)
 						{
-							list->next->last = list->last;
+							op->next->last = op->last;
 						}
-						free(list);
-						list = temp;
+						free(op);
+						op = temp;
+					}
+					else
+					{
+						pCard temp = op->date.card;
+						op->date.card = NULL;
+						free(temp);
 					}
 				}
 				else
@@ -474,6 +490,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
 					getch();
 				}
+				break;
 			case d_history:		//筛选
 				finalPage = -1;
 				p = selectToHistory();
@@ -624,7 +641,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 	case d_admin:
 		printf("\n\n                                   请设置管理员\n\n");
 		printf("                  ================================================            \n");
-		printf("          用户名        |                        权限                          \n");
+		printf("             用户名    |                        权限                          \n");
 		printf("                  -----+------------------------------------------         \n");
 		strcpy(nMore, "                       |                                            \n");
 		break;
@@ -699,7 +716,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 				prUser(p->date.admin, 3 == 0);
 				if (length / 2 == i)
 				{
-					printf("               ----------------+--------------------+----------------         \n");
+					printf("               --------+---------------------------------------------         \n");
 				}
 				break;
 			case d_rate:
@@ -835,8 +852,8 @@ pList scrollMenu(pList list, dateType type, int option) {
 				{
 					char *pass1 = (char *)malloc(sizeof(char) * 16);
 					char *pass2 = (char *)malloc(sizeof(char) * 16);
-					strcpy(pass1, p->date.admin->password);
-					strcpy(pass2, p->date.admin->password);
+					pass1[0] = '\0';
+					pass2[0] = '\0';
 					pAdmin p = (pAdmin)malloc(sizeof(admin));
 					p->name[0] = '\0';
 					p->password[0] = '\0';
@@ -960,6 +977,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 			default:
 				break;
 			}
+			break;
 		}
 		case 3:
 			if (d_admin==type)

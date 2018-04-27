@@ -74,7 +74,7 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 	printf("\n\n");
 	printf("                         -----=====修改管理员=====-----                        \n\n");
 	printf("                               -----基本信息-----                              \n\n");
-	printf("                              用户名：%s\n\n", 0 == type ? p->name : "");
+	printf("                              用户名：%s\n\n", 0 == type ?  "" : p->name);
 	printf("                                密码：%s\n\n", 1 == type ? "" : printfPassword(pass1));
 	printf("                            确认密码：%s\n\n", 2 == type ? "" : printfPassword(pass2));
 	printf("                                 -----权限-----                                \n\n");
@@ -88,7 +88,7 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		, 7 == type ? '>' : ' ', isPower(p->power, 12) ? getAttri("is") : getAttri("isNot")
 		, 8 == type ? '>' : ' ', isPower(p->power, 13) ? getAttri("is") : getAttri("isNot")
 	);
-	printf("                   会员卡管理： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
+	printf("                  会员卡管理： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
 		, 9 == type ? '>' : ' ', isPower(p->power, 0) ? getAttri("is") : getAttri("isNot")
 		, 10 == type ? '>' : ' ', isPower(p->power, 1) ? getAttri("is") : getAttri("isNot")
 		, 11 == type ? '>' : ' ', isPower(p->power, 2) ? getAttri("is") : getAttri("isNot")
@@ -108,16 +108,20 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		, 19== type ? '>' : ' ', isPower(p->power, 7) ? getAttri("is") : getAttri("isNot")
 		, 20 == type ? '>' : ' ', isPower(p->power, 17) ? getAttri("is") : getAttri("isNot")
 	);
-	printf("                 ");
+	printf("                                  ");
 	OPTION_OK(21 == type);
 	key k;
 	if (0==type)
 	{
-		k = input(7, 20, p->name, 0, LETTER | CHINESE, NULL);
+		k = input(38, 3, p->name, 0, LETTER | CHINESE, NULL);
 	}
 	else if (1==type)
 	{
-		k = input(9, 20, p->password, 1, NUM | LETTER | SYMBOL, NULL);
+		k = input(38, 5, pass1, 1, NUM | LETTER | SYMBOL, NULL);
+	}
+	else if (2 == type)
+	{
+		k = input(38, 7, pass2, 1, NUM | LETTER | SYMBOL, NULL);
 	}
 	else
 	{
@@ -142,7 +146,6 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		{
 			type -= 3;
 		}
-		editUser(type, p, pass1, pass2);
 		break;
 	case down:
 		if (3>type)
@@ -157,7 +160,6 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		{
 			type += 3;
 		}
-		editUser(type, p, pass1, pass2);
 		break;
 	case left:
 		if (0==type)
@@ -168,7 +170,6 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		{
 			type--;
 		}
-		editUser(type, p, pass1, pass2);
 		break;
 	case right:
 		if (22==type)
@@ -179,7 +180,6 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		{
 			type++;
 		}
-		editUser(type, p, pass1, pass2);
 		break;
 	case tab:
 		if (3>type)
@@ -190,7 +190,6 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		{
 			type = 0;
 		}
-		editUser(type, p, pass1, pass2);
 		break;
 	case esc:
 		return;
@@ -200,7 +199,7 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		case 0:
 		case 1:
 		case 2:
-			type = 20;
+			type = 21;
 			break;
 		//使用异或运算改变选择状态
 		case 3:	
@@ -279,7 +278,7 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 
 //输出权限
 char * prPower(int power) {
-	char str[40];
+	char *str = (char*)malloc(40*sizeof(char));
 	int i = 0;
 	if ((isPower(power, 0) && isPower(power, 1) && isPower(power, 2)))
 	{
@@ -435,13 +434,21 @@ char * prPower(int power) {
 			str[i++] = ',';
 		}
 	}
-	str[i] = '\0';
+	if (i>0)
+	{
+		str[i-1] = '\0';
+	}
+	else
+	{
+		str[0] = '\0';
+	}
+	return str;
 }
 
 //输出管理员
 void prUser(pAdmin p, int isOption) {
-	printf(" %6s%15s | %40s %-6s   \n"
-		, isOption ? getAttri("L") : getAttri("NL"), p->name,  prPower(p->power), isOption ? getAttri("R") : getAttri("NR"));
+	printf(" %6s%15s | %-41s %-6s  \n"
+		, isOption ? getAttri("L") : getAttri("NL"), p->name, prPower(p->power) , isOption ? getAttri("R") : getAttri("NR"));
 }
 
 //帮助
@@ -455,9 +462,9 @@ void helpFromUser() {
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
-	printf("|            每个权限的第一个字母分别表示：      |");
+	printf("|            每个权限的第一个字母分别表示：     |");
 	gotoxy(x, y++);
-	printf("|             全部(All)、增加(Create)、          |");
+	printf("|             全部(All)、增加(Create)、         |");
 	gotoxy(x, y++);
 	printf("|             修改(Update)、删除(Detele)        |");
 	gotoxy(x, y++);
@@ -479,7 +486,7 @@ void helpFromUser() {
 	gotoxy(x, y++);
 	printf("|                    ");
 	prOption("确定", 1, 7);
-	printf("                   |");
+	printf("                    |");
 	gotoxy(x, y++);
 	printf("=================================================");
 	if (enter!=isKey(getch()))

@@ -85,7 +85,10 @@ void mainMenu(pAdmin user, int type) {
 	while (!isPower(menuOption, type)){
 		type++;
 	}
-	system("title login");
+	char *title = (char *)malloc(32 * sizeof(char));
+	sprintf(title, "title %s : Ö÷²Ëµ¥", getUser()->name);
+	system(title);
+	free(title);
 	system("cls");
 	system("mode con cols=80 lines=24");
 	printf("\n");
@@ -261,7 +264,7 @@ void mainMenu(pAdmin user, int type) {
 
 //µÇÂ¼
 void login(pAdmin user, int type, char* text) {
-	system("title login");
+	system("title µÇÂ½");
 	system("cls");
 	system("mode con cols=80 lines=24");
 	printf("                                                       \n");

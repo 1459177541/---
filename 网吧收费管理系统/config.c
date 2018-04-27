@@ -36,11 +36,11 @@ char* getAttri(char * key) {
 	}
 	else if (!strcmp("is", key))
 	{
-		return "O";
+		return "[X]";
 	}
 	else if (!strcmp("isNot", key))
 	{
-		return "X";
+		return "[ ]";
 	}
 	return NULL;
 }

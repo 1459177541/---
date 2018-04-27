@@ -84,7 +84,7 @@ void editCardType(int type, pCardType p) {
 	printf("|                                               |");
 	gotoxy(x, y++);
 	printf("|                      ");
-	OPTION_OK(3 == type);
+	OPTION_OK(2 == type);
 	printf("                  |");
 	gotoxy(x, y++);
 	printf("|                                               |");
@@ -97,9 +97,10 @@ void editCardType(int type, pCardType p) {
 	{
 		key = input(x + 27, 9, p->name, 0, NUM | LETTER | CHINESE, NULL);
 	}
-	else
+	else if(1 == type)
 	{
 		char *in = (char *)malloc(sizeof(char) * 16);
+		in[0] = '\0';
 		key = input(x + 27, 11, in, 0, NUM, NULL);
 		p->price = '\0' == in[0] ? p->price : atof(in);
 		free(in);
@@ -109,7 +110,7 @@ void editCardType(int type, pCardType p) {
 	case up:
 		if (1 == type)
 		{
-			editCardType(3, p);
+			editCardType(2, p);
 		}
 		else {
 			editCardType(type - 1, p);
@@ -117,7 +118,7 @@ void editCardType(int type, pCardType p) {
 		break;
 	case down:
 	case tab:
-		if (3 == type)
+		if (2 == type)
 		{
 			editCardType(0, p);
 		}

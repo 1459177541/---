@@ -78,7 +78,7 @@ void prPC(pPC p, int isOption) {
 void logPC(pPC p) {
 	if (NULL == p->user)
 	{
-		p->user = paginationMenu(getCards(), d_card, 0, 0)->date.card;
+		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
 	}
 	else
 	{
@@ -89,25 +89,8 @@ void logPC(pPC p) {
 
 //全部下机
 void logoutPCAll() {
-	int x = 16;
-	int y = 8;
-	gotoxy(x, y++);
-	printf("=================================================");
-	gotoxy(x, y++);
-	printf("|                                               |");
-	gotoxy(x, y++);
-	printf("|        -------------------------------        |");
-	gotoxy(x, y++);
-	printf("|                                               |");
-	gotoxy(x, y++);
-	printf("|                                               |");
-	gotoxy(x, y++);
-	printf("|                                               |");
-	gotoxy(x, y++);
-	printf("=================================================");
-	gotoxy(x + 15, 9);
-	printf("    正在结算金额    ");
-	gotoxy(x + 5, 12);
+	prPrompt("正在结算金额", "");
+	gotoxy(21, 12);
 	int i = 0;
 	pList list = getPCs();
 	while (NULL!=list && d_pc == list->type)

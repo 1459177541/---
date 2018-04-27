@@ -103,7 +103,7 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	if (2!=type)
 	{
 		gotoxy(x + 27, y - 1); 
-		printfPassword(password);
+		printf(printfPassword(password));
 	}
 	gotoxy(x, y++);
 	printf("|                                               |");
@@ -112,12 +112,12 @@ int showCard(int type, pCard p,char * text, char *password, char *password2) {
 	if (3!=type)
 	{
 		gotoxy(x + 27, y - 1);
-		printfPassword(password2);
+		printf(printfPassword(password2));
 	}
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    Óà¶î£º%-21lf|", p->balance);
+	printf("|                    Óà¶î£º%-21.2lf|", p->balance);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
