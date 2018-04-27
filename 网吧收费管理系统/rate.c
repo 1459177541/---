@@ -57,8 +57,8 @@ pList getRateList() {
 
 //输出
 void prRate(pRate p, int isOption) {
-	char time1[25];
-	char time2[25];
+	char *time1 = (char*)malloc(25 * sizeof(char));
+	char *time2 = (char*)malloc(25 * sizeof(char));
 	char * time = (char *)malloc(sizeof(char) * 50);
 	prTimes(p->startTime, p->endTime, time);
 	splitString(time, time1, 0, 24);
@@ -67,6 +67,8 @@ void prRate(pRate p, int isOption) {
 		, isOption ? getAttri("L") : getAttri("NL"), time1, p->card, p->rule, isOption ? getAttri("R") : getAttri("NR"));
 	printf("%5s%25s |%19s |%20s  %-5s\n"
 		, isOption ? getAttri("L") : getAttri("NL"), time2, p->pc, "", isOption ? getAttri("R") : getAttri("NR"));
+	free(time2);
+	free(time1);
 }
 
 //设置时间段
@@ -85,7 +87,7 @@ void setRule(int type, pRate p) {
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
-	printf("|                                               |");
+	printf("|         %-29s         |",p->rule);
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
@@ -103,15 +105,15 @@ void setRule(int type, pRate p) {
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
-	printf("|        ");
+	printf("|                    ");
 	OPTION_OK(1==type);
-	printf("        |");
+	printf("                    |");
 	gotoxy(x, y++);
 	printf("=================================================");
 	key k;
 	if (0==type)
 	{
-		k = input(x + 16, 9, p->rule, 0, NUM | OTHER, "+-*/xX");
+		k = input(x + 16, 8, p->rule, 0, NUM | OTHER, "+-*/xX");
 	}
 	else
 	{

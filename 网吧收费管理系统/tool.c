@@ -497,7 +497,7 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 		{
 			isIn = 1;
 		}
-		if(NULL!=other && !isPower(power,4)){
+		if(NULL!=other && isPower(power,4)){
 			int j = 0;
 			while (other[j]!='\0')
 			{

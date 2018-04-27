@@ -122,7 +122,7 @@ void initFinalPage(pList list) {
 }
 
 int isFirst = 1;
-void paginationMenuHelp(int type) {
+void MenuHelp(int type) {
 	int x = 16;
 	int y = 6;
 	gotoxy(x, y++);
@@ -162,7 +162,7 @@ void paginationMenuHelp(int type) {
 	}
 	else
 	{
-		paginationMenuHelp(type);
+		MenuHelp(type);
 	}
 
 }
@@ -321,7 +321,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	}
 	if (isFirst)
 	{
-		paginationMenuHelp(0);
+		MenuHelp(0);
+		return paginationMenu(list, type, index, option);
 	}
 	int in = getch();
 	key k = isKey(in);
@@ -672,9 +673,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 
 //¹ö¶¯²Ëµ¥
 pList scrollMenu(pList list, dateType type, int option) {
-	pList p = list;
-	pList ret;
-	char nMore[79];
+	pList ret = NULL;
+	char *nMore = (char*)malloc(160 * sizeof(char));
 	int isTop = 0;
 	system("cls");
 	system("mode con cols=80 lines=24");
@@ -712,7 +712,8 @@ pList scrollMenu(pList list, dateType type, int option) {
 	default:
 		return NULL;
 	}
-	int length = d_rate == type ? 3 : 7;
+	int length = (d_rate == type) ? 3 : 7;
+	pList p = list;
 	for (int i = 0; i < length/2; i++)
 	{
 		if (NULL!=p && NULL!=p->last)
@@ -736,54 +737,61 @@ pList scrollMenu(pList list, dateType type, int option) {
 	{
 		if (NULL != p)
 		{
-			if (length / 2 == i)
+			if (NULL != p->date.admin)
 			{
-				ret = p;
-			}
-			switch (type)
-			{
-			case d_pcType:
 				if (length / 2 == i)
 				{
-					printf("               ------------------+----------------+------------------         \n");
+					ret = p;
 				}
-				prPCtype(p->date.pcType, 3 == 0);
-				if (length / 2 == i)
+				switch (type)
 				{
-					printf("               ------------------+----------------+------------------         \n");
+				case d_pcType:
+					if (length / 2 == i)
+					{
+						printf("               ------------------+----------------+------------------         \n");
+					}
+					prPCtype(p->date.pcType, 3 == 0);
+					if (length / 2 == i)
+					{
+						printf("               ------------------+----------------+------------------         \n");
+					}
+					break;
+				case d_cardType:
+					if (length / 2 == i)
+					{
+						printf("               --------------------------+---------------------------         \n");
+					}
+					prCardType(p->date.cardType, 3 == 0);
+					if (length / 2 == i)
+					{
+						printf("               --------------------------+---------------------------         \n");
+					}
+					break;
+				case d_admin:
+					if (length / 2 == i)
+					{
+						printf("               --------+---------------------------------------------         \n");
+					}
+					prUser(p->date.admin, 3 == 0);
+					if (length / 2 == i)
+					{
+						printf("               --------+---------------------------------------------         \n");
+					}
+					break;
+				case d_rate:
+					if (length / 2 == i)
+					{
+						printf("               ----------------+--------------------+----------------         \n");
+					}
+					prRate(p->date.rate, 3 == 0);
+					if (length / 2 == i)
+					{
+						printf("               ----------------+--------------------+----------------         \n");
+					}
+					break;
+				default:
+					return ret;
 				}
-				break;
-			case d_cardType:
-				if (length / 2 == i)
-				{
-					printf("               --------------------------+---------------------------         \n");
-				}
-				prCardType(p->date.cardType, 3 == 0);
-				if (length / 2 == i)
-				{
-					printf("               --------------------------+---------------------------         \n");
-				}
-				break;
-			case d_admin:
-				if (length / 2 == i)
-				{
-					printf("               --------+---------------------------------------------         \n");
-				}
-				prUser(p->date.admin, 3 == 0);
-				if (length / 2 == i)
-				{
-					printf("               --------+---------------------------------------------         \n");
-				}
-				break;
-			case d_rate:
-				if (length / 2 == i)
-				{
-					printf("               ----------------+--------------------+----------------         \n");
-				}
-				prRate(p->date.rate, 3 == 0);
-				break;
-			default:
-				return ret;
 			}
 			p = p->next;
 		}
@@ -807,9 +815,11 @@ pList scrollMenu(pList list, dateType type, int option) {
 	prOption("  °ïÖú  ", 3 == option, 13);
 	printf(" ");
 	prOption("  ·µ»Ø  ", 4 == option, 13);
+	free(nMore);
 	if (isFirst)
 	{
-		paginationMenuHelp(1);
+		MenuHelp(1);
+		return scrollMenu(list, type, option);
 	}
 	int in = getch();
 	key k = isKey(in);
@@ -854,6 +864,15 @@ pList scrollMenu(pList list, dateType type, int option) {
 		case 0:
 		{
 			pList q = list;
+			if (NULL == q)
+			{
+				q = (pList)malloc(sizeof(List));
+				q->date.admin = NULL;
+				q->last = NULL;
+				q->next = NULL;
+				q->type = type;
+				list = q;
+			}
 			while (NULL != q->next)
 			{
 				q = q->next;
