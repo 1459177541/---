@@ -121,6 +121,52 @@ void initFinalPage(pList list) {
 	finalPage = length/10;
 }
 
+int isFirst = 1;
+void paginationMenuHelp(int type) {
+	int x = 16;
+	int y = 6;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                      帮助                     |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	if (0 == type)
+	{
+		gotoxy(x, y++);
+		printf("|         pagup/pagdown ：前/后一页             |");
+	}
+	gotoxy(x, y++);
+	printf("|               up/down ：前/后一项             |");
+	gotoxy(x, y++);
+	printf("|            right/left ：前/后一选项           |");
+	gotoxy(x, y++);
+	printf("|                   tab ：切换选项行            |");
+	gotoxy(x, y++);
+	printf("|                 enter ：确定                  |");
+	gotoxy(x, y++);
+	printf("|                   esc ：返回                  |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|                    ");
+	OPTION_OK(1);
+	printf("                    |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	key k = isKey(getch());
+	if (enter == k || esc == k)
+	{
+		isFirst = 0;
+		return;
+	}
+	else
+	{
+		paginationMenuHelp(type);
+	}
+
+}
+
 pList paginationMenu(pList list, dateType type, int index, int option) {
 	pList p = list;
 	if (-1==finalPage)
@@ -273,6 +319,10 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	default:
 		break;
 	}
+	if (isFirst)
+	{
+		paginationMenuHelp(0);
+	}
 	int in = getch();
 	key k = isKey(in);
 	switch (k)		//处理按键类型
@@ -286,7 +336,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		index--;
 		if (0 > index)
 		{
-			index = length;
+			index = length-1;
 		}
 		break;
 	case down:
@@ -520,6 +570,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_history:		//退出
 				finalPage = -1;
 				thisPage = 0;
+				isFirst = 1;
 				return op;
 			default:
 				break;
@@ -568,6 +619,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_pc:			//退出
 				finalPage = -1;
 				thisPage = 0;
+				isFirst = 1;
 				return op;
 			case d_card:		//筛选
 				finalPage = -1;
@@ -592,6 +644,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_card:		//退出
 				finalPage = -1;
 				thisPage = 0;
+				isFirst = 1;
 				return op;
 			default:
 				break;
@@ -605,6 +658,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		return paginationMenu(list, type, index, option);
 	case esc:
 	{
+		finalPage = -1;
+		thisPage = 0;
+		isFirst = 1;
 		return NULL;
 	}
 	default:
@@ -751,7 +807,10 @@ pList scrollMenu(pList list, dateType type, int option) {
 	prOption("  帮助  ", 3 == option, 13);
 	printf(" ");
 	prOption("  返回  ", 4 == option, 13);
-
+	if (isFirst)
+	{
+		paginationMenuHelp(1);
+	}
 	int in = getch();
 	key k = isKey(in);
 	switch (k)	//处理按键类型
@@ -986,6 +1045,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 			}
 			break;
 		case 4:
+			isFirst = 1;
 			return ret;;
 		default:
 			break;
@@ -994,6 +1054,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 		return ret;
 	}
 	case esc:
+		isFirst = 1;
 		return ret;
 	default:
 		break;
