@@ -55,18 +55,30 @@ pList getRateList() {
 	return rateLists;
 }
 
+//设置列表
+void setRateList(pList p) {
+	rateLists = p;
+}
+
 //输出
 void prRate(pRate p, int isOption) {
 	char *time1 = (char*)malloc(25 * sizeof(char));
 	char *time2 = (char*)malloc(25 * sizeof(char));
+	time1[0] = '\0';
+	time2[0] = '\0';
 	char * time = (char *)malloc(sizeof(char) * 50);
+	time[0] = '\0';
 	prTimes(p->startTime, p->endTime, time);
 	splitString(time, time1, 0, 24);
-	splitString(time, time2, 25, 49);
-	printf("%5s%25s |%19s |%20s  %-5s\n"
+	if (24<strlen(time))
+	{
+		splitString(time, time2, 25, 49);
+	}
+	printf("%5s%25s | %-19s| %-20s %-5s\n"
 		, isOption ? getAttri("L") : getAttri("NL"), time1, p->card, p->rule, isOption ? getAttri("R") : getAttri("NR"));
-	printf("%5s%25s |%19s |%20s  %-5s\n"
+	printf("%5s%25s | %-19s| %-20s %-5s\n"
 		, isOption ? getAttri("L") : getAttri("NL"), time2, p->pc, "", isOption ? getAttri("R") : getAttri("NR"));
+	free(time);
 	free(time2);
 	free(time1);
 }

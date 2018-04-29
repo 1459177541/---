@@ -863,6 +863,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 		{
 		case 0:
 		{
+			int isNULL = 0;
 			pList q = list;
 			if (NULL == q)
 			{
@@ -872,6 +873,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 				q->next = NULL;
 				q->type = type;
 				list = q;
+				isNULL = 1;
 			}
 			while (NULL != q->next)
 			{
@@ -970,6 +972,12 @@ pList scrollMenu(pList list, dateType type, int option) {
 					pl->type = d_rate;
 					q->next = pl;
 					editRate(0, a, p);
+					if (isNULL)
+					{
+						list = list->next;
+						pl->last = NULL;
+						setRateList(pl);
+					}
 				}
 				else
 				{

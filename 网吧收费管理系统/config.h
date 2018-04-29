@@ -212,6 +212,7 @@ pList getRateList();
 double results(pPC pc, pCard user);
 void prRate(pRate p, int isOption);
 void editRate(int type, int option[], pRate p);
+void setRateList(pList p);
 
 //history
 pList getHistorys();
