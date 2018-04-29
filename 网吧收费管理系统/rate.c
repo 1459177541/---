@@ -163,7 +163,7 @@ void setRule(int type, pRate p) {
 
 //修改计费标准
 void editRate(int type,int option[], pRate p) {
-	system("cls");
+	myCls();
 	printf("\n\n\n");
 	printf("\n\n\n            %c关联电脑类型：",0==type?'>':' ');
 	int i = 0;

@@ -16,6 +16,12 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+//清屏
+void myCls() {
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	gotoxy(0, 0);
+}
+
 //字符转换为整形
 int stringToInt(char * string) {
 	int num = 0;

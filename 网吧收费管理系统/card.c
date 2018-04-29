@@ -333,7 +333,7 @@ pList selectCard(int type, pCriteriaCard criteria, pList p) {
 	key k;
 	pList pt = getCardTypeList();
 	system("title ɸѡ");
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	printf("\n\n");
 	printf("                       ============= ɸ ѡ =============                       \n\n");

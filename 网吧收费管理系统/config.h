@@ -116,6 +116,7 @@ typedef enum {
 
 //tool
 void gotoxy(int x, int y);
+void myCls();
 int stringToInt(char * string);
 char * intToString(int num);
 void splitString(char *src, char *ret, int start, int length);

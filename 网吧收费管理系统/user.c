@@ -69,7 +69,7 @@ void setRoot(pAdmin root) {
 
 //修改管理员
 void editUser(int type, pAdmin p,char *pass1,char *pass2) {
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	printf("\n\n");
 	printf("                         -----=====修改管理员=====-----                        \n\n");

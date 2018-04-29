@@ -350,7 +350,7 @@ pList selectHistory(int type, pCriteriaHistory criteria, pList p) {
 	historyType ht = ALL_T;
 	pList admin = getAdminHead();
 	system("title ɸѡ");
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	printf("\n\n");
 	printf("                       ============= ɸ ѡ =============                       \n\n");

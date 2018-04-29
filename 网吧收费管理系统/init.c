@@ -3,7 +3,7 @@
 //Êä³öÍ·
 void pr_weclome() {
 	system("title welcome");
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	gotoxy(0, 0);
 	printf("                                                                             \n");

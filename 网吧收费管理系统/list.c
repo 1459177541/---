@@ -177,7 +177,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	pList op = list;
 	int length = 0;
 	int optionLength;
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	switch (type)
 	{
@@ -676,7 +676,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 	pList ret = NULL;
 	char *nMore = (char*)malloc(160 * sizeof(char));
 	int isTop = 0;
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	switch (type)
 	{

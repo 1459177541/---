@@ -245,7 +245,7 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 	key k;
 	pList pt = getPCtypeList();
 	system("title ɸѡ");
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	printf("\n\n");
 	printf("                       ============= ɸ ѡ =============                       \n\n");

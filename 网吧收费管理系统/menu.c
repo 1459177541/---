@@ -89,7 +89,7 @@ void mainMenu(pAdmin user, int type) {
 	sprintf(title, "title %s : Ö÷²Ëµ¥", getUser()->name);
 	system(title);
 	free(title);
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	printf("\n");
 	printf("                     //||   //||                                     \n");
@@ -265,7 +265,7 @@ void mainMenu(pAdmin user, int type) {
 //µÇÂ¼
 void login(pAdmin user, int type, char* text) {
 	system("title µÇÂ½");
-	system("cls");
+	myCls();
 	system("mode con cols=80 lines=24");
 	printf("                                                       \n");
 	printf("                                                       \n");
