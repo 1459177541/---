@@ -458,6 +458,9 @@ void recharge(pCard p) {
 	{
 		double mon = atof(money);
 		p->balance += mon;
+		date d;
+		d.card = p;
+		addHistory(RECHARGE_T, d, mon);
 	}
 	else if (esc == k)
 	{

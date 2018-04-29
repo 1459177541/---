@@ -84,7 +84,8 @@ typedef struct {
 	historyType type;
 	char text[128];
 	char editor[16];
-	char time[64];
+	tm time;
+	double money;
 }history,* pHistory;
 
 //ап╠М
@@ -220,6 +221,7 @@ pList getHistorys();
 void prHistory(pHistory p, int isOption);
 void showHistory(pHistory p);
 pList selectToHistory();
+void addHistory(historyType type, date date, double other);
 
 //list
 void save(dateType type);

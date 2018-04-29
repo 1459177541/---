@@ -76,14 +76,19 @@ void prPC(pPC p, int isOption) {
 
 //ио/об╩З
 void logPC(pPC p) {
+	date d;
+	d.pc = p;
 	if (NULL == p->user)
 	{
 		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
+		addHistory(UP_T, d, 0);
 	}
 	else
 	{
-		p->user->balance -= results(p, p->user);
+		double money = results(p, p->user);
+		p->user->balance -= money;
 		p->user = NULL;
+		addHistory(DOWN_T, d, money);
 	}
 }
 

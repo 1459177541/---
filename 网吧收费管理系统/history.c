@@ -132,12 +132,21 @@ void showHistory(pHistory p) {
 	textTime2[0] = '\0';
 	text1[0] = '\0';
 	text2[0] = '\0';
-	text3[0] = '\0';
-	splitString(p->time, textTime1, 0, 32);
-	splitString(p->time, textTime2, 33, 64);
+	text3[0] = '\0';	
+	splitString(asctime(&(p->time)), textTime1, 0, 32);
+	if (strlen(asctime(&(p->time)))>32)
+	{
+		splitString(asctime(&(p->time)), textTime2, 33, 64);
+	}
 	splitString(p->text, text1, 0, 32);
-	splitString(p->text, text1, 33, 64);
-	splitString(p->text, text1, 65, 96);
+	if (strlen(p->text)>32)
+	{
+		splitString(p->text, text1, 33, 64);
+	}
+	if (strlen(p->text)>64)
+	{
+		splitString(p->text, text1, 65, 96);
+	}
 	int x = 8;
 	int y = 1;
 	gotoxy(x, y++);
@@ -184,7 +193,7 @@ void showHistory(pHistory p) {
 	free(textTime1);
 }
 
-void addHistory(historyType type, date date, void* other) {
+void addHistory(historyType type, date date, double other) {
 	char * prPower(int power);
 	pList pl;
 	if (NULL==historyFinal)
@@ -202,7 +211,9 @@ void addHistory(historyType type, date date, void* other) {
 	}
 	pHistory d = (pHistory)malloc(sizeof(history));
 	strcpy(d->editor, getUser()->name);
-	strcpy(d->time, prTime(localtime(NULL),DATE|TIME));
+	pTm tt = gmtime(time(NULL));
+	d->time = *tt;
+	d->money = other;
 	switch (type)
 	{
 	case C_ADMIN_T:
@@ -212,7 +223,7 @@ void addHistory(historyType type, date date, void* other) {
 		sprintf(d->text, "删除管理员: %-16s", date.admin->name);
 		break;
 	case U_ADMIN_T:
-		sprintf(d->text, "修改管理员信息: %-16s --> %-16s ", date.admin->name);
+		sprintf(d->text, "修改管理员信息: %-16s", date.admin->name);
 		break;
 	case C_RATE_T:
 		sprintf(d->text, "新建计费方案: %-16s 对于 %s 在 %s 上机适用", date.rate->rule, date.rate->card, date.rate->pc);
@@ -221,7 +232,7 @@ void addHistory(historyType type, date date, void* other) {
 		sprintf(d->text, "删除计费方案: %s", date.rate->rule);
 		break;
 	case U_RATE_T:
-		sprintf(d->text, "修改计费方案: %s --> %s", date.rate->rule);
+		sprintf(d->text, "修改计费方案: %s", date.rate->rule);
 		break;
 	case C_CARD_T:
 		sprintf(d->text, "开户: %s(证件号: %s)，开通%s", date.card->masterName, date.card->idcardNum, date.card->type);
@@ -230,7 +241,7 @@ void addHistory(historyType type, date date, void* other) {
 		sprintf(d->text, "注销: %s(证件号: %s)，注销%s", date.card->masterName, date.card->idcardNum, date.card->type);
 		break;
 	case U_CARD_T:
-		sprintf(d->text, "修改: %s(证件号: %s)，注销%s", date.card->masterName, date.card->idcardNum, date.card->type);
+		sprintf(d->text, "修改: %s(证件号: %s)", date.card->masterName, date.card->idcardNum);
 		break;
 	case C_PC_TYPE_T:
 		sprintf(d->text, "新增电脑类型%s %d台，编号: %d~%d", date.pcType->type, date.pcType->num, date.pcType->startId, date.pcType->startId + date.pcType->num);
@@ -254,10 +265,10 @@ void addHistory(historyType type, date date, void* other) {
 		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑上机", date.pc->user->id, date.pc->type, date.pc->id);
 		break;
 	case DOWN_T:
-		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5lf元", date.pc->user->id, date.pc->type, date.pc->id, (double*)other);
+		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5lf元", date.pc->user->id, date.pc->type, date.pc->id, other);
 		break;
 	case RECHARGE_T:
-		sprintf(d->text, "用户: %16d 充值了 %16lf 元", date.card->id, (double*)other);
+		sprintf(d->text, "用户: %16d 充值了 %16lf 元", date.card->id, other);
 	default:
 		strcpy(pl->date.history->text, "ERROR");
 		break;

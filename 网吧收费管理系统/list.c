@@ -485,6 +485,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					strcpy(pass2, "***************");
 					free(pass1);
 					free(pass2);
+					addHistory(C_CARD_TYPE_T, pl->date, 0);
 				}
 				else
 				{
@@ -526,6 +527,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 						{
 							op->next->last = op->last;
 						}
+						addHistory(D_CARD_TYPE_T, op->date, 0);
 						free(op);
 						op = temp;
 					}
@@ -533,6 +535,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					{
 						pCard temp = op->date.card;
 						op->date.card = NULL;
+						addHistory(D_CARD_TYPE_T, op->date, 0);
 						free(temp);
 					}
 				}
@@ -896,6 +899,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					pl->type = d_pcType;
 					q->next = pl;
 					editPCtype(0, p);
+					addHistory(C_PC_TYPE_T, pl->date, 0);
 				}
 				else
 				{
@@ -918,6 +922,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					pl->type = d_cardType;
 					q->next = pl;
 					editCardType(0, p);
+					addHistory(C_CARD_TYPE_T, pl->date, 0);
 				}
 				else
 				{
@@ -947,6 +952,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					editUser(0, p, pass1, pass2);
 					free(pass1);
 					free(pass2);
+					addHistory(C_ADMIN_T, pl->date, 0);
 				}
 				else
 				{
@@ -978,6 +984,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 						pl->last = NULL;
 						setRateList(pl);
 					}
+					addHistory(C_RATE_T, pl->date, 0);
 				}
 				else
 				{
@@ -1006,6 +1013,23 @@ pList scrollMenu(pList list, dateType type, int option) {
 					{
 						list->next->last = list->last;
 					}
+					switch (type)
+					{
+					case d_pcType:
+						addHistory(D_PC_TYPE_T, list->date, 0);
+						break;
+					case d_cardType:
+						addHistory(D_CARD_T, list->date, 0);
+						break;
+					case d_admin:
+						addHistory(D_ADMIN_T, list->date, 0);
+						break;
+					case d_rate:
+						addHistory(D_RATE_T, list->date, 0);
+						break;
+					default:
+						break;
+					}
 					free(list);
 					list = temp;
 				}
@@ -1020,6 +1044,23 @@ pList scrollMenu(pList list, dateType type, int option) {
 					{
 						pList temp = list->next;
 						list->next->last = NULL;
+						switch (type)
+						{
+						case d_pcType:
+							addHistory(D_PC_TYPE_T, list->date, 0);
+							break;
+						case d_cardType:
+							addHistory(D_CARD_T, list->date, 0);
+							break;
+						case d_admin:
+							addHistory(D_ADMIN_T, list->date, 0);
+							break;
+						case d_rate:
+							addHistory(D_RATE_T, list->date, 0);
+							break;
+						default:
+							break;
+						}
 						free(list);
 						list = temp;
 					}
@@ -1042,9 +1083,11 @@ pList scrollMenu(pList list, dateType type, int option) {
 			{
 			case d_pcType:
 				editPCtype(0, list->date.pcType);
+				addHistory(U_PC_TYPE_T, list->date, 0);
 				break;
 			case  d_cardType:
 				editCardType(0, list->date.cardType);
+				addHistory(U_CARD_TYPE_T, list->date, 0);
 				break;
 			case d_admin:
 			{
@@ -1055,10 +1098,12 @@ pList scrollMenu(pList list, dateType type, int option) {
 				editUser(0, list->date.admin,pass1,pass2);
 				free(pass1);
 				free(pass2);
+				addHistory(U_ADMIN_T, list->date, 0);
 				break;
 			}
 			case d_rate:
 				editRate(0, a, list->date.rate);
+				addHistory(U_RATE_T, list->date, 0);
 				break;
 			default:
 				break;
