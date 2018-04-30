@@ -44,7 +44,7 @@ pList getHistorys() {
 	{
 		if (initHistory())
 		{
-			historyLists = (pHistory)malloc(sizeof(history));
+			historyLists = (pList)malloc(sizeof(List));
 			historyLists->next = NULL;
 			historyLists->last = NULL;
 			historyLists->date.history = NULL;
@@ -55,7 +55,7 @@ pList getHistorys() {
 }
 
 char *getHistoryType(historyType p) {
-	char type[15];
+	char* type = (char*)malloc(16 * sizeof(char));
 	switch (p)
 	{
 	case ALL_T:
@@ -141,40 +141,41 @@ void showHistory(pHistory p) {
 	splitString(p->text, text1, 0, 32);
 	if (strlen(p->text)>32)
 	{
-		splitString(p->text, text1, 33, 64);
+		splitString(p->text, text2, 33, 64);
 	}
 	if (strlen(p->text)>64)
 	{
-		splitString(p->text, text1, 65, 96);
+		splitString(p->text, text3, 65, 96);
 	}
 	int x = 8;
-	int y = 1;
+	int y = 4;
 	gotoxy(x, y++);
 	printf("=========================================================");
 	gotoxy(x, y++);
 	printf("|                                                       |");
 	gotoxy(x, y++);
-	printf("|               类型: %-24s             |", getHistoryType(p->type));
+	printf("|               类型: %-24s          |", getHistoryType(p->type));
 	gotoxy(x, y++);
-	printf("|                                               |");
+	printf("|                                                       |");
 	gotoxy(x, y++);
-	printf("|             操作人: %-22s             |", p->editor);
+	printf("|             操作人: %-22s            |", p->editor);
 	gotoxy(x, y++);
-	printf("|                                               |");
+	printf("|                                                       |");
 	gotoxy(x, y++);
-	printf("|               时间: %-32s         |", textTime1);
+	printf("|               时间: %4d年%2d月%2d日 %2d时%2d分%2d秒       |"
+		, p->time.tm_year + 1900, p->time.tm_mon + 1, p->time.tm_mday
+		, p->time.tm_hour, p->time.tm_min, p->time.tm_sec
+		);
 	gotoxy(x, y++);
-	printf("|                    %-32s         |", textTime2);
+	printf("|                                                       |");
 	gotoxy(x, y++);
-	printf("|                                                   |");
+	printf("|               详细:%-32s   |", text1);
 	gotoxy(x, y++);
-	printf("|               详细:%-32s         |", text1);
+	printf("|                    %-32s   |", text2);
 	gotoxy(x, y++);
-	printf("|                    %-32s         |", text2);
+	printf("|                    %-32s   |", text3);
 	gotoxy(x, y++);
-	printf("|                    %-32s         |", text3);
-	gotoxy(x, y++);
-	printf("|                                                   |");
+	printf("|                                                       |");
 	gotoxy(x, y++);
 	printf("|            -------------------------------            |");
 	gotoxy(x, y++);
@@ -195,7 +196,7 @@ void showHistory(pHistory p) {
 
 void addHistory(historyType type, date date, double other) {
 	char * prPower(int power);
-	pList pl;
+	pList pl = NULL;
 	if (NULL==historyFinal)
 	{
 		historyFinal = getHistorys();
@@ -210,10 +211,13 @@ void addHistory(historyType type, date date, double other) {
 		historyFinal->next = pl;
 	}
 	pHistory d = (pHistory)malloc(sizeof(history));
-	strcpy(d->editor, getUser()->name);
-	pTm tt = gmtime(time(NULL));
+	pl->date.history = d;
+	time_t timer = time(NULL);
+	pTm tt = localtime(&timer);
 	d->time = *tt;
+	strcpy(d->editor, getUser()->name);
 	d->money = other;
+	d->type = type;
 	switch (type)
 	{
 	case C_ADMIN_T:
@@ -276,8 +280,11 @@ void addHistory(historyType type, date date, double other) {
 }
 
 void prHistory(pHistory p, int isOption) {
-	printf("%6s%16s |%15s  |%19s %-6s\n"
-		, isOption ? getAttri("L") : getAttri("NL"), getHistoryType(p->type), p->editor, p->time, isOption ? getAttri("R") : getAttri("NR"));
+	printf("%5s%16s |%15s  | %4d年%2d月%2d日 %2d时%2d分%2d秒 %-5s"
+		, isOption ? getAttri("L") : getAttri("NL"), getHistoryType(p->type), p->editor
+		, p->time.tm_year+1900, p->time.tm_mon+1, p->time.tm_mday
+		, p->time.tm_hour, p->time.tm_min, p->time.tm_sec
+		, isOption ? getAttri("R") : getAttri("NR"));
 }
 
 //搜索条件
