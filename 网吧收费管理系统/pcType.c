@@ -59,9 +59,8 @@ pList getPCtypeList() {
 }
 
 //输出
-void prPCtype(pPCtype p, int isOption) {
-	printf("     %6s%18s    |%12d    |%12d    %-6s   \n"
-		, isOption ? getAttri("L") : getAttri("NL"), p->type, p->num, p->startId, isOption ? getAttri("R") : getAttri("NR"));
+void prPCtype(pPCtype p) {
+	printf("     %24s    |%12d    |%12d       \n",  p->type, p->num, p->startId);
 }
 
 //修改电脑类型

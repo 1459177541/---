@@ -55,9 +55,8 @@ pList getCardTypeList() {
 }
 
 //输出
-void prCardType(pCardType p, int isOption) {
-	printf("            %6s%18s     |%7.2lf              %-6s\n"
-		, isOption ? getAttri("L") : getAttri("NL"), p->name, p->price, isOption ? getAttri("R") : getAttri("NR"));
+void prCardType(pCardType p) {
+	printf("            %24s     |%13.2lf              \n", p->name, p->price);
 }
 
 //修改会员卡类型

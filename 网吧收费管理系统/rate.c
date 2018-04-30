@@ -61,7 +61,7 @@ void setRateList(pList p) {
 }
 
 //Êä³ö
-void prRate(pRate p, int isOption) {
+void prRate(pRate p) {
 	char *time1 = (char*)malloc(25 * sizeof(char));
 	char *time2 = (char*)malloc(25 * sizeof(char));
 	time1[0] = '\0';
@@ -74,10 +74,8 @@ void prRate(pRate p, int isOption) {
 	{
 		splitString(time, time2, 25, 49);
 	}
-	printf("%5s%25s | %-19s| %-20s %-5s\n"
-		, isOption ? getAttri("L") : getAttri("NL"), time1, p->card, p->rule, isOption ? getAttri("R") : getAttri("NR"));
-	printf("%5s%25s | %-19s| %-20s %-5s\n"
-		, isOption ? getAttri("L") : getAttri("NL"), time2, p->pc, "", isOption ? getAttri("R") : getAttri("NR"));
+	printf("%30s | %-19s| %-20s \n", time1, p->card, p->rule);
+	printf("%30s | %-19s| %-20s \n", time2, p->pc, "");
 	free(time);
 	free(time2);
 	free(time1);

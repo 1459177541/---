@@ -175,7 +175,7 @@ pList getAdminHead();
 void setRoot(pAdmin root);
 void setUser(pAdmin u);
 pAdmin getUser();
-void prUser(pAdmin p, int isOption);
+void prUser(pAdmin p);
 void editUser(int type, pAdmin p, char *pass1, char *pass2);
 void helpFromUser();
 
@@ -185,7 +185,7 @@ void login(pAdmin user,int type,char* text);
 
 //pcType
 pList getPCtypeList();
-void prPCtype(pPCtype p, int isOption);
+void prPCtype(pPCtype p);
 void editPCtype(int type, pPCtype p);
 
 //PC
@@ -198,7 +198,7 @@ void logPC(pPC p);
 
 //cardType
 pList getCardTypeList();
-void prCardType(pCardType p, int isOption);
+void prCardType(pCardType p);
 void editCardType(int type, pCardType p);
 
 //card
@@ -212,7 +212,7 @@ void recharge(pCard p);
 //rate
 pList getRateList();
 double results(pPC pc, pCard user);
-void prRate(pRate p, int isOption);
+void prRate(pRate p);
 void editRate(int type, int option[], pRate p);
 void setRateList(pList p);
 

@@ -47,8 +47,8 @@ pList getHistorys() {
 			historyLists = (pHistory)malloc(sizeof(history));
 			historyLists->next = NULL;
 			historyLists->last = NULL;
+			historyLists->date.history = NULL;
 			historyLists->type = d_history;
-			return NULL;
 		}
 	}
 	return historyLists;

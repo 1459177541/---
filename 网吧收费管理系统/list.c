@@ -753,7 +753,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					{
 						printf("               ------------------+----------------+------------------         \n");
 					}
-					prPCtype(p->date.pcType, 3 == 0);
+					prPCtype(p->date.pcType);
 					if (length / 2 == i)
 					{
 						printf("               ------------------+----------------+------------------         \n");
@@ -764,7 +764,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					{
 						printf("               --------------------------+---------------------------         \n");
 					}
-					prCardType(p->date.cardType, 3 == 0);
+					prCardType(p->date.cardType);
 					if (length / 2 == i)
 					{
 						printf("               --------------------------+---------------------------         \n");
@@ -775,7 +775,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					{
 						printf("               --------+---------------------------------------------         \n");
 					}
-					prUser(p->date.admin, 3 == 0);
+					prUser(p->date.admin);
 					if (length / 2 == i)
 					{
 						printf("               --------+---------------------------------------------         \n");
@@ -786,7 +786,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					{
 						printf("               ----------------+--------------------+----------------         \n");
 					}
-					prRate(p->date.rate, 3 == 0);
+					prRate(p->date.rate);
 					if (length / 2 == i)
 					{
 						printf("               ----------------+--------------------+----------------         \n");

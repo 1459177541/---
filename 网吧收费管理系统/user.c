@@ -446,9 +446,8 @@ char * prPower(int power) {
 }
 
 //输出管理员
-void prUser(pAdmin p, int isOption) {
-	printf(" %6s%15s | %-41s %-6s  \n"
-		, isOption ? getAttri("L") : getAttri("NL"), p->name, prPower(p->power) , isOption ? getAttri("R") : getAttri("NR"));
+void prUser(pAdmin p) {
+	printf(" %21s | %-47s   \n", p->name, prPower(p->power));
 }
 
 //帮助
