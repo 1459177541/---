@@ -205,6 +205,14 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n----------------------+-----------------+---------------------------------------");
 		optionLength = 6;
 		break;
+	case d_statistics:
+		system("title 统计");
+		printf("\n                               ---===统计===---\n");
+		printf("\n----------------------+-------------------+-------------------------------------");
+		printf("\n         时间         |      上机金额     |                充值金额             ");
+		printf("\n----------------------+-------------------+-------------------------------------");
+		optionLength = 5;
+		break;
 	default:
 		return NULL;
 	}
@@ -226,6 +234,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					break;
 				case d_history:
 					prHistory(p->date.history, i == index);
+					break;
+				case d_statistics:
+					prStat(p->date.statistics, i == index);
 					break;
 				default:
 					break;
@@ -252,6 +263,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_history:
 				printf("\n                      |                 |                                       ");
 				break;
+			case d_statistics:
+				printf("\n                      |                   |                                     ");
+				break;
 			default:
 				break;
 			}
@@ -267,6 +281,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		break;
 	case d_history:
 		printf("\n----------------------+-----------------+---------------------------------------");
+		break;
+	case d_statistics:
+		printf("\n----------------------+-------------------+-------------------------------------");
 		break;
 	default:
 		break;
@@ -315,6 +332,12 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		prOption("筛选", 5 == option, 6);
 		printf("            ");
 		prOption("返回", 6 == option, 6);
+		break;
+	case d_statistics:
+		printf("\n\n                         ");
+		prOption("详细", 4 == option, 6);
+		printf("                  ");
+		prOption("返回", 5 == option, 6);
 		break;
 	default:
 		break;

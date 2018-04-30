@@ -235,7 +235,7 @@ void mainMenu(pAdmin user, int type) {
 			paginationMenu(getHistorys(), d_history, 0, 0);
 			break;
 		case 7:
-			////Õ≥º∆////
+			paginationMenu(getStat(), d_statistics, 0, 0);
 			break;
 		case 8:
 			////…Ë÷√////

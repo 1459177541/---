@@ -88,6 +88,16 @@ typedef struct {
 	double money;
 }history,* pHistory;
 
+//统计
+typedef struct {
+	tm time;
+	int	stat_up;					//上机次数
+	double stat_up_money;			//上机金额
+	double stat_recharge_money;		//充值金额
+	int stat_card_login;			//总注册卡数
+	int stat_card_logout;			//注销卡数
+}stat, *pStat;
+
 //列表
 typedef union {
 	pAdmin admin;
@@ -97,10 +107,11 @@ typedef union {
 	pCardType cardType;
 	pRate rate;
 	pHistory history;
+	pStat statistics;
 }date,* pDate;
 
 typedef enum {
-	d_admin, d_pc, d_card, d_pcType, d_cardType, d_rate, d_history
+	d_admin, d_pc, d_card, d_pcType, d_cardType, d_rate, d_history, d_statistics
 }dateType;
 
 typedef struct List{
@@ -228,3 +239,7 @@ void save(dateType type);
 void saveAll();
 pList paginationMenu(pList list, dateType type, int index, int option);	//上/下机、会员卡、历史记录
 pList scrollMenu(pList list, dateType type, int option);		//电脑类型、会员卡类型、管理员、收费标准
+
+//stztistics
+void prStat(pStat p, int isOption);
+pList getStat();

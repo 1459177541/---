@@ -54,10 +54,16 @@
     <ClCompile Include="list.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="statistics.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
