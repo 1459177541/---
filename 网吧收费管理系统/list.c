@@ -176,7 +176,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	pList ret = NULL;
 	pList op = list;
 	int length = 0;
-	int optionLength;
+	int optionLength = 0;
 	myCls();
 	system("mode con cols=80 lines=24");
 	switch (type)
@@ -206,12 +206,14 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		optionLength = 6;
 		break;
 	case d_statistics:
+		optionLength--;
+	case d_statistics_more:
 		system("title 统计");
 		printf("\n                               ---===统计===---\n");
 		printf("\n----------------------+-------------------+-------------------------------------");
 		printf("\n         时间         |      上机金额     |                充值金额             ");
 		printf("\n----------------------+-------------------+-------------------------------------");
-		optionLength = 5;
+		optionLength += 5;
 		break;
 	default:
 		return NULL;
@@ -237,6 +239,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					break;
 				case d_statistics:
 					prStat(p->date.statistics, i == index);
+					break;
+				case d_statistics_more:
+					prStatMore(p->date.statistics, i == index);
 					break;
 				default:
 					break;
@@ -264,6 +269,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				printf("\n                      |                 |                                       ");
 				break;
 			case d_statistics:
+			case d_statistics_more:
 				printf("\n                      |                   |                                     ");
 				break;
 			default:
@@ -283,6 +289,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n----------------------+-----------------+---------------------------------------");
 		break;
 	case d_statistics:
+	case d_statistics_more:
 		printf("\n----------------------+-------------------+-------------------------------------");
 		break;
 	default:
@@ -338,6 +345,10 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		prOption("详细", 4 == option, 6);
 		printf("                  ");
 		prOption("返回", 5 == option, 6);
+		break;
+	case d_statistics_more:
+		printf("\n\n                                           ");
+		prOption("返回", 4 == option, 6);
 		break;
 	default:
 		break;
@@ -516,10 +527,34 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					getch();
 				}
 				break;
+			}
 			case d_history:		//详细
 				showHistory(op->date.history);
 				break;
+			case d_statistics:	//详细
+			{
+				int	ttp = thisPage;
+				int tfp = finalPage;
+				thisPage = 0;
+				finalPage = -1;
+				pList p = getMoreStat(op);
+				paginationMenu(p, d_statistics, 0, 0);
+				thisPage = ttp;
+				finalPage = tfp;
+				pList q = p->next;
+				while (NULL != q)
+				{
+					free(p);
+					p = q;
+					q = q->next;
+				}
+				return ret;
 			}
+			case d_statistics_more:	//退出
+				finalPage = -1;
+				thisPage = 0;
+				isFirst = 1;
+				return op;
 			default:
 				break;
 			}

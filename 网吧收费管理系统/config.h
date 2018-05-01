@@ -91,6 +91,7 @@ typedef struct {
 //统计
 typedef struct {
 	tm time;
+	pList startHistory;			//开始的记录
 	int	stat_up;					//上机次数
 	double stat_up_money;			//上机金额
 	double stat_recharge_money;		//充值金额
@@ -111,7 +112,7 @@ typedef union {
 }date,* pDate;
 
 typedef enum {
-	d_admin, d_pc, d_card, d_pcType, d_cardType, d_rate, d_history, d_statistics
+	d_admin, d_pc, d_card, d_pcType, d_cardType, d_rate, d_history, d_statistics, d_statistics_more
 }dateType;
 
 typedef struct List{
@@ -242,4 +243,6 @@ pList scrollMenu(pList list, dateType type, int option);		//电脑类型、会员卡类型
 
 //stztistics
 void prStat(pStat p, int isOption);
+void prStatMore(pStat p, int isOption);
 pList getStat();
+pList getMoreStat(pList start);
