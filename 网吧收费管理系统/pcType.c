@@ -139,7 +139,7 @@ void editPCtype(int type, pPCtype p) {
 		{
 			editPCtype(3, p);
 		}
-		return 0;
+		return;
 	default:
 		editPCtype(type, p);
 		break;

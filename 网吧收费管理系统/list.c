@@ -485,8 +485,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					while (NULL==getCardTypeList()->next)
 					{
 						prPrompt("没有会员卡类型", "按任意键转到会员卡类型列表\n按esc键取消新建");
-						key k = isKey(getch());
-						if (esc == k)
+						key key = isKey(getch());
+						if (esc == key)
 						{
 							return paginationMenu(list, type, index, option);							
 						}
@@ -662,7 +662,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				char *pass2 = (char *)malloc(sizeof(char) * 16);
 				strcpy(pass1, op->date.card->password);
 				strcpy(pass2, op->date.card->password);
-				showCard(0, op, "", pass1, pass2);
+				showCard(0, op->date.card, "", pass1, pass2);
 				strcpy(pass1, "***************");
 				strcpy(pass2, "***************");
 				free(pass1);
@@ -953,7 +953,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					pList pl = (pList)malloc(sizeof(List));
 					pl->last = q;
 					pl->next = NULL;
-					pl->date.pc = p;
+					pl->date.pcType = p;
 					pl->type = d_pcType;
 					q->next = pl;
 					editPCtype(0, p);
@@ -976,7 +976,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					pList pl = (pList)malloc(sizeof(List));
 					pl->last = q;
 					pl->next = NULL;
-					pl->date.card = p;
+					pl->date.cardType = p;
 					pl->type = d_cardType;
 					q->next = pl;
 					editCardType(0, p);

@@ -74,7 +74,7 @@ void prCard(pCard p, int isOption) {
 		, isOption ? getAttri("L") : getAttri("NL"), p->id, p->type, p->masterName, p->balance, isOption ? getAttri("R") : getAttri("NR"));
 }
 
-int showCard(int type, pCard p,char * text, char *password, char *password2) {
+void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	if (0 > p->id)
 	{
 		p->id = maxCardId;
@@ -277,7 +277,7 @@ pList getListFromCardCriteria(pCriteriaCard criteria) {
 	pList o = list;
 	pList p = getCards();
 	int isAdd;
-	char temp[32];
+	char *temp = (char*)malloc(sizeof(char) * 32);
 	while (NULL != p)
 	{
 		switch (criteria->type)
@@ -325,6 +325,7 @@ pList getListFromCardCriteria(pCriteriaCard criteria) {
 		}
 		p = p->next;
 	}
+	free(temp);
 	return list->next;
 }
 
@@ -359,7 +360,7 @@ pList selectCard(int type, pCriteriaCard criteria, pList p) {
 	else if (1 == criteria->type)
 	{
 		printf("模糊搜索\n\n");
-		printf("                         含有的内容：", 1 == type ? '>' : ' ');
+		printf("                        %c含有的内容：", 1 == type ? '>' : ' ');
 		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
 		printf("\n\n");
 		printf("                                ");

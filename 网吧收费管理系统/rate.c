@@ -297,6 +297,7 @@ double compute(char *expression, int start, int end) {
 	default:
 		break;
 	}
+	return 0;
 }
 
 //计算价格(单条规则)
@@ -357,7 +358,7 @@ double result(pPC pc, pCard user, pRate rate, double src) {
 double results(pPC pc, pCard user) {
 	if (NULL==getRateList() || NULL==user)
 	{
-		return;
+		return 0;
 	}
 	pList p = getRateList()->next;
 	double money = 0;

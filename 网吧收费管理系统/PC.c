@@ -115,7 +115,7 @@ void logoutPCAll() {
 }
 
 //PC½çÃæ
-int showPC(pPC p) {
+void showPC(pPC p) {
 	char name[16] = "";
 	if (NULL!=p->user)
 	{
@@ -183,7 +183,7 @@ pList getListFromPcCriteria(pCriteriaPC criteria) {
 	pList o = list;
 	pList p = getPCs();
 	int isAdd;
-	char temp[32];
+	char *temp = (char*)malloc(sizeof(char) * 32);
 	while (NULL!=p)
 	{
 		switch (criteria->type)
@@ -242,6 +242,7 @@ pList getListFromPcCriteria(pCriteriaPC criteria) {
 		}
 		p = p->next;
 	}
+	free(temp);
 	return list->next;
 }
 

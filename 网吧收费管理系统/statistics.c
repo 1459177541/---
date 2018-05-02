@@ -38,7 +38,7 @@ void initStat() {
 			p->date.statistics->stat_up = 0;
 			p->date.statistics->stat_up_money = 0;
 		}
-		double money = history->date.history->money;
+		double num = history->date.history->money;
 		switch (history->date.history->type)
 		{
 		case C_CARD_T:
@@ -48,13 +48,13 @@ void initStat() {
 			p->date.statistics->stat_card_logout++;
 			break;
 		case RECHARGE_T:
-			p->date.statistics->stat_recharge_money += money;
+			p->date.statistics->stat_recharge_money += num;
 			break;
 		case UP_T:
 			p->date.statistics->stat_up++;
 			break;
 		case DOWN_T:
-			p->date.statistics->stat_card_login+=money;
+			p->date.statistics->stat_up_money += num;
 			break;
 		default:
 			break;
@@ -117,7 +117,7 @@ pList getMoreStat(pList start) {
 			p->date.statistics->stat_up++;
 			break;
 		case DOWN_T:
-			p->date.statistics->stat_card_login += money;
+			p->date.statistics->stat_up_money += money;
 			break;
 		default:
 			break;

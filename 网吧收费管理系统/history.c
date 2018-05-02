@@ -311,8 +311,7 @@ pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
 	list->next = NULL;
 	pList o = list;
 	pList p = getPCs();
-	int isAdd;
-	char temp[32];
+	int isAdd = 0;
 	while (NULL != p)
 	{
 		switch (criteria->type)
@@ -336,7 +335,7 @@ pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
 			break;
 		case 1:
 			isAdd = 0;
-			if (NULL != strstr(getHistorys(p->date.history->type),criteria->Criteria))
+			if (NULL != strstr(getHistoryType(p->date.history->type),criteria->Criteria))
 			{
 				isAdd = 1;
 			}
@@ -376,7 +375,7 @@ pList selectHistory(int type, pCriteriaHistory criteria, pList p) {
 	if (0 == criteria->type)
 	{
 		printf("条件搜索\n\n");
-		printf("                            操作人：", 1 == type ? '>' : ' ');
+		printf("                           %c操作人：", 1 == type ? '>' : ' ');
 		while (strcmp(criteria->editor, admin->date.admin->name) != 0 && admin->next != NULL)
 		{
 			admin = admin->next;
@@ -404,11 +403,15 @@ pList selectHistory(int type, pCriteriaHistory criteria, pList p) {
 	else if (1 == criteria->type)
 	{
 		printf("模糊搜索\n\n");
-		printf("                         含有的内容：", 1 == type ? '>' : ' ');
+		printf("                         %c含有的内容：", 1 == type ? '>' : ' ');
 		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
 		printf("\n\n");
 		printf("                                ");
 		OPTION_OK(2 == type);
+	}
+	else
+	{
+		k = isKey(getch());
 	}
 	switch (k)
 	{
@@ -536,5 +539,5 @@ pList selectHistory(int type, pCriteriaHistory criteria, pList p) {
 }
 
 pList selectToHistory() {
-	return selectHistory(0, getDefaultCriteriaPC(), getPCs());
+	return selectHistory(0, getDefaultCriteriaHistory(), getHistorys());
 }

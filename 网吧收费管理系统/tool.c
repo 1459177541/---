@@ -174,7 +174,7 @@ int isPower(int powerCode,int point) {
 }
 
 //输出选项
-char* prOption(char * name,int isOption,int length) {
+void prOption(char * name,int isOption,int length) {
 	char str[] = "%  s%  s%-  s";
 	if (length/6>=10)
 	{
@@ -588,7 +588,6 @@ int saveExit(int type) {
 			prPrompt("已成功关闭", "感谢您的使用");
 			gotoxy(x + 15, 13);
 			exit(0);
-			return 1;
 		case 2:
 			return 0;
 		default:

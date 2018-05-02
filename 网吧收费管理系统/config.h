@@ -147,7 +147,7 @@ int isPower(int powerCode, int point);
 	//默认外观
 	#define OPTION_OK(isOption) prOption("确定", isOption, 7);
 	#define OPTION_CANCEL(isOption) prOption("取消/删除", isOption, 15);
-char* prOption(char * name, int isOption, int length);
+void prOption(char * name, int isOption, int length);
 void prPrompt(char *title, char *body);
 char * prTime(pTm p, int style);
 void prTimes(pTm start, pTm end, char * text);
@@ -206,7 +206,7 @@ pList getPCs();
 void logoutPCAll();
 void prPC(pPC p, int isOption);
 pList selectToPC();
-int showPC(pPC p);
+void showPC(pPC p);
 void logPC(pPC p);
 
 //cardType
@@ -218,7 +218,7 @@ void editCardType(int type, pCardType p);
 pCard getCard(int id);
 pList getCards();
 void prCard(pCard p, int isOption);
-int showCard(int type, pCard p, char * text, char *password, char *password2);
+void showCard(int type, pCard p, char * text, char *password, char *password2);
 pList selectToCard();
 void recharge(pCard p);
 
