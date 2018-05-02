@@ -89,9 +89,10 @@ typedef struct {
 }history,* pHistory;
 
 //统计
+typedef struct List List, *pList;
 typedef struct {
 	tm time;
-	pList startHistory;			//开始的记录
+	pList startHistory;				//开始的记录
 	int	stat_up;					//上机次数
 	double stat_up_money;			//上机金额
 	double stat_recharge_money;		//充值金额
