@@ -55,7 +55,7 @@ typedef struct {
 	char type[16];
 	int id;
 	pCard user;
-	pTm startTime;
+	tm startTime;
 }PC,* pPC;
 
 //收费标准
@@ -208,6 +208,7 @@ void prPC(pPC p, int isOption);
 pList selectToPC();
 void showPC(pPC p);
 void logPC(pPC p);
+int hasLoginPC();
 
 //cardType
 pList getCardTypeList();

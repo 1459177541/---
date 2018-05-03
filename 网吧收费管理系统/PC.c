@@ -28,7 +28,6 @@ void initPCToArray() {
 		{
 			pPC pc = (pPC)malloc(sizeof(PC));
 			pc->id = pcType->startId + i;
-			pc->startTime = NULL;
 			pc->user = NULL;
 			strcpy(pc->type, pcTypeList->date.pcType->type);
 			q = (pList)malloc(sizeof(List));
@@ -61,18 +60,22 @@ pList getPCs() {
 //输出PC信息（列表）
 void prPC(pPC p, int isOption) {
 	char *user = (char *)malloc(16 * sizeof(char));
+	char *time = (char *)malloc(16 * sizeof(char));
 	if (NULL != p->user)
 	{
 		strcpy(user, p->user->masterName);
+		sprintf(time, "%2d日 %2d时%2d分", p->startTime.tm_mday, p->startTime.tm_hour, p->startTime.tm_min);
 	}
 	else
 	{
+		time[0] = '\0';
 		user[0] = '\0';
 	}
 	printf("\n%3s%9d |%19s |%19s |%19s% -3s"
-		, isOption ? getAttri("L") : getAttri("NL"), p->id, p->type, user, prTime(p->startTime, TIME), isOption ? getAttri("R") : getAttri("NR"));
+		, isOption ? getAttri("L") : getAttri("NL"), p->id, p->type, user, time, isOption ? getAttri("R") : getAttri("NR"));
+	free(user);
+	free(time);
 }
-
 
 //上/下机
 void logPC(pPC p) {
@@ -211,6 +214,19 @@ pList getListFromPcCriteria(pCriteriaPC criteria) {
 			break;
 		case 1:
 			isAdd = 0;
+			char *user = (char *)malloc(16 * sizeof(char));
+			char *time = (char *)malloc(16 * sizeof(char));
+			if (NULL != p->date.pc->user)
+			{
+				strcpy(user, p->date.pc->user->masterName);
+				sprintf(time, "%2d日 %2d时%2d分"
+					, p->date.pc->startTime.tm_mday, p->date.pc->startTime.tm_hour, p->date.pc->startTime.tm_min);
+			}
+			else
+			{
+				time[0] = '\0';
+				user[0] = '\0';
+			}
 			if (NULL!=strstr(itoa(p->date.pc->id,temp,10),criteria->Criteria))
 			{
 				isAdd = 1;
@@ -219,14 +235,16 @@ pList getListFromPcCriteria(pCriteriaPC criteria) {
 			{
 				isAdd = 1;
 			}
-			if (NULL!= p->date.pc->user && NULL != strstr(p->date.pc->user->masterName, criteria->Criteria))
+			if (NULL != strstr(user, criteria->Criteria))
 			{
 				isAdd = 1;
 			}
-			if (NULL != strstr(prTime(p->date.pc->startTime,TIME), criteria->Criteria))
+			if (NULL != strstr(time, criteria->Criteria))
 			{
 				isAdd = 1;
 			}
+			free(user);
+			free(time);
 			break;
 		default:
 			break;
@@ -427,4 +445,129 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 
 pList selectToPC() {
 	return selectPC(0, getDefaultCriteriaPC(), getPCs());
+}
+
+pList loginPcList = NULL;
+pList loginPcListFinal = NULL;
+int lock = 0;
+//是否有上机
+int hasLoginPC() {
+	return NULL != loginPcList;
+}
+
+//上/下机
+void logPC(pPC p) {
+	while (lock)
+	{
+		Sleep(100);
+	}
+	lock = 1;
+	date d;
+	d.pc = p;
+	if (NULL == p->user)
+	{
+		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
+		addHistory(UP_T, d, 0);
+		if (hasLoginPC)
+		{
+			pList pl = (pList)malloc(sizeof(List));
+			pl->next = NULL;
+			pl->last = loginPcListFinal;
+			pl->type = d_pc;
+			pl->date.pc = p;
+			loginPcListFinal->next = pl;
+		}
+		else
+		{
+			loginPcList = (pList)malloc(sizeof(List));
+			loginPcList->last = NULL;
+			loginPcList->next = NULL;
+			loginPcList->type = d_pc;
+			loginPcList->date.pc = p;
+			loginPcListFinal = loginPcList;
+		}
+	}
+	else
+	{
+		double money = results(p, p->user);
+		p->user->balance -= money;
+		p->user = NULL;
+		addHistory(DOWN_T, d, money);
+		pList pl = loginPcList;
+		while (pl!=NULL && pl->date.pc!=p)
+		{
+			pl = pl->next;
+		}
+		if (NULL==pl->last)
+		{
+			loginPcList = loginPcList->next;
+			loginPcList->last = NULL;
+			pl->date.pc = NULL;
+			free(pl);
+		}
+		else if (NULL==pl->next)
+		{
+			loginPcListFinal = loginPcListFinal->last;
+			loginPcListFinal->next = NULL;
+			pl->date.pc = NULL;
+			free(pl);
+		}
+		else
+		{
+			pl->last->next = pl->next;
+			pl->next->last = pl->last;
+			pl->date.pc = NULL;
+			free(pl);
+		}
+	}
+	lock = 0;
+}
+
+//全部下机
+void logoutPCAll() {
+	prPrompt("正在结算金额", "");
+	gotoxy(21, 12);
+	int i = 0;
+	pList list = getPCs();
+	while (NULL != list && d_pc == list->type)
+	{
+		if (i>pcLength / 40)
+		{
+			printf("#");
+			i = 0;
+		}
+		i++;
+		if (NULL != list->date.pc->user)
+		{
+			logPC(list->date.pc);
+		}
+		list = list->next;
+	}
+}
+
+//检查上机余额
+void check() {
+	int time = atoi(getAttri("checkTime"))*60;
+	while (1)
+	{
+		while (lock)
+		{
+			Sleep(500);
+		}
+		lock = 1;
+		if (NULL == loginPcList)
+		{
+			lock = 0;
+			Sleep(time);
+			continue;
+		}
+		//////////////////////////////////////
+		lock = 0;
+		Sleep(time);
+	}
+}
+
+//开始执行检查
+void startCheck() {
+	CreateThread(NULL, 0, check, NULL, 0, NULL);
 }

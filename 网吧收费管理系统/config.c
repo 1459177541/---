@@ -42,6 +42,10 @@ char* getAttri(char * key) {
 	{
 		return "[ ]";
 	}
+	else if (!strcmp("checkTime", key))
+	{
+		return "10";
+	}
 	return NULL;
 }
 
