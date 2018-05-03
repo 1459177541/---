@@ -547,7 +547,7 @@ void logoutPCAll() {
 
 //¼ì²éÉÏ»úÓà¶î
 void check() {
-	int time = atoi(getAttri("checkTime"))*60;
+	int time = atoi(getAttri("checkTime")) * 60 * 1000;
 	while (1)
 	{
 		while (lock)
@@ -561,7 +561,14 @@ void check() {
 			Sleep(time);
 			continue;
 		}
-		//////////////////////////////////////
+		pList pl = loginPcList;
+		while (pl!=NULL)
+		{
+			time_t time = mktime(&(pl->date.pc->startTime)) + time;
+			
+			///////////////////////
+			pl = pl->next;
+		}
 		lock = 0;
 		Sleep(time);
 	}
