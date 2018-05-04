@@ -77,46 +77,6 @@ void prPC(pPC p, int isOption) {
 	free(time);
 }
 
-//上/下机
-void logPC(pPC p) {
-	date d;
-	d.pc = p;
-	if (NULL == p->user)
-	{
-		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
-		addHistory(UP_T, d, 0);
-	}
-	else
-	{
-		double money = results(p, p->user);
-		p->user->balance -= money;
-		p->user = NULL;
-		addHistory(DOWN_T, d, money);
-	}
-}
-
-//全部下机
-void logoutPCAll() {
-	prPrompt("正在结算金额", "");
-	gotoxy(21, 12);
-	int i = 0;
-	pList list = getPCs();
-	while (NULL!=list && d_pc == list->type)
-	{
-		if (i>pcLength/40)
-		{
-			printf("#");
-			i = 0;
-		}
-		i++;
-		if (NULL!=list->date.pc->user)
-		{
-			logPC(list->date.pc);
-		}
-		list = list->next;
-	}
-}
-
 //PC界面
 void showPC(pPC p) {
 	char name[16] = "";
@@ -449,6 +409,7 @@ pList selectToPC() {
 
 pList loginPcList = NULL;
 pList loginPcListFinal = NULL;
+int loginPcNum = 0;
 int lock = 0;
 //是否有上机
 int hasLoginPC() {
@@ -486,11 +447,24 @@ void logPC(pPC p) {
 			loginPcList->date.pc = p;
 			loginPcListFinal = loginPcList;
 		}
+		loginPcNum++;
 	}
 	else
 	{
-		double money = results(p, p->user);
-		p->user->balance -= money;
+		time_t now = time(NULL);
+		time_t time = now - mktime(&(p->startTime));
+		double money = results(p, p->user, localtime(&time));
+		if (p->user->balance>money)
+		{
+			p->user->balance -= money;
+		}
+		else
+		{
+			char other[16];
+			sprintf(other, "对方账户余额不足\n请收取%.2ld元\n按任意键确认", money - p->user->balance);
+			prPrompt("下机",other);
+			p->user->balance = 0;
+		}
 		p->user = NULL;
 		addHistory(DOWN_T, d, money);
 		pList pl = loginPcList;
@@ -502,23 +476,20 @@ void logPC(pPC p) {
 		{
 			loginPcList = loginPcList->next;
 			loginPcList->last = NULL;
-			pl->date.pc = NULL;
-			free(pl);
 		}
 		else if (NULL==pl->next)
 		{
 			loginPcListFinal = loginPcListFinal->last;
 			loginPcListFinal->next = NULL;
-			pl->date.pc = NULL;
-			free(pl);
 		}
 		else
 		{
 			pl->last->next = pl->next;
 			pl->next->last = pl->last;
-			pl->date.pc = NULL;
-			free(pl);
 		}
+		pl->date.pc = NULL;
+		free(pl);
+		loginPcNum--;
 	}
 	lock = 0;
 }
@@ -528,26 +499,27 @@ void logoutPCAll() {
 	prPrompt("正在结算金额", "");
 	gotoxy(21, 12);
 	int i = 0;
-	pList list = getPCs();
-	while (NULL != list && d_pc == list->type)
+	pList list = loginPcList;
+	while (hasLoginPC())
 	{
-		if (i>pcLength / 40)
+		if (i>loginPcNum / 40)
 		{
 			printf("#");
 			i = 0;
 		}
 		i++;
+		pList p = list->next;
 		if (NULL != list->date.pc->user)
 		{
 			logPC(list->date.pc);
 		}
-		list = list->next;
+		list = p;
 	}
 }
 
 //检查上机余额
 void check() {
-	int time = atoi(getAttri("checkTime")) * 60 * 1000;
+	int iTime = atoi(getAttri("checkTime")) * 60 * 1000;
 	while (1)
 	{
 		while (lock)
@@ -558,19 +530,34 @@ void check() {
 		if (NULL == loginPcList)
 		{
 			lock = 0;
-			Sleep(time);
+			Sleep(iTime);
 			continue;
 		}
 		pList pl = loginPcList;
 		while (pl!=NULL)
 		{
-			time_t time = mktime(&(pl->date.pc->startTime)) + time;
-			
-			///////////////////////
+			time_t time_t = time(NULL) - mktime(&(pl->date.pc->startTime));
+			double money = results(pl->date.pc, pl->date.pc->user, localtime(time_t + iTime));
+			double money2 = results(pl->date.pc, pl->date.pc->user, localtime(time_t));
+			if (money2>pl->date.pc->user->balance)
+			{
+				logPC(pl->date.pc);
+				char body[32];
+				sprintf(body, "%d号电脑余额不足\n已自动下机\n按任意键关闭", pl->date.pc->id);
+				prPrompt("提示", body);
+				getch();
+			}
+			else if (money>pl->date.pc->user->balance)
+			{
+				char body[32];
+				sprintf(body, "%d号电脑余额不足\n将在%s分钟内自动下机\n按任意键关闭", pl->date.pc->id, getAttri("checkTime"));
+				prPrompt("提示", body);
+				getch();
+			}
 			pl = pl->next;
 		}
 		lock = 0;
-		Sleep(time);
+		Sleep(iTime);
 	}
 }
 

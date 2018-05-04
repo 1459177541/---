@@ -84,6 +84,43 @@ void splitString(char *src, char *ret,int start,int length) {
 	ret[i] = '\0';
 }
 
+//Ìæ»»×Ö·û´®
+void replaceString(char *src, char old, char *new) {
+	char * temp = (char*)malloc(32 * sizeof(char));
+	int i = 0;
+	while ('\0' != src[i])
+	{
+		if (old == src[i] || old == src[i])
+		{
+			int j = 0;
+			int it = i;
+			while (src[it] != '\0')
+			{
+				temp[j] = src[it];
+				it++;
+			}
+			temp[j] = '\0';
+			while (new[j] != '\0')
+			{
+				src[i] = new[j];
+				i++;
+				j++;
+			}
+			j = 0;
+			while ('\0' != temp[j])
+			{
+				src[i] = temp[j];
+				i++;
+				j++;
+			}
+			break;
+		}
+		i++;
+	}
+	src[i] = '\0';
+	free(temp);
+}
+
 //Êä³öÃÜÂë
 char *printfPassword(char *password) {
 	int i = 0;

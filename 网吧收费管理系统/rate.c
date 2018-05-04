@@ -97,21 +97,21 @@ void setRule(int type, pRate p) {
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
-	printf("|         %-29s         |",p->rule);
+	printf("|            %-29s      |",p->rule);
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
 	printf("|        设置方法：字母x为上一符合条件          |");
 	gotoxy(x, y++);
-	printf("|        的计算结果(若为第一个计费标准则        |");
+	printf("|        的计算结果(单位:元/时)(若为第一        |");
 	gotoxy(x, y++);
-	printf("|        为0)，经过加减乘除得到结果传递         |");
+	printf("|        个计费标准则为0),字母t为时间(         |");
 	gotoxy(x, y++);
-	printf("|        给下一个符合条件的计费标准，若         |");
+	printf("|        单位:h)，经过加减乘除得到结果         |");
 	gotoxy(x, y++);
-	printf("|        为最后一个，则为收费金额。             |");
+	printf("|        传递给下一个符合条件的计费             |");
 	gotoxy(x, y++);
-	printf("|        (单位:元/时)                           |");
+	printf("|        标准，若为最后一个，则为收费金额。     |");
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
@@ -123,7 +123,7 @@ void setRule(int type, pRate p) {
 	key k;
 	if (0==type)
 	{
-		k = input(x + 16, 8, p->rule, 0, NUM | OTHER, "+-*/xX");
+		k = input(x + 16, 8, p->rule, 0, NUM | OTHER, "+-*/xXtT");
 	}
 	else
 	{
@@ -301,7 +301,7 @@ double compute(char *expression, int start, int end) {
 }
 
 //计算价格(单条规则)
-double result(pPC pc, pCard user, pRate rate, double src) {
+double result(pPC pc, pCard user, pRate rate,pTm ptm_time, double src) {
 	if (strcmp(pc->type,rate->pc)!=0)
 	{
 		return src;
@@ -310,52 +310,26 @@ double result(pPC pc, pCard user, pRate rate, double src) {
 	{
 		return src;
 	}
-
+	///////////////////////////////////////////////
 	char number[16];
+	char time[16];
+	sprintf(time, "%.2lf", ptm_time->tm_hour / 60.0 + ptm_time->tm_min);
 	sprintf(number, "%.2lf", src);
-	char * rule = (char*)malloc(32 * sizeof(char));
-	char * temp = (char*)malloc(32 * sizeof(char));
+	char * rule = (char*)malloc(64 * sizeof(char));
 	strcpy(rule, rate->rule);
+
+	replaceString(rule, 'x', number);
+	replaceString(rule, 'X', number);
+	replaceString(rule, 't', time);
+	replaceString(rule, 'T', time);
 	
-	int i = 0;
-	while ('\0' != rule[i])
-	{
-		if ('x' == rule[i] || 'X' == rule[i])
-		{
-			int j = 0;
-			int it = i;
-			while (rule[it]!='\0')
-			{
-				temp[j] = rule[it];
-				it++;
-			}
-			temp[j] = '\0';
-			while (number[j]!='\0')
-			{
-				rule[i] = number[j];
-				i++;
-				j++;
-			}
-			j = 0;
-			while ('\0'!=temp[j])
-			{
-				rule[i] = temp[j];
-				i++;
-				j++;
-			}
-			break;
-		}
-		i++;
-	}
-	rule[i] = '\0';
-	double result = compute(rule,0,i);
+	double result = compute(rule,0,strlen(rule));
 	free(rule);
-	free(temp);
 	return result;
 }
 
 //计算价格(全部规则)
-double results(pPC pc, pCard user) {
+double results(pPC pc, pCard user, pTm time) {
 	if (NULL==getRateList() || NULL==user)
 	{
 		return 0;
@@ -364,7 +338,7 @@ double results(pPC pc, pCard user) {
 	double money = 0;
 	while (NULL!=p)
 	{
-		money = result(pc, user, p->date.rate, money);
+		money = result(pc, user, p->date.rate, time, money);
 		p = p->next;
 	}
 	return money;

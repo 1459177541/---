@@ -134,6 +134,7 @@ void myCls();
 int stringToInt(char * string);
 char * intToString(int num);
 void splitString(char *src, char *ret, int start, int length);
+void replaceString(char *src, char old, char *new);
 char* printfPassword(char *password);
 key isKey(int in);
 	//输入限定，使用左移运算得到对应的二进制位
@@ -225,7 +226,7 @@ void recharge(pCard p);
 
 //rate
 pList getRateList();
-double results(pPC pc, pCard user);
+double results(pPC pc, pCard user, pTm time);
 void prRate(pRate p);
 void editRate(int type, int option[], pRate p);
 void setRateList(pList p);
