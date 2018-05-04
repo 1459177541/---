@@ -82,8 +82,166 @@ void prRate(pRate p) {
 }
 
 //设置时间段
-void setTimes(pTm start,pTm end) {
-	//////////////////////////////////////////////////
+//T	0:年 1:月 2:周 3:日
+void setTimes(pTm start, pTm end, int type, int T) {
+	int x = 16;
+	int y = 2;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|               周期: ");
+	switch (T)
+	{
+	case 0:
+		printf("每年");
+		break;
+	case 1:
+		printf("每月");
+		break;
+	case 2:
+		printf("每周");
+		break;
+	case 3:
+		printf("每日");
+		break;
+	default:
+		break;
+	}
+	printf("               |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	switch (T)
+	{
+	case 0:
+		gotoxy(x, y++);
+		printf("|               年份:                           |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+	case 1:
+		gotoxy(x, y++);
+		printf("|               月份:                           |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+	case 3:
+		gotoxy(x, y++);
+		printf("|                 日:                           |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		break;
+	case 2:
+		gotoxy(x, y++);
+		printf("|                每周                           |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		break;
+	default:
+		break;
+	}
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                       时   分                 |");
+	gotoxy(x, y++);
+	printf("|                  至   时   分                 |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                      ");
+	OPTION_OK(-1 == type);
+	printf("                  |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	char *in = (char*)malloc(16 * sizeof(char));
+	in[0] = '\0';
+	key k = input(x + 19, 7 + type * 2, in, 0, INTER, NULL);
+	int num = atoi(in);
+	switch (k)
+	{
+	case up:
+		type++;
+		switch (T)
+		{
+		case 0:
+			if (7<type)
+			{
+				type = -1;
+			}
+			break;
+		case 1:
+			if (6<type)
+			{
+				type = -1;
+			}
+			break;
+		case 2:
+			if (5<type)
+			{
+				type = -1;
+			}
+			break;
+		case 3:
+			if (5<type)
+			{
+				type = -1;
+			}
+			break;
+		default:
+			break;
+		}
+		break;
+	case down:
+		type--;
+		if (-1>type)
+		{
+			switch (T)
+			{
+			case 0:
+				type = 7;
+				break;
+			case 1:
+			case 2:
+			case 3:
+				type = 6;
+				break;
+			default:
+				break;
+			}
+		}
+		break;
+	case left:
+		T--;
+		if (0>T)
+		{
+			T = 3;
+		}
+		break;
+	case right:
+		T++;
+		if (3<T)
+		{
+			T = 0;
+		}
+		break;
+	case enter:
+		if (type!=-1)
+		{
+			type = -1;
+		}
+		else
+		{
+			return;
+		}
+	default:
+		break;
+	}
+	if (-1!=type)
+	{
+		///////////////////////////////////////////////////////////////
+	}
+	free(in);
+	setTimes(start, end, type, T);
 }
 
 //设置收费标准
@@ -237,7 +395,7 @@ void editRate(int type,int option[], pRate p) {
 			editRate(5, option, p);
 			return;
 		case 2:
-			setTimes(p->startTime, p->endTime);
+			setTimes(p->startTime, p->endTime, 0, 0);
 			editRate(type, option, p);
 			return;
 		case 3:

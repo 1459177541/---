@@ -314,69 +314,6 @@ void prPrompt(char *title, char *body) {
 	free(text3);
 }
 
-//输出时间
-char * prTime(pTm p, int style) {
-	if (NULL==p)
-	{
-		return "";
-	}
-	char *cTime;
-	int offer = 0;
-	if (isPower(style,0)&&isPower(style,1))
-	{
-		cTime = "    年  月  日  时  分  秒";
-	}
-	if (isPower(style,0))
-	{
-		cTime = "    年  月  日";
-		if (p->tm_year>1000)
-		{
-			cTime[0 + offer] = p->tm_year / 1000 + '0';
-		}
-		if (p->tm_year>100)
-		{
-			cTime[1 + offer] = p->tm_year % 1000 / 100 + '0';
-		}
-		if (p->tm_year>10)
-		{
-			cTime[2 + offer] = p->tm_year % 100 / 10 + '0';
-		}
-		cTime[3 + offer] = p->tm_year % 10 + '0';
-		offer = 2;
-		if (p->tm_mon>10)
-		{
-			cTime[5 + offer] = p->tm_mon / 10 + '0';
-		}
-		cTime[6 + offer] = p->tm_mon % 10 + '0';
-		if (p->tm_mday>10)
-		{
-			cTime[9 + offer] = p->tm_mday / 10 + '0';
-		}
-		cTime[10 + offer] = p->tm_mday % 10 + '0';
-		offer = 14;
-	}
-	if (isPower(style,0))
-	{
-		cTime = "  时  分  秒";
-		if (p->tm_hour>10)
-		{
-			cTime[0 + offer] = p->tm_hour / 10 + '0';
-		}
-		cTime[1 + offer] = p->tm_hour % 10 + '0';
-		if (p->tm_min>10)
-		{
-			cTime[5 + offer] = p->tm_min / 10 + '0';
-		}
-		cTime[6 + offer] = p->tm_min % 10 + '0';
-		if (p->tm_sec>10)
-		{
-			cTime[9 + offer] = p->tm_sec / 10 + '0';
-		}
-		cTime[10 + offer] = p->tm_sec % 10 + '0';
-	}
-	return cTime;
-}
-
 //输出时间段
 void prTimes(pTm start, pTm end, char * text) {
 	if (NULL==start||NULL==end)
@@ -393,14 +330,14 @@ void prTimes(pTm start, pTm end, char * text) {
 		else {
 			if (start->tm_mon == end->tm_mon)
 			{
-				if (start->tm_mon == 0)
+				if (start->tm_mon == -1)
 				{
 					strcat(text, "每月");
 				}
 				else {
 					if (start->tm_year == end->tm_year)
 					{
-						if (start->tm_year == 0)
+						if (start->tm_year == -1)
 						{
 							strcat(text, "每年");
 						}
@@ -503,6 +440,7 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 				gotoxy(x - 1 + i, y);
 				printf(" ");
 				gotoxy(x - 1 + i, y);
+				i--;
 			}
 			gotoxy(x - 1 + i, y);
 			printf(" ");
