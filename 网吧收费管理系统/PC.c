@@ -534,7 +534,7 @@ void logoutPCAll() {
 }
 
 //检查上机余额
-void check() {
+DWORD WINAPI check() {
 	int iTime = atoi(getAttri("checkTime")) * 60 * 1000;
 	while (1)
 	{
@@ -575,9 +575,11 @@ void check() {
 		lock = 0;
 		Sleep(iTime);
 	}
+	return 0;
 }
 
 //开始执行检查
 void startCheck() {
-//	CreateThread(NULL, 0, check, NULL, 0, NULL);
+	DWORD dword;
+	CreateThread(NULL, 0, check(), NULL, 0, dword);
 }
