@@ -477,6 +477,12 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				prPrompt("即将进入网吧规模", "按任意键继续");
 				getch();
 				scrollMenu(getPCtypeList(), d_pcType, 0);
+				if (isEditPCType())
+				{
+					clossPC();
+					list = getPCs();
+					setEdit(0);
+				}
 				break;
 			case d_card:		//新建
 			{
@@ -961,6 +967,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					pl->type = d_pcType;
 					q->next = pl;
 					editPCtype(0, p);
+					setEdit(1);
 					addHistory(C_PC_TYPE_T, pl->date, 0);
 				}
 				else
@@ -1067,9 +1074,16 @@ pList scrollMenu(pList list, dateType type, int option) {
 					|| (isPower(getUser()->power, 4) && d_rate == type)
 				)
 			{
-					if (d_pcType == type && !editPCTypePS(0))
+					if (d_pcType == type)
 					{
-						break;
+						if (!editPCTypePS(0))
+						{
+							break;
+						}
+						else
+						{
+							setEdit(1);
+						}
 					}
 				if (NULL!=list->last)
 				{
@@ -1152,6 +1166,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 				{
 					break;
 				}
+				setEdit(1);
 				editPCtype(0, list->date.pcType);
 				addHistory(U_PC_TYPE_T, list->date, 0);
 				break;

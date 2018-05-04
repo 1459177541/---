@@ -1,5 +1,16 @@
 #include"config.h"
 pList pcTypeList = NULL;
+int isEdit = 0;
+
+//是否修改过
+int isEditPCType() {
+	return isEdit != 0;
+}
+
+//设置修改状态
+void setEdit(int edit) {
+	isEdit = edit;
+}
 
 //初始化
 int length = 0;

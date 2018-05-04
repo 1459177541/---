@@ -198,12 +198,15 @@ int initAdminList();
 void login(pAdmin user,int type,char* text);
 
 //pcType
+int isEditPCType();
+void setEdit(int edit);
 pList getPCtypeList();
 void prPCtype(pPCtype p);
 void editPCtype(int type, pPCtype p);
 int editPCTypePS(int type);
 
 //PC
+void clossPC();
 pList getPCs();
 void logoutPCAll();
 void prPC(pPC p, int isOption);

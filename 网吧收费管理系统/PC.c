@@ -48,6 +48,22 @@ void initPCToArray() {
 	return;
 }
 
+//释放资源
+void clossPC() {
+	if (hasLoginPC())
+	{
+		logoutPCAll();
+	}
+	pList p = getPCs();
+	pList q;
+	while (NULL!=p->next)
+	{
+		q = p->next;
+		free(p);
+	}
+	pcList = NULL;
+}
+
 //获得全部PC列表
 pList getPCs() {
 	if (NULL == pcList)
