@@ -946,6 +946,10 @@ pList scrollMenu(pList list, dateType type, int option) {
 			{
 				if (isPower(getUser()->power,14))
 				{
+					if (!editPCTypePS(0))
+					{
+						break;
+					}
 					pPCtype p = (pPCtype)malloc(sizeof(PCtype));
 					p->startId = getPCtypeList()->date.pcType->num;
 					p->num = 0;
@@ -1063,6 +1067,10 @@ pList scrollMenu(pList list, dateType type, int option) {
 					|| (isPower(getUser()->power, 4) && d_rate == type)
 				)
 			{
+					if (d_pcType == type && !editPCTypePS(0))
+					{
+						break;
+					}
 				if (NULL!=list->last)
 				{
 					pList temp = NULL!=list->next? list->next : list->last;
@@ -1140,6 +1148,10 @@ pList scrollMenu(pList list, dateType type, int option) {
 			switch (type)		//处理链表类型
 			{
 			case d_pcType:
+				if (!editPCTypePS(0))
+				{
+					break;
+				}
 				editPCtype(0, list->date.pcType);
 				addHistory(U_PC_TYPE_T, list->date, 0);
 				break;

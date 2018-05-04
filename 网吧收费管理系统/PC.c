@@ -563,5 +563,5 @@ void check() {
 
 //开始执行检查
 void startCheck() {
-	CreateThread(NULL, 0, check, NULL, 0, NULL);
+//	CreateThread(NULL, 0, check, NULL, 0, NULL);
 }

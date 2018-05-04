@@ -145,3 +145,58 @@ void editPCtype(int type, pPCtype p) {
 		break;
 	}
 }
+
+//修改信息提醒
+int editPCTypePS(int type) {
+	if (!hasLoginPC())
+	{
+		return 0;
+	}
+	int x = 16;
+	int y = 8;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                    警告                       |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|         当前存在上机用户，需要强制下机        |");
+	gotoxy(x, y++);
+	printf("|         才可继续修改，是否强制下机？          |");
+	gotoxy(x, y++);
+	printf("|        ");
+	prOption("强制下机", 0 == type, 12);
+	printf("         ");
+	prOption("返回", 1 == type, 6);
+	printf("        |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	key k = isKey(getch());
+	switch (k)
+	{
+	case up:
+	case down:
+	case left:
+	case right:
+	case tab:
+		if (1==type)
+		{
+			return editPCTypePS(0);
+		}
+		else
+		{
+			return editPCTypePS(1);
+		}
+		break;
+	case enter:
+		if (0==type)
+		{
+			logoutPCAll();
+		}
+		return type;
+	default:
+		break;
+	}
+	return editPCTypePS(type);
+}

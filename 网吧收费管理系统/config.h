@@ -201,6 +201,7 @@ void login(pAdmin user,int type,char* text);
 pList getPCtypeList();
 void prPCtype(pPCtype p);
 void editPCtype(int type, pPCtype p);
+int editPCTypePS(int type);
 
 //PC
 pList getPCs();
