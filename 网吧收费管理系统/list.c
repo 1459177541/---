@@ -31,6 +31,10 @@ void save(dateType type) {
 		strcpy(fileName, "data\\card");
 		p = getCards();
 		break;
+	case d_attri:
+		strcpy(fileName, "data\\config");
+		p = getAttriList();
+		break;
 	default:
 		break;
 	}
@@ -82,6 +86,12 @@ void save(dateType type) {
 			{
 				p = p->next;
 			}
+			break;;
+		case d_attri:
+			if (fwrite(p->date.card, sizeof(attribute), 1, fp)>0)
+			{
+				p = p->next;
+			}
 			break;
 		default:
 			break;
@@ -95,7 +105,7 @@ void saveAll() {
 	prPrompt("正在保存", "正在保存管理员信息");
 	save(d_admin);
 	prPrompt("正在保存", "正在保存配置");
-	saveAttri();
+	save(d_attri);
 	prPrompt("正在保存", "正在保存网吧规模");
 	save(d_pcType);
 	prPrompt("正在保存", "正在保存会员卡类型");

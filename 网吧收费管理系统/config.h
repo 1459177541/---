@@ -98,6 +98,12 @@ typedef struct {
 	int stat_card_logout;			//注销卡数
 }stat, *pStat;
 
+//属性
+typedef struct attribute {
+	char key[32];
+	char value[64];
+}attribute, *pAttribute;
+
 //列表
 typedef union {
 	pAdmin admin;
@@ -108,10 +114,11 @@ typedef union {
 	pRate rate;
 	pHistory history;
 	pStat statistics;
+	pAttribute attri;
 }date,* pDate;
 
 typedef enum {
-	d_admin, d_pc, d_card, d_pcType, d_cardType, d_rate, d_history, d_statistics, d_statistics_more
+	d_admin, d_pc, d_card, d_pcType, d_cardType, d_rate, d_history, d_statistics, d_statistics_more, d_attri
 }dateType;
 
 typedef struct List{
@@ -153,10 +160,9 @@ int saveExit(int type);
 
 //config
 int initAttri();
+pList getAttriList();
 char* getAttri(char * key);
 void setAttri(char *key, char *value);
-void saveAttri();
-void closeAttri();
 
 //init
 int initialization();

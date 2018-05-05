@@ -92,86 +92,87 @@ void setting() {
 	setAttri("R", "]");
 	setAttri("NL", " ");
 	setAttri("NR", " ");
+	setAttri("is", "[X]");
+	setAttri("isNot", "[ ]");
+	setAttri("checkTime", "10");
 }
 
 //初始化流程控制
 int initialization() {
 	setting();
 	mkdir("data");
-//	if (1==init(1))
+	char *pass1 = (char *)malloc(sizeof(char)*16);
+	char *pass2 = (char *)malloc(sizeof(char)*16);
+	pass1[0] = '\0';
+	pass2[0] = '\0';
+	int type = 0;
+	int isWhile = 1;
+	setRootPassword(1, pass1, pass2, "");
+	while (isWhile)
 	{
-		char *pass1 = (char *)malloc(sizeof(char)*16);
-		char *pass2 = (char *)malloc(sizeof(char)*16);
-		pass1[0] = '\0';
-		pass2[0] = '\0';
-		int type = 0;
-		int isWhile = 1;
-		setRootPassword(1, pass1, pass2, "");
-		while (isWhile)
+		pr_weclome();
+		printf("                             请选择需要设置的项目                             \n");
+		printf("                           你可以随时通过管理员修改                           \n");
+		printf("\n\n                              ");
+		prOption(" 网吧规模 ", 0 == type, 18);
+		printf("\n\n                              ");
+		prOption("  会员卡  ", 1 == type, 18);
+		printf("\n\n                              ");
+		prOption(" 收费标准 ", 2 == type, 18);
+		printf("\n\n                              ");
+		prOption("   完成   ", 3 == type, 18);
+		int in = getch();
+		key k = isKey(in);
+		switch (k)
 		{
-			pr_weclome();
-			printf("                             请选择需要设置的项目                             \n");
-			printf("                           你可以随时通过管理员修改                           \n");
-			printf("\n\n                              ");
-			prOption(" 网吧规模 ", 0 == type, 18);
-			printf("\n\n                              ");
-			prOption("  会员卡  ", 1 == type, 18);
-			printf("\n\n                              ");
-			prOption(" 收费标准 ", 2 == type, 18);
-			printf("\n\n                              ");
-			prOption("   完成   ", 3 == type, 18);
-			int in = getch();
-			key k = isKey(in);
-			switch (k)
+		case up:
+		case left:
+			type--;
+			if (0>type)
 			{
-			case up:
-			case left:
-				type--;
-				if (0>type)
-				{
-					type = 3;
-				}
+				type = 3;
+			}
+			break;
+		case down:
+		case right:
+		case tab:
+			type++;
+			if (3<type)
+			{
+				type = 0;
+			}
+			break;
+		case esc:
+			initialization();
+			break;
+		case enter:
+			switch (type)
+			{
+			case 0:
+				scrollMenu(getPCtypeList(), d_pcType, 0);
 				break;
-			case down:
-			case right:
-			case tab:
-				type++;
-				if (3<type)
-				{
-					type = 0;
-				}
+			case 1:
+				scrollMenu(getCardTypeList(), d_cardType, 0);
 				break;
-			case esc:
-				initialization();
+			case 2:
+				scrollMenu(getRateList(), d_rate, 0);
 				break;
-			case enter:
-				switch (type)
-				{
-				case 0:
-					scrollMenu(getPCtypeList(), d_pcType, 0);
-					break;
-				case 1:
-					scrollMenu(getCardTypeList(), d_cardType, 0);
-					break;
-				case 2:
-					scrollMenu(getRateList(), d_rate, 0);
-					break;
-				case 3:
-					isWhile = 0;
-					break;
-				default:
-					break;
-				}
+			case 3:
+				isWhile = 0;
+				break;
 			default:
 				break;
 			}
+		default:
+			break;
 		}
-		setUser(NULL);
-		save(d_admin);
-		save(d_pcType);
-		save(d_cardType);
-		save(d_rate);
 	}
+	setUser(NULL);
+	save(d_attri);
+	save(d_admin);
+	save(d_pcType);
+	save(d_cardType);
+	save(d_rate);
 
 	return 0;
 }
