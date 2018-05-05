@@ -62,186 +62,7 @@ void setRateList(pList p) {
 
 //输出
 void prRate(pRate p) {
-	char *time1 = (char*)malloc(25 * sizeof(char));
-	char *time2 = (char*)malloc(25 * sizeof(char));
-	time1[0] = '\0';
-	time2[0] = '\0';
-	char * time = (char *)malloc(sizeof(char) * 50);
-	time[0] = '\0';
-	prTimes(p->startTime, p->endTime, time);
-	splitString(time, time1, 0, 24);
-	if (24<strlen(time))
-	{
-		splitString(time, time2, 25, 49);
-	}
-	printf("%30s | %-19s| %-20s \n", time1, p->card, p->rule);
-	printf("%30s | %-19s| %-20s \n", time2, p->pc, "");
-	free(time);
-	free(time2);
-	free(time1);
-}
-
-//设置时间段
-//T	0:年 1:月 2:周 3:日
-void setTimes(pTm start, pTm end, int type, int T) {
-	int x = 16;
-	int y = 2;
-	gotoxy(x, y++);
-	printf("=================================================");
-	gotoxy(x, y++);
-	printf("|                                               |");
-	gotoxy(x, y++);
-	printf("|               周期: ");
-	switch (T)
-	{
-	case 0:
-		printf("每年");
-		break;
-	case 1:
-		printf("每月");
-		break;
-	case 2:
-		printf("每周");
-		break;
-	case 3:
-		printf("每日");
-		break;
-	default:
-		break;
-	}
-	printf("               |");
-	gotoxy(x, y++);
-	printf("|                                               |");
-	switch (T)
-	{
-	case 0:
-		gotoxy(x, y++);
-		printf("|               年份:                           |");
-		gotoxy(x, y++);
-		printf("|                                               |");
-	case 1:
-		gotoxy(x, y++);
-		printf("|               月份:                           |");
-		gotoxy(x, y++);
-		printf("|                                               |");
-	case 3:
-		gotoxy(x, y++);
-		printf("|                 日:                           |");
-		gotoxy(x, y++);
-		printf("|                                               |");
-		break;
-	case 2:
-		gotoxy(x, y++);
-		printf("|                每周                           |");
-		gotoxy(x, y++);
-		printf("|                                               |");
-		break;
-	default:
-		break;
-	}
-	gotoxy(x, y++);
-	printf("|                                               |");
-	gotoxy(x, y++);
-	printf("|                       时   分                 |");
-	gotoxy(x, y++);
-	printf("|                  至   时   分                 |");
-	gotoxy(x, y++);
-	printf("|                                               |");
-	gotoxy(x, y++);
-	printf("|                      ");
-	OPTION_OK(-1 == type);
-	printf("                  |");
-	gotoxy(x, y++);
-	printf("=================================================");
-	char *in = (char*)malloc(16 * sizeof(char));
-	in[0] = '\0';
-	key k = input(x + 19, 7 + type * 2, in, 0, INTER, NULL);
-	int num = atoi(in);
-	switch (k)
-	{
-	case up:
-		type++;
-		switch (T)
-		{
-		case 0:
-			if (7<type)
-			{
-				type = -1;
-			}
-			break;
-		case 1:
-			if (6<type)
-			{
-				type = -1;
-			}
-			break;
-		case 2:
-			if (5<type)
-			{
-				type = -1;
-			}
-			break;
-		case 3:
-			if (5<type)
-			{
-				type = -1;
-			}
-			break;
-		default:
-			break;
-		}
-		break;
-	case down:
-		type--;
-		if (-1>type)
-		{
-			switch (T)
-			{
-			case 0:
-				type = 7;
-				break;
-			case 1:
-			case 2:
-			case 3:
-				type = 6;
-				break;
-			default:
-				break;
-			}
-		}
-		break;
-	case left:
-		T--;
-		if (0>T)
-		{
-			T = 3;
-		}
-		break;
-	case right:
-		T++;
-		if (3<T)
-		{
-			T = 0;
-		}
-		break;
-	case enter:
-		if (type!=-1)
-		{
-			type = -1;
-		}
-		else
-		{
-			return;
-		}
-	default:
-		break;
-	}
-	if (-1!=type)
-	{
-		///////////////////////////////////////////////////////////////
-	}
-	free(in);
-	setTimes(start, end, type, T);
+	printf("%30s | %-19s| %-20s \n", p->pc, p->card, p->rule);
 }
 
 //设置收费标准
@@ -344,11 +165,9 @@ void editRate(int type,int option[], pRate p) {
 	printf("%s", pCardType->date.cardType->name);
 	
 	printf("\n\n              ");
-	prOption("设置收费时间段",2==type,22);
+	prOption("   计费标准   ", 2 == type, 22);
 	printf("\n\n              ");
-	prOption("   计费标准   ", 3 == type, 22);
-	printf("\n\n              ");
-	OPTION_OK(4 == type);
+	OPTION_OK(3 == type);
 
 	int in = getch();
 	key k= isKey(in);
@@ -395,14 +214,10 @@ void editRate(int type,int option[], pRate p) {
 			editRate(5, option, p);
 			return;
 		case 2:
-			setTimes(p->startTime, p->endTime, 0, 0);
-			editRate(type, option, p);
-			return;
-		case 3:
 			setRule(0,p);
 			editRate(type, option, p);
 			return;
-		case 4:
+		case 3:
 			return;
 		default:
 			break;
@@ -468,7 +283,6 @@ double result(pPC pc, pCard user, pRate rate,pTm ptm_time, double src) {
 	{
 		return src;
 	}
-	///////////////////////////////////////////////
 	char number[16];
 	char time[16];
 	sprintf(time, "%.2lf", ptm_time->tm_hour / 60.0 + ptm_time->tm_min);

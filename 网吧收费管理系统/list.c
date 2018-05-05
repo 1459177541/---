@@ -771,10 +771,9 @@ pList scrollMenu(pList list, dateType type, int option) {
 	case d_rate:
 		printf("\n\n                             请设置您的网吧收费标准\n\n");
 		printf("                  ================================================            \n");
-		printf("             开始时间          |     会员卡类型     |     收费标准            \n");
-		printf("             结束时间          |      电脑类型      |                         \n");
+		printf("             电脑类型          |     会员卡类型     |     收费标准            \n");
 		printf("                  -------------+--------------------+-------------            \n");
-		strcpy(nMore, "                               |                    |                         \n                               |                    |                         \n");
+		strcpy(nMore, "                               |                    |                         \n");
 		break;
 	default:
 		return NULL;
@@ -1037,8 +1036,6 @@ pList scrollMenu(pList list, dateType type, int option) {
 					pRate p = (pRate)malloc(sizeof(rate));
 					p->card[0] = '\0';
 					p->pc[0] = '\0';
-					p->startTime = NULL;
-					p->endTime = NULL;
 					p->rule[0] = '\0';
 					pList pl = (pList)malloc(sizeof(List));
 					pl->last = q;

@@ -62,8 +62,6 @@ typedef struct {
 typedef struct {
 	char pc[16];
 	char card[16];
-	pTm startTime;
-	pTm endTime;
 	char rule[16];
 }rate,* pRate;
 
@@ -150,7 +148,6 @@ int isPower(int powerCode, int point);
 	#define OPTION_CANCEL(isOption) prOption("È¡Ïû/É¾³ý", isOption, 15);
 void prOption(char * name, int isOption, int length);
 void prPrompt(char *title, char *body);
-void prTimes(pTm start, pTm end, char * text);
 key input(int x, int y, char *in, int isPassword, int power, char * other);
 int saveExit(int type);
 

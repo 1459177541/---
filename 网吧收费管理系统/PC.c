@@ -443,6 +443,7 @@ void logPC(pPC p) {
 	d.pc = p;
 	if (NULL == p->user)
 	{
+		void startCheck();
 		startCheck();
 		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
 		addHistory(UP_T, d, 0);
