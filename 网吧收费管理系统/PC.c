@@ -443,6 +443,7 @@ void logPC(pPC p) {
 	d.pc = p;
 	if (NULL == p->user)
 	{
+		startCheck();
 		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
 		addHistory(UP_T, d, 0);
 		if (hasLoginPC)
@@ -534,7 +535,7 @@ void logoutPCAll() {
 }
 
 //检查上机余额
-DWORD WINAPI check() {
+DWORD WINAPI check(LPVOID pM) {
 	int iTime = atoi(getAttri("checkTime")) * 60 * 1000;
 	while (1)
 	{
@@ -575,11 +576,14 @@ DWORD WINAPI check() {
 		lock = 0;
 		Sleep(iTime);
 	}
-	return 0;
+	return NULL;
 }
 
 //开始执行检查
+HANDLE handle = NULL;
 void startCheck() {
-	DWORD dword;
-	CreateThread(NULL, 0, check(), NULL, 0, dword);
+	if (NULL == handle)
+	{
+		handle = CreateThread(NULL, 0, check, NULL, 0, NULL);
+	}
 }
