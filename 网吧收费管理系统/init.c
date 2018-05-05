@@ -88,13 +88,13 @@ void setRootPassword(int type,char * pass1,char * pass2,char *text) {
 
 //设置默认外观
 void setting() {
-	setAttri("L", "[");
-	setAttri("R", "]");
-	setAttri("NL", " ");
-	setAttri("NR", " ");
-	setAttri("is", "[X]");
-	setAttri("isNot", "[ ]");
-	setAttri("checkTime", "10");
+	setAttri("L", "[", "选项选中左样式");
+	setAttri("R", "]", "选项选中左样式");
+	setAttri("NL", " ", "选项未选中左样式");
+	setAttri("NR", " ", "选项未选中左样式");
+	setAttri("is", "[X]", "选择确认样式");
+	setAttri("isNot", "[ ]", "选择未确认样式");
+	setAttri("checkTime", "10", "检查上机余额时间间隔(min)");
 }
 
 //初始化流程控制

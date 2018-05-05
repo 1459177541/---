@@ -225,6 +225,14 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n----------------------+-------------------+-------------------------------------");
 		optionLength += 5;
 		break;
+	case d_attri:
+		system("title 设置");
+		printf("\n                               ---===设置===---\n");
+		printf("\n-----------------------------+--------------------------------------------------");
+		printf("\n               设置项        |                    设置值                        ");
+		printf("\n-----------------------------+--------------------------------------------------");
+		optionLength += 5;
+		break;
 	default:
 		return NULL;
 	}
@@ -252,6 +260,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					break;
 				case d_statistics_more:
 					prStatMore(p->date.statistics, i == index);
+					break;
+				case d_attri:
+					prAttri(p->date.attri, i == index);
 					break;
 				default:
 					break;
@@ -282,6 +293,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_statistics_more:
 				printf("\n                      |                   |                                     ");
 				break;
+			case d_attri:
+				printf("\n                             |                                                  ");
+				break;
 			default:
 				break;
 			}
@@ -301,6 +315,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	case d_statistics:
 	case d_statistics_more:
 		printf("\n----------------------+-------------------+-------------------------------------");
+		break;
+	case d_attri:
+		printf("\n-----------------------------+--------------------------------------------------");
 		break;
 	default:
 		break;
@@ -359,6 +376,12 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	case d_statistics_more:
 		printf("\n\n                                           ");
 		prOption("返回", 4 == option, 6);
+		break;
+	case d_attri:
+		printf("\n\n                         ");
+		prOption("修改", 4 == option, 6);
+		printf("                  ");
+		prOption("返回", 5 == option, 6);
 		break;
 	default:
 		break;
@@ -571,6 +594,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				thisPage = 0;
 				isFirst = 1;
 				return op;
+			case d_attri:
+				editAttri(op->date.attri);
+				break;
 			default:
 				break;
 			}
@@ -631,6 +657,11 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					q = q->next;
 				}
 				return ret;
+			case d_attri:
+				finalPage = -1;
+				thisPage = 0;
+				isFirst = 1;
+				return op;
 			default:
 				break;
 			}

@@ -238,7 +238,7 @@ void mainMenu(pAdmin user, int type) {
 			paginationMenu(getStat(), d_statistics, 0, 0);
 			break;
 		case 8:
-			////…Ë÷√////
+			paginationMenu(getAttriList(), d_attri, 0, 0);
 			break;
 		case 9:
 			setUser(NULL);

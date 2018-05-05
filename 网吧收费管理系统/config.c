@@ -64,7 +64,7 @@ char* getAttri(char * key) {
 }
 
 //修改key对应的value，若无该键则新增
-void setAttri(char *key, char *value) {
+void setAttri(char *key, char *value, char *name) {
 	pList p = attributeLists;
 	while (NULL != p && NULL != p->next)
 	{
@@ -100,4 +100,26 @@ void setAttri(char *key, char *value) {
 		attributeLists->type = d_attri;
 		attributeLists->date.attri = d;
 	}
+}
+
+//修改值
+void editAttri(pAttribute p) {
+	prPrompt("请输入设置的值", "");
+	char *in = (char *)malloc(sizeof(char) * 32);
+	key k = input(21, 12, in, 0, INTER | LETTER | SYMBOL, NULL);
+	if (enter==k)
+	{
+		setAttri(p->key, in, p->name);
+		return;
+	}
+	else
+	{
+		edit(p);
+	}
+}
+
+//输出
+void prAttri(pAttribute p, int isOption) {
+	printf("\n%3s %24s |  %-32s% -3s"
+		, isOption ? getAttri("L") : getAttri("NL"), p->name, p->value, isOption ? getAttri("R") : getAttri("NR"));
 }

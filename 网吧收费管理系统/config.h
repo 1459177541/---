@@ -100,8 +100,9 @@ typedef struct {
 
 // Ù–‘
 typedef struct attribute {
-	char key[32];
+	char key[16];
 	char value[64];
+	char name[32];
 }attribute, *pAttribute;
 
 //¡–±Ì
@@ -162,7 +163,9 @@ int saveExit(int type);
 int initAttri();
 pList getAttriList();
 char* getAttri(char * key);
-void setAttri(char *key, char *value);
+void setAttri(char *key, char *value, char *name);
+void prAttri(pAttribute p, int isOption);
+void editAttri(pAttribute p);
 
 //init
 int initialization();
