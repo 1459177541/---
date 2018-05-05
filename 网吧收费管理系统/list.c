@@ -223,7 +223,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n----------------------+-------------------+-------------------------------------");
 		printf("\n         时间         |      上机金额     |                充值金额             ");
 		printf("\n----------------------+-------------------+-------------------------------------");
-		optionLength += 5;
+		optionLength += 7;
 		break;
 	case d_attri:
 		system("title 设置");
@@ -650,7 +650,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				thisPage = 0;
 				finalPage = -1;
 				pList p = getMoreStat(op);
-				paginationMenu(p, d_statistics, 0, 0);
+				paginationMenu(p, d_statistics_more, 0, 0);
 				thisPage = ttp;
 				finalPage = tfp;
 				pList q = p->next;
@@ -660,7 +660,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					p = q;
 					q = q->next;
 				}
-				return ret;
+				break;
 			}
 			case d_statistics_more:	//退出
 				finalPage = -1;

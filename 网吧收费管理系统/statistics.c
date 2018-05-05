@@ -14,7 +14,7 @@ void initStat() {
 	p->type = d_statistics;
 	p->date.statistics = (pStat)malloc(sizeof(stat));
 	p->date.statistics->startHistory = history;
-	p->date.statistics->time.tm_mon = history->date.history->time.tm_mon;
+	p->date.statistics->time = history->date.history->time;
 	p->date.statistics->stat_card_login = 0;
 	p->date.statistics->stat_card_logout = 0;
 	p->date.statistics->stat_recharge_money = 0;
@@ -76,14 +76,14 @@ pList getMoreStat(pList start) {
 	p->type = d_statistics_more;
 	p->date.statistics = (pStat)malloc(sizeof(stat));
 	p->date.statistics->startHistory = history;
-	p->date.statistics->time.tm_mon = history->date.history->time.tm_mon;
+	p->date.statistics->time = history->date.history->time;
 	p->date.statistics->stat_card_login = 0;
 	p->date.statistics->stat_card_logout = 0;
 	p->date.statistics->stat_recharge_money = 0;
 	p->date.statistics->stat_up = 0;
 	p->date.statistics->stat_up_money = 0;
 	while (NULL != history
-		|| history->date.history->time.tm_yday != p->date.statistics->time.tm_yday)
+		&& history->date.history->time.tm_yday != p->date.statistics->time.tm_yday)
 	{
 		if (history->date.history->time.tm_yday != p->date.statistics->time.tm_yday)
 		{
@@ -122,6 +122,7 @@ pList getMoreStat(pList start) {
 		default:
 			break;
 		}
+		history = history->next;
 	}
 	return ret;
 }
@@ -146,8 +147,8 @@ void showStat(pStat p,int isMore) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|            统计日期: %s%s%s%s         |"
-		, isMore ? p->time.tm_mon : p->time.tm_year, isMore ? "月" : "年"
+	printf("|            统计日期: %4d%s%2d%s               |"
+		, isMore ? p->time.tm_mon : p->time.tm_year+1900, isMore ? "月" : "年"
 		, isMore ? p->time.tm_mday : p->time.tm_mon, isMore ? "日" : "月"		
 		);
 	gotoxy(x, y++);
@@ -191,11 +192,11 @@ void showStat(pStat p,int isMore) {
 }
 
 void prStat(pStat p, int isOption) {
-	printf(" %6s %4d年%2d月 | %20.2lf | %20.2lf %-6s\n"
-		, isOption ? getAttri("L") : getAttri("NL"), p->time.tm_year, p->time.tm_mon, p->stat_up_money, p->stat_recharge_money, isOption ? getAttri("L") : getAttri("NL"));
+	printf(" %6s %4d年%2d月    | %17.2lf | %20.2lf %-6s"
+		, isOption ? getAttri("L") : getAttri("NL"), p->time.tm_year+1900, p->time.tm_mon, p->stat_up_money, p->stat_recharge_money, isOption ? getAttri("R") : getAttri("NR"));
 }
 
 void prStatMore(pStat p, int isOption) {
-	printf(" %6s   %2d月%2d日 | %20.2lf | %20.2lf %-6s\n"
-		, isOption ? getAttri("L") : getAttri("NL"), p->time.tm_mon, p->time.tm_mday, p->stat_up_money, p->stat_recharge_money, isOption ? getAttri("L") : getAttri("NL"));
+	printf(" %6s   %2d月%2d日    | %17.2lf | %20.2lf %-6s"
+		, isOption ? getAttri("L") : getAttri("NL"), p->time.tm_mon, p->time.tm_mday, p->stat_up_money, p->stat_recharge_money, isOption ? getAttri("R") : getAttri("NR"));
 }
