@@ -360,7 +360,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		prOption("返回", 9 == option, 6);
 		break;
 	case d_history:
-		printf("\n\n                    ");
+		printf("\n\n                 ");
 		prOption("详细", 4 == option, 6);
 		printf("            ");
 		prOption("筛选", 5 == option, 6);
@@ -368,14 +368,18 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		prOption("返回", 6 == option, 6);
 		break;
 	case d_statistics:
-		printf("\n\n                         ");
-		prOption("详细", 4 == option, 6);
+		printf("\n\n                     ");
+		prOption("更多", 4 == option, 6);
+		printf("            ");
+		prOption("详细", 5 == option, 6);
 		printf("                  ");
-		prOption("返回", 5 == option, 6);
+		prOption("返回", 6 == option, 6);
 		break;
 	case d_statistics_more:
 		printf("\n\n                                           ");
-		prOption("返回", 4 == option, 6);
+		prOption("更多", 4 == option, 6);
+		printf("            ");
+		prOption("返回", 5 == option, 6);
 		break;
 	case d_attri:
 		printf("\n\n                         ");
@@ -570,30 +574,12 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_history:		//详细
 				showHistory(op->date.history);
 				break;
-			case d_statistics:	//详细
-			{
-				int	ttp = thisPage;
-				int tfp = finalPage;
-				thisPage = 0;
-				finalPage = -1;
-				pList p = getMoreStat(op);
-				paginationMenu(p, d_statistics, 0, 0);
-				thisPage = ttp;
-				finalPage = tfp;
-				pList q = p->next;
-				while (NULL != q)
-				{
-					free(p);
-					p = q;
-					q = q->next;
-				}
-				return ret;
-			}
-			case d_statistics_more:	//退出
-				finalPage = -1;
-				thisPage = 0;
-				isFirst = 1;
-				return op;
+			case d_statistics:			//更多信息
+				showStat(op->date.statistics, 0);
+				break;
+			case d_statistics_more:		//更多信息
+				showStat(op->date.statistics, 1);
+				break;
 			case d_attri:
 				editAttri(op->date.attri);
 				break;
@@ -657,6 +643,30 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					q = q->next;
 				}
 				return ret;
+			case d_statistics:	//详细
+			{
+				int	ttp = thisPage;
+				int tfp = finalPage;
+				thisPage = 0;
+				finalPage = -1;
+				pList p = getMoreStat(op);
+				paginationMenu(p, d_statistics, 0, 0);
+				thisPage = ttp;
+				finalPage = tfp;
+				pList q = p->next;
+				while (NULL != q)
+				{
+					free(p);
+					p = q;
+					q = q->next;
+				}
+				return ret;
+			}
+			case d_statistics_more:	//退出
+				finalPage = -1;
+				thisPage = 0;
+				isFirst = 1;
+				return op;
 			case d_attri:
 				finalPage = -1;
 				thisPage = 0;
@@ -677,6 +687,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				recharge(op->date.card);
 				break;
 			case d_history:		//退出
+			case d_statistics_more:
 				finalPage = -1;
 				thisPage = 0;
 				isFirst = 1;

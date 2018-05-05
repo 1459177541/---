@@ -134,6 +134,62 @@ pList getStat() {
 	return statLists;
 }
 
+void showStat(pStat p,int isMore) {
+	int x = 16;
+	int y = 2;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                     更多信息                  |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|            统计日期: %s%s%s%s         |"
+		, isMore ? p->time.tm_mon : p->time.tm_year, isMore ? "月" : "年"
+		, isMore ? p->time.tm_mday : p->time.tm_mon, isMore ? "日" : "月"		
+		);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|            注册卡数: %-13d            |",p->stat_card_login);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|            充值金额: %-13.2lf            |", p->stat_recharge_money);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|            注销卡数: %-13d            |", p->stat_card_logout);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|            上机次数: %-13d            |", p->stat_up);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|          上机总金额: %-13.2lf            |", p->stat_up_money);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|                      ");
+	OPTION_OK(1 == 1);
+	printf("                  |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	if (enter == isKey(getch()))
+	{
+		return;
+	}
+	else
+	{
+		showStat(p, isMore);
+	}
+}
+
 void prStat(pStat p, int isOption) {
 	printf(" %6s %4d年%2d月 | %20.2lf | %20.2lf %-6s\n"
 		, isOption ? getAttri("L") : getAttri("NL"), p->time.tm_year, p->time.tm_mon, p->stat_up_money, p->stat_recharge_money, isOption ? getAttri("L") : getAttri("NL"));

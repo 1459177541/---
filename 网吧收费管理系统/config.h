@@ -258,3 +258,4 @@ void prStat(pStat p, int isOption);
 void prStatMore(pStat p, int isOption);
 pList getStat();
 pList getMoreStat(pList start);
+void showStat(pStat p,int isMore);
