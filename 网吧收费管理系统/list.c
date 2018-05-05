@@ -2,7 +2,7 @@
 
 //保存
 void save(dateType type) {
-	FILE *fp;
+	FILE *fp = NULL;
 	pList p = NULL;
 	char fileName[14] = "";
 	switch (type)
@@ -228,9 +228,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	case d_attri:
 		system("title 设置");
 		printf("\n                               ---===设置===---\n");
-		printf("\n-----------------------------+--------------------------------------------------");
-		printf("\n               设置项        |                    设置值                        ");
-		printf("\n-----------------------------+--------------------------------------------------");
+		printf("\n----------------------------------+---------------------------------------------");
+		printf("\n                    设置项        |               设置值                        ");
+		printf("\n----------------------------------+---------------------------------------------");
 		optionLength += 5;
 		break;
 	default:
@@ -294,7 +294,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				printf("\n                      |                   |                                     ");
 				break;
 			case d_attri:
-				printf("\n                             |                                                  ");
+				printf("\n                                  |                                             ");
 				break;
 			default:
 				break;
@@ -317,7 +317,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n----------------------+-------------------+-------------------------------------");
 		break;
 	case d_attri:
-		printf("\n-----------------------------+--------------------------------------------------");
+		printf("\n----------------------------------+---------------------------------------------");
 		break;
 	default:
 		break;

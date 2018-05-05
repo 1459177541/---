@@ -83,6 +83,7 @@ void setAttri(char *key, char *value, char *name) {
 	pAttribute d = (pAttribute)malloc(sizeof(attribute));
 	strcpy(d->key, key);
 	strcpy(d->value, value);
+	strcpy(d->name, name);
 	if (NULL!=attributeLists)
 	{
 		pList q = (pList)malloc(sizeof(List));
@@ -106,7 +107,7 @@ void setAttri(char *key, char *value, char *name) {
 void editAttri(pAttribute p) {
 	prPrompt("请输入设置的值", "");
 	char *in = (char *)malloc(sizeof(char) * 32);
-	key k = input(21, 12, in, 0, INTER | LETTER | SYMBOL, NULL);
+	key k = input(26, 12, in, 0, INTER | LETTER | SYMBOL, NULL);
 	if (enter==k)
 	{
 		setAttri(p->key, in, p->name);
@@ -114,12 +115,12 @@ void editAttri(pAttribute p) {
 	}
 	else
 	{
-		edit(p);
+		editAttri(p);
 	}
 }
 
 //输出
 void prAttri(pAttribute p, int isOption) {
-	printf("\n%3s %24s |  %-32s% -3s"
+	printf("\n%3s %29s |  %-32s% -3s"
 		, isOption ? getAttri("L") : getAttri("NL"), p->name, p->value, isOption ? getAttri("R") : getAttri("NR"));
 }

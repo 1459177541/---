@@ -14,6 +14,7 @@ int initCardType() {
 		cardTypeLists = (pList)malloc(sizeof(pList));
 		cardTypeLists->next = NULL;
 		cardTypeLists->last = NULL;
+		cardTypeLists->type = d_cardType;
 		cardTypeLists->date.cardType = p;
 	}
 	pList q = cardTypeLists;
