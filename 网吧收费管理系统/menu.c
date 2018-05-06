@@ -1,5 +1,25 @@
 #include"config.h"
 
+//初始化
+void init() {
+	prPrompt("正在加载", "正在加载管理员信息");
+	getAdminHead();
+	prPrompt("正在加载", "正在加载配置列表");
+	getAttriList();
+	prPrompt("正在加载", "正在加载电脑配置");
+	getPCtypeList();
+	prPrompt("正在加载", "正在加载会员卡类型");
+	getCardTypeList();
+	prPrompt("正在加载", "正在加载计费方案");
+	getRateList();
+	prPrompt("正在加载", "正在加载会员卡列表");
+	getCards();
+	prPrompt("正在加载", "正在加载历史记录");
+	getHistorys();
+	prPrompt("正在加载", "正在加载电脑列表");
+	getPCs();
+}
+
 //验证登录用户合法性
 pAdmin isCanLogin(pAdmin user) {
 	if (NULL == getAdminHead())
@@ -244,6 +264,7 @@ void mainMenu(pAdmin user, int type) {
 			break;
 		case 9:
 			saveAll();
+			break;
 		case 10:
 			setUser(NULL);
 			login(user, 0, "");
@@ -281,14 +302,16 @@ void login(pAdmin user, int type, char* text) {
 	printf("                                  ||  //                     \n");
 	printf("                                   ||//                      \n");
 	printf("                                    ^^                       \n");
-	printf("                                                         \n");
+	printf("                                                             \n");
+	printf("                                                             \n");
+	printf("                                                             \n");
 	printf("             用户名：%s\n", 1 == type ? "" : user->name);
 	printf("                                                         \n");
 	printf("             密  码：%s\n", 2 == type ? "" : printfPassword(user->password));
 	printf("\n                  %s\n", text);
 	printf("                                                         \n");
 	printf("              ESC:退出   上/下方向键、TAB：切换选项   ENTER：确认");
-	key in = 1 == type ? input(21, 11, user->name, 0, NUM | LETTER, NULL) : input(21, 13, user->password, 1, NUM | LETTER, NULL);
+	key in = 1 == type ? input(21, 13, user->name, 0, NUM | LETTER, NULL) : input(21, 15, user->password, 1, NUM | LETTER, NULL);
 	switch (in)
 	{
 	case tab:
