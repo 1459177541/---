@@ -332,6 +332,7 @@ void login(pAdmin user, int type, char* text) {
 			pAdmin p = isCanLogin(user);
 			if (p!=NULL)
 			{
+				init();
 				setUser(p);
 				mainMenu(p, 0);
 				return;

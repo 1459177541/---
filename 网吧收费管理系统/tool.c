@@ -18,7 +18,7 @@ void gotoxy(int x, int y)
 
 //«Â∆¡
 void myCls() {
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	gotoxy(0, 0);
 }
 
@@ -236,7 +236,8 @@ void prPrompt(char *title, char *body) {
 	int row = 0;
 	int i = 0;
 	int j = 0;
-	while ('\0' != body[i] && '\n' != body[i])
+	int isEnd = 0;
+	while (!isEnd && '\0' != body[i] && '\n' != body[i])
 	{
 		text1[j] = body[i];
 		j++;
@@ -246,10 +247,14 @@ void prPrompt(char *title, char *body) {
 	{
 		row++;
 	}
+	else
+	{
+		isEnd = 1;
+	}
 	text1[j] = '\0';
 	j = 0;
 	i++;
-	while ('\0'!=body[i]&&'\n'!=body[i])
+	while (!isEnd && '\0'!=body[i]&&'\n'!=body[i])
 	{
 		text2[j] = body[i];
 		j++;
@@ -259,10 +264,14 @@ void prPrompt(char *title, char *body) {
 	{
 		row++;
 	}
+	else
+	{
+		isEnd = 1;
+	}
 	text2[j] = '\0';
 	j = 0;
 	i++;
-	while ('\0' != body[i] && '\n' != body[i])
+	while (!isEnd && '\0' != body[i] && '\n' != body[i])
 	{
 		text3[j] = body[i];
 		j++;
@@ -308,10 +317,10 @@ void prPrompt(char *title, char *body) {
 		gotoxy(x + 25 - strlen(text3) / 2, 13);
 		printf("%s", text3);
 	}
-	gotoxy(0, 23);
-	free(text1);
-	free(text2);
 	free(text3);
+	free(text2);
+	free(text1);
+	gotoxy(0, 23);
 }
 
 // ‰»Î
