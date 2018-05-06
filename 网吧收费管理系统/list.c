@@ -830,9 +830,8 @@ pList scrollMenu(pList list, dateType type, int option) {
 	default:
 		return NULL;
 	}
-	int length = (d_rate == type) ? 3 : 7;
 	pList p = list;
-	for (int i = 0; i < length/2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		if (NULL!=p && NULL!=p->last)
 		{
@@ -851,58 +850,58 @@ pList scrollMenu(pList list, dateType type, int option) {
 			printf(nMore);
 		}
 	}
-	for (int i = isTop; i < length; i++)
+	for (int i = isTop; i < 7; i++)
 	{
 		if (NULL != p)
 		{
 			if (NULL != p->date.admin)
 			{
-				if (length / 2 == i)
+				if (3 == i)
 				{
 					ret = p;
 				}
 				switch (type)
 				{
 				case d_pcType:
-					if (length / 2 == i)
+					if (3 == i)
 					{
 						printf("               ------------------+----------------+------------------         \n");
 					}
 					prPCtype(p->date.pcType);
-					if (length / 2 == i)
+					if (3 == i)
 					{
 						printf("               ------------------+----------------+------------------         \n");
 					}
 					break;
 				case d_cardType:
-					if (length / 2 == i)
+					if (3 == i)
 					{
 						printf("               --------------------------+---------------------------         \n");
 					}
 					prCardType(p->date.cardType);
-					if (length / 2 == i)
+					if (3 == i)
 					{
 						printf("               --------------------------+---------------------------         \n");
 					}
 					break;
 				case d_admin:
-					if (length / 2 == i)
+					if (3 == i)
 					{
 						printf("               --------+---------------------------------------------         \n");
 					}
 					prUser(p->date.admin);
-					if (length / 2 == i)
+					if (3 == i)
 					{
 						printf("               --------+---------------------------------------------         \n");
 					}
 					break;
 				case d_rate:
-					if (length / 2 == i)
+					if (3 == i)
 					{
 						printf("               ----------------+--------------------+----------------         \n");
 					}
 					prRate(p->date.rate);
-					if (length / 2 == i)
+					if (3 == i)
 					{
 						printf("               ----------------+--------------------+----------------         \n");
 					}

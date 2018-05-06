@@ -13,10 +13,6 @@
 //左移运算
 #define SHL(x) (1<<x)
 
-//时间格式
-#define DATE SHL(0)
-#define TIME SHL(1)
-
 //时间
 typedef struct tm tm, * pTm;
 
@@ -99,7 +95,7 @@ typedef struct {
 }stat, *pStat;
 
 //属性
-typedef struct attribute {
+typedef struct {
 	char key[16];
 	char value[64];
 	char name[32];

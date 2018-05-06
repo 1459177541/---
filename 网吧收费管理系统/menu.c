@@ -58,6 +58,7 @@ int toMenu(int power) {
 	menu |= SHL(8);
 	menu |= SHL(9);
 	menu |= SHL(10);
+	menu |= SHL(11);
 	return menu;
 }
 
@@ -112,6 +113,7 @@ void mainMenu(pAdmin user, int type) {
 	prMenuOption("查询历史记录", menuOption, indexLength++, type);
 	prMenuOption("    统计    ", menuOption, indexLength++, type);
 	prMenuOption("    设置    ", menuOption, indexLength++, type);
+	prMenuOption("    保存    ", menuOption, indexLength++, type);
 	prMenuOption("    注销    ", menuOption, indexLength++, type);
 	if (0==indexLength%2)
 	{
@@ -175,7 +177,7 @@ void mainMenu(pAdmin user, int type) {
 		do {
 			type++;
 		} while (!isPower(menuOption, type));
-		if (type>9)
+		if (type>indexLength)
 		{
 			type = -1;
 			do {
@@ -241,10 +243,12 @@ void mainMenu(pAdmin user, int type) {
 			paginationMenu(getAttriList(), d_attri, 0, 0);
 			break;
 		case 9:
+			saveAll();
+		case 10:
 			setUser(NULL);
 			login(user, 0, "");
 			return;
-		case 10:
+		case 11:
 			if (!saveExit(0))
 			{
 				mainMenu(user, type);
