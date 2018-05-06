@@ -122,30 +122,98 @@ char *getHistoryType(historyType p) {
 	return type;
 }
 
+void getHistoryMore(date date, char *ret) {
+	char * prPower(int power);
+	switch (date.history->type)
+	{
+	case C_ADMIN_T:
+		sprintf(ret, "新建管理员: %-16s 权限: %-40s ", date.admin->name, prPower(date.admin->power));
+		break;
+	case D_ADMIN_T:
+		sprintf(ret, "删除管理员: %-16s", date.admin->name);
+		break;
+	case U_ADMIN_T:
+		sprintf(ret, "修改管理员信息: %-16s", date.admin->name);
+		break;
+	case C_RATE_T:
+		sprintf(ret, "新建计费方案: %-16s 对于 %s 在 %s 上机适用", date.rate->rule, date.rate->card, date.rate->pc);
+		break;
+	case D_RATE_T:
+		sprintf(ret, "删除计费方案: %s", date.rate->rule);
+		break;
+	case U_RATE_T:
+		sprintf(ret, "修改计费方案: %s", date.rate->rule);
+		break;
+	case C_CARD_T:
+		sprintf(ret, "开户: %s(证件号: %s)，开通%s", date.card->masterName, date.card->idcardNum, date.card->type);
+		break;
+	case D_CARD_T:
+		sprintf(ret, "注销: %s(证件号: %s)，注销%s", date.card->masterName, date.card->idcardNum, date.card->type);
+		break;
+	case U_CARD_T:
+		sprintf(ret, "修改: %s(证件号: %s)", date.card->masterName, date.card->idcardNum);
+		break;
+	case C_PC_TYPE_T:
+		sprintf(ret, "新增电脑类型%s %d台，编号: %d~%d", date.pcType->type, date.pcType->num, date.pcType->startId, date.pcType->startId + date.pcType->num);
+		break;
+	case D_PC_TYPE_T:
+		sprintf(ret, "删除%s类型电脑", date.pcType->type);
+		break;
+	case U_PC_TYPE_T:
+		sprintf(ret, "修改%s类型电脑", date.pcType->type);
+		break;
+	case C_CARD_TYPE_T:
+		sprintf(ret, "新增会员卡类型%s，售价: %lf", date.cardType->name, date.cardType->price);
+		break;
+	case D_CARD_TYPE_T:
+		sprintf(ret, "删除会员卡类型%s", date.cardType->name);
+		break;
+	case U_CARD_TYPE_T:
+		sprintf(ret, "修改类型%s的会员卡", date.cardType->name);
+		break;
+	case UP_T:
+		sprintf(ret, "用户: %16d 在 %s 类型 %d 电脑上机", date.pc->user->id, date.pc->type, date.pc->id);
+		break;
+	case DOWN_T:
+		sprintf(ret, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5lf元", date.pc->user->id, date.pc->type, date.pc->id, date.history->money);
+		break;
+	case RECHARGE_T:
+		sprintf(ret, "用户: %16d 充值了 %16lf 元", date.card->id, date.history->money);
+	default:
+		strcpy(ret, "ERROR");
+		break;
+	}
+}
+
 void showHistory(pHistory p) {
 	char *textTime1 = (char *)malloc(sizeof(char) * 33);
 	char *textTime2 = (char *)malloc(sizeof(char) * 33);
+	char *text = (char *)malloc(sizeof(char) * 128);
 	char *text1 = (char *)malloc(sizeof(char) * 33);
 	char *text2 = (char *)malloc(sizeof(char) * 33);
 	char *text3 = (char *)malloc(sizeof(char) * 33);
 	textTime1[0] = '\0';
 	textTime2[0] = '\0';
+	text[0] = '\0';
 	text1[0] = '\0';
 	text2[0] = '\0';
-	text3[0] = '\0';	
+	text3[0] = '\0';
+	date d;
+	d.history = p;
+	getHistoryMore(d, text);
 	splitString(asctime(&(p->time)), textTime1, 0, 32);
 	if (strlen(asctime(&(p->time)))>32)
 	{
 		splitString(asctime(&(p->time)), textTime2, 33, 64);
 	}
-	splitString(p->text, text1, 0, 32);
-	if (strlen(p->text)>32)
+	splitString(text, text1, 0, 32);
+	if (strlen(text)>32)
 	{
-		splitString(p->text, text2, 33, 64);
+		splitString(text, text2, 33, 64);
 	}
-	if (strlen(p->text)>64)
+	if (strlen(text)>64)
 	{
-		splitString(p->text, text3, 65, 96);
+		splitString(text, text3, 65, 96);
 	}
 	int x = 8;
 	int y = 4;
@@ -190,12 +258,12 @@ void showHistory(pHistory p) {
 	free(text3);
 	free(text2);
 	free(text1);
+	free(text);
 	free(textTime2);
 	free(textTime1);
 }
 
 void addHistory(historyType type, date date, double other) {
-	char * prPower(int power);
 	pList pl = NULL;
 	if (NULL==historyFinal)
 	{
@@ -218,65 +286,6 @@ void addHistory(historyType type, date date, double other) {
 	strcpy(d->editor, getUser()->name);
 	d->money = other;
 	d->type = type;
-	switch (type)
-	{
-	case C_ADMIN_T:
-		sprintf(d->text, "新建管理员: %-16s 权限: %-40s ", date.admin->name, prPower(date.admin->power));
-		break;
-	case D_ADMIN_T:
-		sprintf(d->text, "删除管理员: %-16s", date.admin->name);
-		break;
-	case U_ADMIN_T:
-		sprintf(d->text, "修改管理员信息: %-16s", date.admin->name);
-		break;
-	case C_RATE_T:
-		sprintf(d->text, "新建计费方案: %-16s 对于 %s 在 %s 上机适用", date.rate->rule, date.rate->card, date.rate->pc);
-		break;
-	case D_RATE_T:
-		sprintf(d->text, "删除计费方案: %s", date.rate->rule);
-		break;
-	case U_RATE_T:
-		sprintf(d->text, "修改计费方案: %s", date.rate->rule);
-		break;
-	case C_CARD_T:
-		sprintf(d->text, "开户: %s(证件号: %s)，开通%s", date.card->masterName, date.card->idcardNum, date.card->type);
-		break;
-	case D_CARD_T:
-		sprintf(d->text, "注销: %s(证件号: %s)，注销%s", date.card->masterName, date.card->idcardNum, date.card->type);
-		break;
-	case U_CARD_T:
-		sprintf(d->text, "修改: %s(证件号: %s)", date.card->masterName, date.card->idcardNum);
-		break;
-	case C_PC_TYPE_T:
-		sprintf(d->text, "新增电脑类型%s %d台，编号: %d~%d", date.pcType->type, date.pcType->num, date.pcType->startId, date.pcType->startId + date.pcType->num);
-		break;
-	case D_PC_TYPE_T:
-		sprintf(d->text, "删除%s类型电脑", date.pcType->type);
-		break;
-	case U_PC_TYPE_T:
-		sprintf(d->text, "修改%s类型电脑", date.pcType->type);
-		break;
-	case C_CARD_TYPE_T:
-		sprintf(d->text, "新增会员卡类型%s，售价: %lf", date.cardType->name, date.cardType->price);
-		break;
-	case D_CARD_TYPE_T:
-		sprintf(d->text, "删除会员卡类型%s", date.cardType->name);
-		break;
-	case U_CARD_TYPE_T:
-		sprintf(d->text, "修改类型%s的会员卡", date.cardType->name);
-		break;
-	case UP_T:
-		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑上机", date.pc->user->id, date.pc->type, date.pc->id);
-		break;
-	case DOWN_T:
-		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5lf元", date.pc->user->id, date.pc->type, date.pc->id, other);
-		break;
-	case RECHARGE_T:
-		sprintf(d->text, "用户: %16d 充值了 %16lf 元", date.card->id, other);
-	default:
-		strcpy(pl->date.history->text, "ERROR");
-		break;
-	}
 }
 
 void prHistory(pHistory p, int isOption) {

@@ -76,7 +76,6 @@ typedef enum {
 //¼ÇÂ¼
 typedef struct {
 	historyType type;
-	char text[128];
 	char editor[16];
 	tm time;
 	double money;
