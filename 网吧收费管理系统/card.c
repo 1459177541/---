@@ -4,7 +4,7 @@ int maxCardId = 1;
 pList cardLists = NULL;
 int CardLength = 0;
 int initCard() {
-	FILE *fp;
+	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\card", "rb")))
 	{
 		return 1;

@@ -3,7 +3,7 @@ pList rateLists = NULL;
 
 //≥ı ºªØ
 int initRate() {
-	FILE *fp;
+	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\rate", "rb")))
 	{
 		return 1;

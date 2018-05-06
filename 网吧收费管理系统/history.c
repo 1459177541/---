@@ -4,7 +4,7 @@ pList historyLists = NULL;
 pList historyFinal = NULL;
 int HistoryLength = 0;
 int initHistory() {
-	FILE *fp;
+	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\history", "rb")))
 	{
 		return 1;

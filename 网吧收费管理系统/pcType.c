@@ -15,7 +15,7 @@ void setEdit(int edit) {
 //≥ı ºªØ
 int length = 0;
 int initPCType() {
-	FILE *fp;
+	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\pc", "rb")))
 	{
 		return 1;

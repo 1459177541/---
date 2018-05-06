@@ -3,7 +3,7 @@
 //≥ı ºªØ
 pList adminLists = NULL;
 int initAdminList() {
-	FILE *fp;
+	FILE *fp = NULL;
 	if (NULL==(fp = fopen("data\\admin","rb")))
 	{
 		return 1;

@@ -3,7 +3,7 @@ pList cardTypeLists = NULL;
 
 //≥ı ºªØ
 int initCardType() {
-	FILE *fp;
+	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\cardType", "rb")))
 	{
 		return 1;
