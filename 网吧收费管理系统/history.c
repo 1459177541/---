@@ -368,8 +368,8 @@ pList selectHistory(int type, pCriteriaHistory criteria, pList p) {
 	historyType ht = ALL_T;
 	pList admin = getAdminHead();
 	system("title 筛选");
-	myCls();
 	system("mode con cols=80 lines=24");
+	myCls();
 	printf("\n\n");
 	printf("                       ============= 筛 选 =============                       \n\n");
 	printf("                            %c方式:", 0 == type ? '>' : ' ');

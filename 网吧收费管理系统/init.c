@@ -3,8 +3,8 @@
 //Êä³öÍ·
 void pr_weclome() {
 	system("title welcome");
-	myCls();
 	system("mode con cols=80 lines=24");
+	myCls();
 	gotoxy(0, 0);
 	printf("                                                                             \n");
 	printf("                                                         \n");

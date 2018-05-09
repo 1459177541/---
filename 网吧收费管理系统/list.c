@@ -319,12 +319,11 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	pList op = list;
 	int length = 0;
 	int optionLength = 0;
-	myCls();
 	system("mode con cols=80 lines=24");
+	myCls();
 	switch (type)
 	{
 	case d_pc:
-		system("title 上/下机");
 		printf("\n                             ---===上/下机===---\n");
 		printf("\n-------------+--------------------+--------------------+------------------------");
 		printf("\n      id     |        类型        |      当前用户      |      上机时间      ");
@@ -332,7 +331,6 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		optionLength = 8;
 		break;
 	case d_card:
-		system("title 会员卡管理");
 		printf("\n                          ---===会员卡管理===---\n");
 		printf("\n-------------------+--------------------+--------------------+------------------");
 		printf("\n        id         |        类型        |       用户名       |      余额    ");
@@ -340,7 +338,6 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		optionLength = 9;
 		break;
 	case d_history:
-		system("title 历史记录");
 		printf("\n                           ---===历史记录===---\n");
 		printf("\n----------------------+-----------------+---------------------------------------");
 		printf("\n         操作类型     |      操作人     |                时间               ");
@@ -350,7 +347,6 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	case d_statistics:
 		optionLength--;
 	case d_statistics_more:
-		system("title 统计");
 		printf("\n                               ---===统计===---\n");
 		printf("\n----------------------+-------------------+-------------------------------------");
 		printf("\n         时间         |      上机金额     |                充值金额             ");
@@ -358,7 +354,6 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		optionLength += 7;
 		break;
 	case d_attri:
-		system("title 设置");
 		printf("\n                               ---===设置===---\n");
 		printf("\n----------------------------------+---------------------------------------------");
 		printf("\n                    设置项        |               设置值                        ");
@@ -645,6 +640,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_pc:			//网吧规模
 				prPrompt("即将进入网吧规模", "按任意键继续");
 				getch();
+				system("title 网吧规模管理");
 				scrollMenu(getPCtypeList(), d_pcType, 0);
 				if (isEditPCType())
 				{
@@ -652,6 +648,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					list = getPCs();
 					setEdit(0);
 				}
+				system("title 上/下机");
 				break;
 			case d_card:		//新建
 			{
@@ -927,8 +924,8 @@ pList scrollMenu(pList list, dateType type, int option) {
 	pList ret = NULL;
 	char *nMore = (char*)malloc(160 * sizeof(char));
 	int isTop = 0;
-	myCls();
 	system("mode con cols=80 lines=24");
+	myCls();
 	switch (type)
 	{
 	case d_pcType:

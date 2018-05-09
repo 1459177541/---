@@ -246,8 +246,8 @@ pList selectPC(int type, pCriteriaPC criteria,pList p) {
 	key k;
 	pList pt = getPCtypeList();
 	system("title 筛选");
-	myCls();
 	system("mode con cols=80 lines=24");
+	myCls();
 	printf("\n\n");
 	printf("                       ============= 筛 选 =============                       \n\n");
 	printf("                            %c方式:", 0 == type ? '>' : ' ');

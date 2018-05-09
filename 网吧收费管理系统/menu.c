@@ -101,9 +101,9 @@ void mainMenu(pAdmin user, int type) {
 	char *title = (char *)malloc(32 * sizeof(char));
 	sprintf(title, "title %s : 主菜单", getUser()->name);
 	system(title);
+	system("mode con cols=80 lines=24");
 	free(title);
 	myCls();
-	system("mode con cols=80 lines=24");
 	printf("\n");
 	printf("                     //||   //||                                     \n");
 	printf("                    // ||  // ||    //===  //||  //  //  //          \n");
@@ -228,30 +228,39 @@ void mainMenu(pAdmin user, int type) {
 		switch (type)
 		{
 		case 0:
+			system("title 上/下机");
 			paginationMenu(getPCs(), d_pc, 0, 0);
 			break;
 		case 1:
+			system("title 会员卡管理");
 			paginationMenu(getCards(), d_card, 0, 0);
 			break;
 		case 2:
+			system("title 网吧规模管理");
 			scrollMenu(getPCtypeList(), d_pcType, 0);
 			break;
 		case 3:
+			system("title 会员卡类型管理");
 			scrollMenu(getCardTypeList(), d_cardType, 0);
 			break;
 		case 4:
+			system("title 收费标准管理");
 			scrollMenu(getRateList(), d_rate, 0);
 			break;
 		case 5:
+			system("title 管理员管理");
 			scrollMenu(getAdminHead(),d_admin,0);
 			break;
 		case 6:
+			system("title 历史记录");
 			paginationMenu(getHistorys(), d_history, 0, 0);
 			break;
 		case 7:
+			system("title 统计");
 			paginationMenu(getStat(), d_statistics, 0, 0);
 			break;
 		case 8:
+			system("title 设置");
 			paginationMenu(getAttriList(), d_attri, 0, 0);
 			break;
 		case 9:
@@ -282,8 +291,8 @@ void mainMenu(pAdmin user, int type) {
 //登录
 void login(pAdmin user, int type, char* text) {
 	system("title 登陆");
-	myCls();
 	system("mode con cols=80 lines=24");
+	myCls();
 	printf("                                                       \n");
 	printf("                                                       \n");
 	printf("                  //                                        \n");
