@@ -100,6 +100,123 @@ void save(dateType type) {
 	fclose(fp);
 }
 
+//链表交换
+void swap(pList a, pList b) {
+	pList t = a->last;
+	if (NULL != a->last)
+	{
+		a->last->next = b;
+	}
+	if (NULL != b->last)
+	{
+		b->last->next = a;
+	}
+	a->last = b->last;
+	b->last = t;
+
+	t = a->next;
+	if (NULL != a->next)
+	{
+		a->next->last = b;
+	}
+	if (NULL != b->next)
+	{
+		b->next->last = a;
+	}
+	a->next = b->next;
+	b->next = t;
+}
+
+//排序---可能出错
+pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
+	pList ret = start;
+	if (8>length)
+	{
+		//选择排序
+		int index = 0;
+		pList t = start;
+		while (t!=end)
+		{
+			pList min = t;
+			pList tt = t;
+			while (tt!=end)
+			{
+				tt = tt->next;
+				if (isUP(min,tt))
+				{
+					min = tt;
+					ret = tt;
+				}
+			}
+			swap(min, t);
+			t = min->next;
+		}
+		return ret;
+	}
+	//归并排序
+	pList min = start;
+	int minLength = length / 2;
+	for (int i = 0; i < minLength; i++)
+	{
+		min = min->next;
+	}
+	pList a = _sort(start, min, minLength, isUP);
+	pList b = _sort(min->next, end, length - minLength, isUP);
+	int ai = 0;
+	int bi = 0;
+	pList p = (pList)malloc(sizeof(List));
+	p->next = NULL;
+	p->last = NULL;
+	for (int i = 0; i < length; i++)
+	{
+		if (isUP(a,b) && ai != min)
+		{
+			p->next = a;
+			a->last = p;
+			a = a->next;
+			ai++;
+		}
+		else if(bi != length-minLength)
+		{
+			p->next = b;
+			b->last = a;
+			b = b->last;
+			bi++;
+		}
+		p = p->next;
+	}
+	ret = p->next;
+	free(p);
+	return ret;
+}
+
+pList sort(pList list, int (*isUP)(pList a, pList b)) {
+	if (NULL==list)
+	{
+		return NULL;
+	}
+	pList s = list;
+	pList e = list;
+	int l = 0;
+	while (NULL!=s->last)
+	{
+		l++;
+		s = s->last;
+	}
+	while (NULL!=e->next)
+	{
+		l++;
+		e = e->next;
+	}
+	_sort(s, e, l, isUP);
+	while (NULL != list->last)
+	{
+		l++;
+		list = list->last;
+	}
+	return list;
+}
+
 //全部保存
 void saveAll() {
 	prPrompt("正在保存", "正在保存管理员信息");
