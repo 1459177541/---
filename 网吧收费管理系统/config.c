@@ -6,6 +6,7 @@ pList attributeLists = NULL;
 //从文件中读取配置信息加载到内存,程序每次运行只执行一次
 //return：从文件读取成功返回0；读取失败创建空链表并返回1
 int initAttri() {
+	prPrompt("正在加载", "正在加载配置列表");
 	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\config", "rb")))
 	{

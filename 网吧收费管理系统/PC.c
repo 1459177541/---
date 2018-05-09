@@ -5,6 +5,7 @@ int pcLength = 0;
 
 //初始化
 void initPCToArray() {
+	prPrompt("正在生成", "正在生成电脑列表");
 	if (NULL==getPCtypeList() || NULL==getPCtypeList()->next)
 	{
 		pcList = NULL;

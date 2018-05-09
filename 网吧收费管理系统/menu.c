@@ -2,21 +2,13 @@
 
 //初始化
 void init() {
-	prPrompt("正在加载", "正在加载管理员信息");
 	getAdminHead();
-	prPrompt("正在加载", "正在加载配置列表");
 	getAttriList();
-	prPrompt("正在加载", "正在加载电脑配置");
 	getPCtypeList();
-	prPrompt("正在加载", "正在加载会员卡类型");
 	getCardTypeList();
-	prPrompt("正在加载", "正在加载计费方案");
 	getRateList();
-	prPrompt("正在加载", "正在加载会员卡列表");
 	getCards();
-	prPrompt("正在加载", "正在加载历史记录");
 	getHistorys();
-	prPrompt("正在加载", "正在加载电脑列表");
 	getPCs();
 }
 

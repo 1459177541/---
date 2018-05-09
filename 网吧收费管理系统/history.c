@@ -4,6 +4,7 @@ pList historyLists = NULL;
 pList historyFinal = NULL;
 int HistoryLength = 0;
 int initHistory() {
+	prPrompt("正在加载", "正在加载历史记录");
 	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\history", "rb")))
 	{

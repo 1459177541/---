@@ -8,30 +8,37 @@ void save(dateType type) {
 	switch (type)
 	{
 	case d_admin:
+		prPrompt("正在保存", "正在保存管理员信息");
 		strcpy(fileName, "data\\admin");
 		p = getAdminHead();
 		break;
 	case d_pcType:
+		prPrompt("正在保存", "正在保存网吧规模");
 		strcpy(fileName, "data\\pc");
 		p = getPCtypeList();
 		break;
 	case d_cardType:
+		prPrompt("正在保存", "正在保存会员卡类型");
 		strcpy(fileName, "data\\cardType");
 		p = getCardTypeList();
 		break;
 	case d_rate:
+		prPrompt("正在保存", "正在保存计费方案");
 		strcpy(fileName, "data\\rate");
 		p = getRateList();
 		break;
 	case d_history:
+		prPrompt("正在保存", "正在保存历史记录");
 		strcpy(fileName, "data\\history");
 		p = getHistorys();
 		break;
 	case d_card:
+		prPrompt("正在保存", "正在保存会员卡");
 		strcpy(fileName, "data\\card");
 		p = getCards();
 		break;
 	case d_attri:
+		prPrompt("正在保存", "正在保存配置");
 		strcpy(fileName, "data\\config");
 		p = getAttriList();
 		break;
@@ -234,19 +241,12 @@ pList sort(pList list, int (*isUP)(pList a, pList b)) {
 
 //全部保存
 void saveAll() {
-	prPrompt("正在保存", "正在保存管理员信息");
 	save(d_admin);
-	prPrompt("正在保存", "正在保存配置");
 	save(d_attri);
-	prPrompt("正在保存", "正在保存网吧规模");
 	save(d_pcType);
-	prPrompt("正在保存", "正在保存会员卡类型");
 	save(d_cardType);
-	prPrompt("正在保存", "正在保存计费方案");
 	save(d_rate);
-	prPrompt("正在保存", "正在保存会员卡");
 	save(d_card);
-	prPrompt("正在保存", "正在保存历史记录");
 	save(d_history);
 }
 

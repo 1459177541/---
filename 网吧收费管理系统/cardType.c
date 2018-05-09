@@ -3,6 +3,7 @@ pList cardTypeLists = NULL;
 
 //初始化
 int initCardType() {
+	prPrompt("正在加载", "正在加载会员卡类型");
 	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\cardType", "rb")))
 	{

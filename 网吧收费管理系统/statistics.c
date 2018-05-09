@@ -2,6 +2,7 @@
 pList statLists = NULL;
 
 void initStat() {
+	prPrompt("正在生成", "正在生成统计信息");
 	pList history = getHistorys();
 	if (NULL == history || NULL == history->date.history)
 	{

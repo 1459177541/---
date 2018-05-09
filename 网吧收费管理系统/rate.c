@@ -3,6 +3,7 @@ pList rateLists = NULL;
 
 //初始化
 int initRate() {
+	prPrompt("正在加载", "正在加载计费方案");
 	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\rate", "rb")))
 	{

@@ -4,6 +4,7 @@ int maxCardId = 1;
 pList cardLists = NULL;
 int CardLength = 0;
 int initCard() {
+	prPrompt("正在加载", "正在加载会员卡列表");
 	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\card", "rb")))
 	{

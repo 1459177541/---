@@ -15,6 +15,7 @@ void setEdit(int edit) {
 //初始化
 int length = 0;
 int initPCType() {
+	prPrompt("正在加载", "正在加载电脑配置");
 	FILE *fp = NULL;
 	if (NULL == (fp = fopen("data\\pc", "rb")))
 	{
