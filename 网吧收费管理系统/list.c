@@ -102,6 +102,10 @@ void save(dateType type) {
 
 //¡¥±ÌΩªªª
 void swap(pList a, pList b) {
+	if (a==b)
+	{
+		return;
+	}
 	pList t = a->last;
 	if (NULL != a->last)
 	{
@@ -129,11 +133,23 @@ void swap(pList a, pList b) {
 
 //≈≈–Ú---ø…ƒ‹≥ˆ¥Ì
 pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
+	if (0>=length)
+	{
+		return start;
+	}
 	pList ret = start;
+	pList p = start;
+	while (p==end)
+	{
+		if (isUP(p,ret))
+		{
+			ret = p;
+		}
+		p = p->next;
+	}
 	if (8>length)
 	{
 		//—°‘Ò≈≈–Ú
-		int index = 0;
 		pList t = start;
 		while (t!=end)
 		{
@@ -145,7 +161,6 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 				if (isUP(min,tt))
 				{
 					min = tt;
-					ret = tt;
 				}
 			}
 			swap(min, t);
@@ -154,39 +169,40 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 		return ret;
 	}
 	//πÈ≤¢≈≈–Ú
-	pList min = start;
+	pList mid = start;
 	int minLength = length / 2;
 	for (int i = 0; i < minLength; i++)
 	{
-		min = min->next;
+		mid = mid->next;
 	}
-	pList a = _sort(start, min, minLength, isUP);
-	pList b = _sort(min->next, end, length - minLength, isUP);
+	pList a = _sort(start, mid, minLength, isUP);
+	pList b = _sort(mid->next, end, length - minLength, isUP);
 	int ai = 0;
 	int bi = 0;
-	pList p = (pList)malloc(sizeof(List));
+	p = (pList)malloc(sizeof(List));
 	p->next = NULL;
 	p->last = NULL;
 	for (int i = 0; i < length; i++)
 	{
-		if (isUP(a,b) && ai != min)
+		if (isUP(a,b) && ai < mid)
 		{
 			p->next = a;
 			a->last = p;
 			a = a->next;
 			ai++;
 		}
-		else if(bi != length-minLength)
+		else if(bi < length-minLength)
 		{
 			p->next = b;
-			b->last = a;
-			b = b->last;
+			b->last = p;
+			b = b->next;
 			bi++;
 		}
 		p = p->next;
+		p->next = NULL;
 	}
-	ret = p->next;
 	free(p);
+	ret->last = NULL;
 	return ret;
 }
 
@@ -208,10 +224,9 @@ pList sort(pList list, int (*isUP)(pList a, pList b)) {
 		l++;
 		e = e->next;
 	}
-	_sort(s, e, l, isUP);
+	list = _sort(s, e, l, isUP);
 	while (NULL != list->last)
 	{
-		l++;
 		list = list->last;
 	}
 	return list;
