@@ -225,6 +225,17 @@ void mainMenu(pAdmin user, int type) {
 		}
 		mainMenu(user, type);
 		break;
+	case esc:
+		if (!saveExit(0))
+		{
+			mainMenu(user, type);
+			return;
+		}
+		break;
+	case backspace:
+		setUser(NULL);
+		login(user, 0, "");
+		break;
 	case enter:
 		switch (type)
 		{
