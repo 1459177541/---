@@ -250,19 +250,7 @@ void saveAll() {
 	save(d_history);
 }
 
-//分页菜单
-int thisPage = 0;
-int finalPage = -1;
-void initFinalPage(pList list) {
-	int length = 0;
-	while (NULL!=list)
-	{
-		length++;
-		list = list->next;
-	}
-	finalPage = length/10;
-}
-
+//菜单帮助
 int isFirst = 1;
 void MenuHelp(int type) {
 	int x = 16;
@@ -309,6 +297,18 @@ void MenuHelp(int type) {
 
 }
 
+//分页菜单
+int thisPage = 0;
+int finalPage = -1;
+void initFinalPage(pList list) {
+	int length = 0;
+	while (NULL!=list)
+	{
+		length++;
+		list = list->next;
+	}
+	finalPage = length/10;
+}
 pList paginationMenu(pList list, dateType type, int index, int option) {
 	pList p = list;
 	if (-1==finalPage)
