@@ -26,7 +26,7 @@ typedef struct {
 //会员卡类型
 typedef struct {
 	char name[16];
-	double price;
+	int price;
 }cardType,* pCardType;
 
 //会员卡

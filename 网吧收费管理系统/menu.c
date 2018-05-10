@@ -197,6 +197,7 @@ void mainMenu(pAdmin user, int type) {
 			type += length;
 		}
 		mainMenu(user, type);
+		break;
 	case left:
 		do {
 			type--;
@@ -223,6 +224,7 @@ void mainMenu(pAdmin user, int type) {
 			} while (!isPower(menuOption, type));
 		}
 		mainMenu(user, type);
+		break;
 	case enter:
 		switch (type)
 		{

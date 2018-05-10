@@ -18,7 +18,11 @@ void gotoxy(int x, int y)
 
 //清屏
 void myCls() {
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n");
 	gotoxy(0, 0);
 }
 
@@ -486,7 +490,8 @@ int saveExit(int type) {
 			logoutPCAll();
 			prPrompt("已成功关闭", "感谢您的使用");
 			gotoxy(x + 15, 13);
-			exit(0);
+//			exit(0);
+			return 1;
 		case 2:
 			return 0;
 		default:

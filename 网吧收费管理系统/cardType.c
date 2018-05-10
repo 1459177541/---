@@ -66,7 +66,7 @@ pList getCardTypeList() {
 
 //输出
 void prCardType(pCardType p) {
-	printf("            %24s     |%13.2lf              \n", p->name, p->price);
+	printf("            %24s     |%13.2lf              \n", p->name, p->price/100.0);
 }
 
 //修改会员卡类型
@@ -75,7 +75,7 @@ void editCardType(int type, pCardType p) {
 	num[0] = '\0';
 	if (1 != type)
 	{
-		sprintf(num, "%.2lf", p->price);
+		sprintf(num, "%.2lf", p->price/100.0);
 	}
 	int x = 16;
 	int y = 7;
@@ -111,8 +111,12 @@ void editCardType(int type, pCardType p) {
 		char *in = (char *)malloc(sizeof(char) * 16);
 		in[0] = '\0';
 		key = input(x + 27, 11, in, 0, NUM, NULL);
-		p->price = '\0' == in[0] ? p->price : atof(in);
+		p->price = '\0' == in[0] ? p->price : (int)(atof(in)*100);
 		free(in);
+	}
+	else
+	{
+		key = isKey(getch());
 	}
 	switch (key)
 	{

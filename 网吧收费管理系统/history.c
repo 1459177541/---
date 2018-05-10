@@ -289,7 +289,7 @@ void addHistory(historyType type, date date, double other) {
 }
 
 void prHistory(pHistory p, int isOption) {
-	printf("%5s%16s |%15s  | %4d年%2d月%2d日 %2d时%2d分%2d秒 %-5s"
+	printf("\n%5s%16s |%15s  | %4d年%2d月%2d日 %2d时%2d分%2d秒 %-5s"
 		, isOption ? getAttri("L") : getAttri("NL"), getHistoryType(p->type), p->editor
 		, p->time.tm_year+1900, p->time.tm_mon+1, p->time.tm_mday
 		, p->time.tm_hour, p->time.tm_min, p->time.tm_sec
