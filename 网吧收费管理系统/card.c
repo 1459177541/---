@@ -11,13 +11,21 @@ int initCard() {
 		return 1;
 	}
 	pCard p = (pCard)malloc(sizeof(card));
-	if (NULL== cardLists && fread(p, sizeof(card),1,fp)>0)
+	if (NULL== cardLists)
 	{
-		cardLists = (pList)malloc(sizeof(List));
-		cardLists->next = NULL;
-		cardLists->last = NULL;
-		cardLists->type = d_card;
-		cardLists->date.card = p;
+		if (fread(p, sizeof(card),1,fp)>0)
+		{
+			cardLists = (pList)malloc(sizeof(List));
+			cardLists->next = NULL;
+			cardLists->last = NULL;
+			cardLists->type = d_card;
+			cardLists->date.card = p;
+		}
+		else
+		{
+			fclose(fp);
+			return 1;
+		}
 	}
 	pList q = cardLists;
 	pList o = (pList)malloc(sizeof(List));
@@ -78,8 +86,8 @@ void prCard(pCard p, int isOption) {
 void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	if (0 > p->id)
 	{
-		p->id = maxCardId;
 		maxCardId++;
+		p->id = maxCardId;
 	}
 	int x = 16;
 	int y = 2;

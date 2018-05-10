@@ -101,7 +101,6 @@ void mainMenu(pAdmin user, int type) {
 	char *title = (char *)malloc(32 * sizeof(char));
 	sprintf(title, "title %s : 主菜单", getUser()->name);
 	system(title);
-	system("mode con cols=80 lines=24");
 	free(title);
 	myCls();
 	printf("\n");
@@ -112,7 +111,7 @@ void mainMenu(pAdmin user, int type) {
 	printf("         ===========================================================         \n");
 	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	gotoxy(0, 24);
-	printf("                     上/下方向键、tab：切换选项   enter：确认");
+	printf("                       方向键/tab：切换选项   enter：确认");
 	gotoxy(0, 9);
 	
 	int indexLength = 0;
@@ -291,7 +290,6 @@ void mainMenu(pAdmin user, int type) {
 //登录
 void login(pAdmin user, int type, char* text) {
 	system("title 登陆");
-	system("mode con cols=80 lines=24");
 	myCls();
 	printf("                                                       \n");
 	printf("                                                       \n");

@@ -7,6 +7,7 @@
  *
  *****************************************************/
 int main() {
+	system("mode con cols=80 lines=24");
 	if (initAttri() || initAdminList())
 	{
 		initialization();

@@ -10,12 +10,20 @@ int initRate() {
 		return 1;
 	}
 	pRate p = (pRate)malloc(sizeof(rate));
-	if (NULL==rateLists && fread(p,sizeof(rate),1,fp)>0)
+	if (NULL==rateLists)
 	{
-		rateLists = (pList)malloc(sizeof(List));
-		rateLists->last = NULL;
-		rateLists->next = NULL;
-		rateLists->date.rate = p;
+		if (fread(p,sizeof(rate),1,fp)>0)
+		{
+			rateLists = (pList)malloc(sizeof(List));
+			rateLists->last = NULL;
+			rateLists->next = NULL;
+			rateLists->date.rate = p;
+		}
+		else
+		{
+			fclose(fp);
+			return 1;
+		}
 	}
 	pList q = getRateList();
 	pList o = (pList)malloc(sizeof(List));

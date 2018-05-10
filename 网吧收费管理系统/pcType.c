@@ -22,13 +22,21 @@ int initPCType() {
 		return 1;
 	}
 	pPCtype p = (pPCtype)malloc(sizeof(PCtype));
-	if (NULL==pcTypeList && fread(p, sizeof(PCtype), 1, fp)>0)
+	if (NULL==pcTypeList)
 	{
-		pcTypeList = (pList)malloc(sizeof(List));
-		pcTypeList->next = NULL;
-		pcTypeList->last = NULL;
-		pcTypeList->type = d_pcType;
-		pcTypeList->date.pcType = p;
+		if (fread(p, sizeof(PCtype), 1, fp)>0)
+		{
+			pcTypeList = (pList)malloc(sizeof(List));
+			pcTypeList->next = NULL;
+			pcTypeList->last = NULL;
+			pcTypeList->type = d_pcType;
+			pcTypeList->date.pcType = p;
+		}
+		else
+		{
+			fclose(fp);
+			return 1;
+		}
 	}
 	pList q = pcTypeList;
 	pList o = (pList)malloc(sizeof(List));

@@ -11,13 +11,21 @@ int initHistory() {
 		return 1;
 	}
 	pHistory p = (pHistory)malloc(sizeof(history));
-	if (NULL == historyLists && fread(p, sizeof(history), 1, fp)>0)
+	if (NULL == historyLists)
 	{
-		historyLists = (pList)malloc(sizeof(List));
-		historyLists->next = NULL;
-		historyLists->last = NULL;
-		historyLists->type = d_history;
-		historyLists->date.history = p;
+		if (fread(p, sizeof(history), 1, fp)>0)
+		{
+			historyLists = (pList)malloc(sizeof(List));
+			historyLists->next = NULL;
+			historyLists->last = NULL;
+			historyLists->type = d_history;
+			historyLists->date.history = p;
+		}
+		else
+		{
+			fclose(fp);
+			return 1;
+		}
 	}
 	pList o = (pList)malloc(sizeof(List));
 	pList q = historyLists;
@@ -258,7 +266,7 @@ void addHistory(historyType type, date date, double other) {
 		sprintf(d->text, "修改%s类型电脑", date.pcType->type);
 		break;
 	case C_CARD_TYPE_T:
-		sprintf(d->text, "新增会员卡类型%s，售价: %lf", date.cardType->name, date.cardType->price);
+		sprintf(d->text, "新增会员卡类型%s，售价: %.2lf", date.cardType->name, date.cardType->price);
 		break;
 	case D_CARD_TYPE_T:
 		sprintf(d->text, "删除会员卡类型%s", date.cardType->name);
@@ -270,7 +278,7 @@ void addHistory(historyType type, date date, double other) {
 		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑上机", date.pc->user->id, date.pc->type, date.pc->id);
 		break;
 	case DOWN_T:
-		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5lf元", date.pc->user->id, date.pc->type, date.pc->id, other);
+		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5.2lf元", date.pc->user->id, date.pc->type, date.pc->id, other);
 		break;
 	case RECHARGE_T:
 		sprintf(d->text, "用户: %16d 充值了 %16lf 元", date.card->id, other);

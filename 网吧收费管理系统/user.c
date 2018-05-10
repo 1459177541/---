@@ -10,13 +10,21 @@ int initAdminList() {
 		return 1;
 	}
 	pAdmin p = (pAdmin)malloc(sizeof(admin));
-	if (NULL == adminLists && fread(p, sizeof(admin), 1, fp)>0)
+	if (NULL == adminLists)
 	{
-		adminLists = (pList)malloc(sizeof(List));
-		adminLists->next = NULL;
-		adminLists->last = NULL;
-		adminLists->type = d_admin;
-		adminLists->date.admin = p;
+		if (fread(p, sizeof(admin), 1, fp)>0)
+		{
+			adminLists = (pList)malloc(sizeof(List));
+			adminLists->next = NULL;
+			adminLists->last = NULL;
+			adminLists->type = d_admin;
+			adminLists->date.admin = p;
+		}
+		else
+		{
+			fclose(fp);
+			return 1;
+		}
 	}
 	pList o = (pList)malloc(sizeof(List));
 	pList q = adminLists;
