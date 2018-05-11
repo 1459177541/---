@@ -113,29 +113,9 @@ void swap(pList a, pList b) {
 	{
 		return;
 	}
-	pList t = a->last;
-	if (NULL != a->last)
-	{
-		a->last->next = b;
-	}
-	if (NULL != b->last)
-	{
-		b->last->next = a;
-	}
-	a->last = b->last;
-	b->last = t;
-
-	t = a->next;
-	if (NULL != a->next)
-	{
-		a->next->last = b;
-	}
-	if (NULL != b->next)
-	{
-		b->next->last = a;
-	}
-	a->next = b->next;
-	b->next = t;
+	date t = a->date;
+	a->date = b->date;
+	b->date = t;
 }
 
 //排序---可能出错
@@ -143,16 +123,6 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 	if (0>=length)
 	{
 		return start;
-	}
-	pList ret = start;
-	pList p = start;
-	while (p==end)
-	{
-		if (isUP(p,ret))
-		{
-			ret = p;
-		}
-		p = p->next;
 	}
 	if (8>length)
 	{
@@ -171,9 +141,9 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 				}
 			}
 			swap(min, t);
-			t = min->next;
+			t = t->next;
 		}
-		return ret;
+		return start;
 	}
 	//归并排序
 	pList mid = start;
@@ -186,7 +156,7 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 	pList b = _sort(mid->next, end, length - minLength, isUP);
 	int ai = 0;
 	int bi = 0;
-	p = (pList)malloc(sizeof(List));
+	pList p = (pList)malloc(sizeof(List));
 	p->next = NULL;
 	p->last = NULL;
 	for (int i = 0; i < length; i++)
@@ -208,9 +178,10 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 		p = p->next;
 		p->next = NULL;
 	}
+	pList pp = p->next;
+	pp->last = NULL;
 	free(p);
-	ret->last = NULL;
-	return ret;
+	return pp;
 }
 
 pList sort(pList list, int (*isUP)(pList a, pList b)) {
@@ -1105,6 +1076,24 @@ pList scrollMenu(pList list, dateType type, int option) {
 		}
 		option++;
 		ret = scrollMenu(list, type, option);
+		break;
+	case symbol:
+		if ('+' == in && d_rate == type)
+		{
+			if (NULL!=list->last)
+			{
+				swap(list, list->last);
+				list = list->last;
+			}
+		}
+		if ('-' == in && d_rate == type)
+		{
+			if (NULL!=list->next)
+			{
+				swap(list, list->next);
+				list = list->next;
+			}
+		}
 		break;
 	case enter:
 	{
