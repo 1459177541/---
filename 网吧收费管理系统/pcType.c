@@ -170,7 +170,7 @@ void editPCtype(int type, pPCtype p) {
 int editPCTypePS(int type) {
 	if (!hasLoginPC())
 	{
-		return 0;
+		return 1;
 	}
 	int x = 16;
 	int y = 8;

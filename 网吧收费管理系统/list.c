@@ -307,7 +307,7 @@ void initFinalPage(pList list) {
 		length++;
 		list = list->next;
 	}
-	finalPage = length/10;
+	finalPage = (length-1)/10;
 }
 pList paginationMenu(pList list, dateType type, int index, int option) {
 	pList p = list;
