@@ -25,7 +25,6 @@ pAdmin isCanLogin(pAdmin user) {
 		{
 			return p->date.admin;
 		}
-		getch();
 		p = p->next;
 	}
 	return NULL;
@@ -55,11 +54,11 @@ int toMenu(int power) {
 	{
 		menu |= SHL(4);
 	}
-	if ((isPower(power, 7)))
+	if ((isPower(power, 8) || isPower(power, 9) || isPower(power, 10)))
 	{
 		menu |= SHL(5);
 	}
-	if ((isPower(power, 8) || isPower(power, 9) || isPower(power, 10)))
+	if ((isPower(power, 7)))
 	{
 		menu |= SHL(6);
 	}
@@ -76,29 +75,33 @@ int toMenu(int power) {
 
 //输出菜单选项
 int menuLength = 0;
-void prMenuOption(char* option, int menuOption, int menuID, int type) {
+int prMenuOption(char* option, int menuOption, int menuID, int type) {
 	static char sp[] = "           ";
+	int ret = 0;
 	if (isPower(menuOption, menuID))
 	{
 		printf(sp);
 		prOption(option, type == menuID, 18);
 		menuLength++;
 		printf(sp);
+		ret = 1;
 	}
 	if (0 == menuLength % 2 && 0!=menuLength)
 	{
 		printf("\n\n");
 	}
+	return ret;
 }
 
 //菜单
-void mainMenu(pAdmin user, int type) {
-	int menuOption = toMenu(user->power);
+void mainMenu(int type) {
+	int menuOption = toMenu(getUser()->power);
 	menuLength = 0;
 	while (!isPower(menuOption, type)){
 		type++;
 	}
-	char *title = (char *)malloc(32 * sizeof(char));
+	char *title = NULL;
+	title = (char *)malloc(64 * sizeof(char));
 	sprintf(title, "title %s : 主菜单", getUser()->name);
 	system(title);
 	free(title);
@@ -115,18 +118,19 @@ void mainMenu(pAdmin user, int type) {
 	gotoxy(0, 9);
 	
 	int indexLength = 0;
-	prMenuOption("   上/下机  ", menuOption, indexLength++, type);
-	prMenuOption(" 会员卡管理 ", menuOption, indexLength++, type);
-	prMenuOption("  网吧规模  ", menuOption, indexLength++, type);
-	prMenuOption(" 会员卡类型 ", menuOption, indexLength++, type);
-	prMenuOption("收费标准管理", menuOption, indexLength++, type);
-	prMenuOption(" 管理员管理 ", menuOption, indexLength++, type);
-	prMenuOption("查询历史记录", menuOption, indexLength++, type);
-	prMenuOption("    统计    ", menuOption, indexLength++, type);
-	prMenuOption("    设置    ", menuOption, indexLength++, type);
-	prMenuOption("    保存    ", menuOption, indexLength++, type);
-	prMenuOption("    注销    ", menuOption, indexLength++, type);
-	if (0==indexLength%2)
+	int optionLength = 0;
+	optionLength += prMenuOption("   上/下机  ", menuOption, indexLength++, type);
+	optionLength += prMenuOption(" 会员卡管理 ", menuOption, indexLength++, type);
+	optionLength += prMenuOption("  网吧规模  ", menuOption, indexLength++, type);
+	optionLength += prMenuOption(" 会员卡类型 ", menuOption, indexLength++, type);
+	optionLength += prMenuOption("收费标准管理", menuOption, indexLength++, type);
+	optionLength += prMenuOption(" 管理员管理 ", menuOption, indexLength++, type);
+	optionLength += prMenuOption("查询历史记录", menuOption, indexLength++, type);
+	optionLength += prMenuOption("    统计    ", menuOption, indexLength++, type);
+	optionLength += prMenuOption("    设置    ", menuOption, indexLength++, type);
+	optionLength += prMenuOption("    保存    ", menuOption, indexLength++, type);
+	optionLength += prMenuOption("    注销    ", menuOption, indexLength++, type);
+	if (0==optionLength%2)
 	{
 		printf("                     ");
 	}
@@ -149,11 +153,11 @@ void mainMenu(pAdmin user, int type) {
 			}
 			if (isPower(menuOption, index))
 			{
-				mainMenu(user, index);
+				mainMenu(index);
 				return;
 			}
 		}
-		mainMenu(user, type);
+		mainMenu(type);
 		return;
 	}
 	case up:
@@ -175,7 +179,7 @@ void mainMenu(pAdmin user, int type) {
 			} while (!isPower(menuOption, type));
 			type -= length;
 		}
-		mainMenu(user, type);
+		mainMenu(type);
 		break;
 	case down:
 		if (indexLength-1==type)
@@ -196,7 +200,7 @@ void mainMenu(pAdmin user, int type) {
 			} while (!isPower(menuOption, type));
 			type += length;
 		}
-		mainMenu(user, type);
+		mainMenu(type);
 		break;
 	case left:
 		do {
@@ -209,7 +213,7 @@ void mainMenu(pAdmin user, int type) {
 				type--;
 			} while (!isPower(menuOption, type));
 		}
-		mainMenu(user, type);
+		mainMenu(type);
 		break;
 	case right:
 	case tab:
@@ -223,19 +227,25 @@ void mainMenu(pAdmin user, int type) {
 				type++;
 			} while (!isPower(menuOption, type));
 		}
-		mainMenu(user, type);
+		mainMenu(type);
 		break;
 	case esc:
 		if (!saveExit(0))
 		{
-			mainMenu(user, type);
+			mainMenu(type);
 			return;
 		}
 		break;
 	case backspace:
+	{
+		pAdmin user = (pAdmin)malloc(sizeof(admin));
+		user->name[0] = '\0';
+		user->password[0] = '\0';
 		setUser(NULL);
-		login(user, 0, "");
-		break;
+		login(user, 1, "");
+		free(user);
+		return;
+	}
 	case enter:
 		switch (type)
 		{
@@ -279,23 +289,29 @@ void mainMenu(pAdmin user, int type) {
 			saveAll();
 			break;
 		case 10:
+		{
+			pAdmin user = (pAdmin)malloc(sizeof(admin));
+			user->name[0] = '\0';
+			user->password[0] = '\0';
 			setUser(NULL);
-			login(user, 0, "");
+			login(user, 1, "");
+			free(user);
 			return;
+		}
 		case 11:
 			if (!saveExit(0))
 			{
-				mainMenu(user, type);
+				mainMenu(type);
 				return;
 			}
 			return;
 		default:
 			break;
 		}
-		mainMenu(user, type);
+		mainMenu(type);
 		break;
 	default:
-		mainMenu(user, type);
+		mainMenu(type);
 		break;
 	}
 }
@@ -346,7 +362,7 @@ void login(pAdmin user, int type, char* text) {
 			{
 				init();
 				setUser(p);
-				mainMenu(p, 0);
+				mainMenu(0);
 				return;
 			}
 		}

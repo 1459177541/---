@@ -138,7 +138,7 @@ void replaceString(char *src, char old, char *new) {
 char *printfPassword(char *password) {
 	int i = 0;
 	while ('\0'!=password[i++])	{	}
-	char *pass = (char*)malloc(sizeof(char)*(i));
+	char *pass = (char*)malloc(sizeof(char)*(i+1));
 	for (int j = 0; j < i-1; j++)
 	{
 		pass[j] = '*';
@@ -240,9 +240,9 @@ void prOption(char * name,int isOption,int length) {
 
 //Êä³öÌáÊ¾¿ò
 void prPrompt(char *title, char *body) {
-	char *text1 = (char*)malloc(sizeof(char) * 46);
-	char *text2 = (char*)malloc(sizeof(char) * 46);
-	char *text3 = (char*)malloc(sizeof(char) * 46);
+	char *text1 = (char*)malloc(sizeof(char) * 64);
+	char *text2 = (char*)malloc(sizeof(char) * 64);
+	char *text3 = (char*)malloc(sizeof(char) * 64);
 	text1[0] = '\0';
 	text2[0] = '\0';
 	text3[0] = '\0';
