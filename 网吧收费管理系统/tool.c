@@ -23,6 +23,8 @@ void myCls() {
 	printf("\n\n\n\n\n\n");
 	printf("\n\n\n\n\n\n");
 	printf("\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n");
 	gotoxy(0, 0);
 }
 

@@ -646,6 +646,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					clossPC();
 					list = getPCs();
 					setEdit(0);
+					finalPage = -1;
+					thisPage = 0;
 				}
 				system("title ио/об╩З");
 				break;

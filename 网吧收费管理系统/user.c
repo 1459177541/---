@@ -303,13 +303,13 @@ char * prPower(int power) {
 			str[i++] = 'C';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 1))
+		if (isPower(power, 1))
 		{
 			str[i++] = 'D';
 			str[i++] = 'C';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 2))
+		if (isPower(power, 2))
 		{
 			str[i++] = 'U';
 			str[i++] = 'C';
@@ -332,14 +332,14 @@ char * prPower(int power) {
 			str[i++] = 'T';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 12))
+		if (isPower(power, 12))
 		{
 			str[i++] = 'D';
 			str[i++] = 'C';
 			str[i++] = 'T';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 13))
+		if (isPower(power, 13))
 		{
 			str[i++] = 'U';
 			str[i++] = 'C';
@@ -363,14 +363,14 @@ char * prPower(int power) {
 			str[i++] = 'T';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 12))
+		if (isPower(power, 12))
 		{
 			str[i++] = 'D';
 			str[i++] = 'P';
 			str[i++] = 'T';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 13))
+		if (isPower(power, 13))
 		{
 			str[i++] = 'U';
 			str[i++] = 'P';
@@ -392,13 +392,13 @@ char * prPower(int power) {
 			str[i++] = 'R';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 1))
+		if (isPower(power, 1))
 		{
 			str[i++] = 'D';
 			str[i++] = 'R';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 2))
+		if (isPower(power, 2))
 		{
 			str[i++] = 'U';
 			str[i++] = 'R';
@@ -430,13 +430,13 @@ char * prPower(int power) {
 			str[i++] = 'A';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 1))
+		if (isPower(power, 1))
 		{
 			str[i++] = 'D';
 			str[i++] = 'A';
 			str[i++] = ',';
 		}
-		else if (isPower(power, 2))
+		if (isPower(power, 2))
 		{
 			str[i++] = 'U';
 			str[i++] = 'A';
