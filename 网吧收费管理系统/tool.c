@@ -364,6 +364,7 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 			if (0 != i)
 			{
 				strcpy(in, input);
+				free(input);
 			}
 			return k;
 		case backspace:
@@ -394,6 +395,7 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 		{
 			continue;
 		}
+		//过滤
 		int isIn = 0;
 		if ( isInt(input[i]) && isPower(power, 5) )		//是否可写入整数
 		{
@@ -435,13 +437,14 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 		{
 			continue;
 		}
+		//显示
 		if (isPassword)
 		{
-			printf("*");
+			putchar('*');
 		}
 		else
 		{
-			printf("%c", input[i]);
+			putchar(input[i]);
 		}
 		i++;
 	}
@@ -509,8 +512,7 @@ int saveExit(int type) {
 	case esc:
 		return 0;
 	default:
-		saveExit(type);
-		break;
+		return saveExit(type);
 	}
 	return 1;
 }

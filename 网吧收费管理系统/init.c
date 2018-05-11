@@ -66,8 +66,6 @@ void setRootPassword(int type,char * pass1,char * pass2,char *text) {
 			setUser(root);
 			strcpy(pass1, "***************");
 			strcpy(pass2, "***************");
-			free(pass1);
-			free(pass2);
 			return;
 		}
 		else
@@ -108,6 +106,8 @@ int initialization() {
 	int type = 0;
 	int isWhile = 1;
 	setRootPassword(1, pass1, pass2, "");
+	free(pass1);
+	free(pass2);
 	while (isWhile)
 	{
 		pr_weclome();
@@ -173,6 +173,5 @@ int initialization() {
 	save(d_pcType);
 	save(d_cardType);
 	save(d_rate);
-
 	return 0;
 }

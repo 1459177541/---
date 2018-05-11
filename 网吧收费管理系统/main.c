@@ -15,6 +15,7 @@ int main() {
 	pAdmin user = (pAdmin)malloc(sizeof(admin));
 	user->name[0] = '\0';
 	user->password[0] = '\0';
+	system("title µÇÂ½");
 	login(user,1,"");
 	free(user);
 	return 0;

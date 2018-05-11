@@ -14,10 +14,6 @@ void init() {
 
 //验证登录用户合法性
 pAdmin isCanLogin(pAdmin user) {
-	if (NULL == getAdminHead())
-	{
-		initAdminList();
-	}
 	pList p = getAdminHead();
 	while (NULL != p)
 	{
@@ -95,7 +91,11 @@ int prMenuOption(char* option, int menuOption, int menuID, int type) {
 
 //菜单
 void mainMenu(int type) {
-	int menuOption = toMenu(getUser()->power);
+	static int menuOption = 0;
+	if (0==mainMenu)
+	{
+		menuOption = toMenu(getUser()->power);
+	}
 	menuLength = 0;
 	while (!isPower(menuOption, type)){
 		type++;
@@ -144,7 +144,7 @@ void mainMenu(int type) {
 	case number:
 	{
 		int index = in - '0';
-		if (index >=0&& index <=9)
+		if (index >= 0 && index <= 9)
 		{
 			index--;
 			if (0>index)
@@ -163,7 +163,7 @@ void mainMenu(int type) {
 	case up:
 		if (0==type)
 		{
-			length = 1;
+			length = optionLength % 2;
 		}
 		do{
 			type--;
@@ -184,7 +184,7 @@ void mainMenu(int type) {
 	case down:
 		if (indexLength-1==type)
 		{
-			length = 1;
+			length = optionLength % 2;
 		}
 		do {
 			type++;
@@ -242,6 +242,7 @@ void mainMenu(int type) {
 		user->name[0] = '\0';
 		user->password[0] = '\0';
 		setUser(NULL);
+		menuOption = 0;
 		login(user, 1, "");
 		free(user);
 		return;
@@ -294,6 +295,7 @@ void mainMenu(int type) {
 			user->name[0] = '\0';
 			user->password[0] = '\0';
 			setUser(NULL);
+			menuOption = 0;
 			login(user, 1, "");
 			free(user);
 			return;
@@ -318,7 +320,6 @@ void mainMenu(int type) {
 
 //登录
 void login(pAdmin user, int type, char* text) {
-	system("title 登陆");
 	myCls();
 	printf("                                                       \n");
 	printf("                                                       \n");
@@ -360,8 +361,8 @@ void login(pAdmin user, int type, char* text) {
 			pAdmin p = isCanLogin(user);
 			if (p!=NULL)
 			{
-				init();
 				setUser(p);
+				init();
 				mainMenu(0);
 				return;
 			}
