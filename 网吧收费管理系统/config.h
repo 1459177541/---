@@ -228,6 +228,7 @@ void prCard(pCard p, int isOption);
 void showCard(int type, pCard p, char * text, char *password, char *password2);
 pList selectToCard();
 void recharge(pCard p);
+int isPasswordOfCard(pCard p);
 
 //rate
 pList getRateList();

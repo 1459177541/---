@@ -733,6 +733,10 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_card:		//É¾³ý
 				if (isPower(getUser()->power, 1))
 				{
+					if (!isPasswordOfCard(op))
+					{
+						break;
+					}
 					if (NULL != op->last)
 					{
 						pList temp = NULL != op->next ? op->next : op->last;

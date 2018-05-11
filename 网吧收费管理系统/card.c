@@ -481,3 +481,29 @@ void recharge(pCard p) {
 		recharge(p);
 	}
 }
+
+//验证密码
+int isPasswordOfCard(pCard p) {
+	prPrompt("请输入会员卡密码", "");
+	char * pass = (char*)malloc(sizeof(char) * 16);
+	key k = input(21, 12, pass, 1, INTER | LETTER | SYMBOL, NULL);
+	if (enter==k)
+	{
+		if (0!=strcmp(pass,p->password))
+		{
+			return 1;
+		}
+		else
+		{
+			return isPasswordOfCard(p);
+		}
+	}
+	else if (esc==k)
+	{
+		return 0;
+	}
+	else
+	{
+		return isPasswordOfCard(p);
+	}
+}

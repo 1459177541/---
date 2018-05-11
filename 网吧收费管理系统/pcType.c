@@ -213,8 +213,12 @@ int editPCTypePS(int type) {
 		if (0==type)
 		{
 			logoutPCAll();
+			return 1;
 		}
-		return type;
+		else
+		{
+			return 0;
+		}
 	default:
 		break;
 	}
