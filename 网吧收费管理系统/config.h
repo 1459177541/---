@@ -9,6 +9,7 @@
 #include<conio.h>
 #include<string.h>
 #include<time.h>
+#include<stdlib.h>
 
 //×óÒÆÔËËã
 #define SHL(x) (1<<x)

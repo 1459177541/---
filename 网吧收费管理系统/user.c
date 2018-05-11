@@ -141,7 +141,7 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 	case up:
 		if (0==type)
 		{
-			type = 22;
+			type = 21;
 		}
 		else if (3>type)
 		{
@@ -173,7 +173,7 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 	case left:
 		if (0==type)
 		{
-			type = 22;
+			type = 21;
 		}
 		else
 		{
@@ -181,7 +181,7 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 		}
 		break;
 	case right:
-		if (22==type)
+		if (21==type)
 		{
 			type=0;
 		}

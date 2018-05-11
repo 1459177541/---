@@ -18,7 +18,14 @@ void gotoxy(int x, int y)
 
 //ÇåÆÁ
 void myCls() {
-	printf("\n\n\n\n\n\n");
+	static int i = 0;
+	if (i>20)
+	{
+		i = 0;
+		system("cls");
+		return;
+	}
+	i++;
 	printf("\n\n\n\n\n\n");
 	printf("\n\n\n\n\n\n");
 	printf("\n\n\n\n\n\n");
