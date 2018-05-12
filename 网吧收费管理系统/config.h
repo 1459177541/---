@@ -26,7 +26,7 @@ typedef struct {
 
 //会员卡类型
 typedef struct {
-	char name[16];
+	char name[32];
 	int price;		//为真实值的100倍
 }cardType,* pCardType;
 

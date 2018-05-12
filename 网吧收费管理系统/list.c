@@ -169,6 +169,7 @@ void close(dateType type) {
 		free(p);
 		p = q;
 	}
+	free(p);
 }
 
 //¹Ø±ÕÈ«²¿
@@ -176,7 +177,7 @@ void closeAll() {
 	close(d_admin);
 	close(d_attri);
 	close(d_card);
-	close(d_cardType);
+//	close(d_cardType);
 	close(d_history);
 	close(d_pc);
 	close(d_pcType);
