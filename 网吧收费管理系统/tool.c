@@ -134,17 +134,15 @@ void replaceString(char *src, char old, char *new) {
 	free(temp);
 }
 
-//输出密码
-char *printfPassword(char *password) {
+//得到密码
+void *printfPassword(char *src, char *ret) {
 	int i = 0;
-	while ('\0'!=password[i++])	{	}
-	char *pass = (char*)malloc(sizeof(char)*(i+1));
+	while ('\0'!=src[i++])	{	}
 	for (int j = 0; j < i-1; j++)
 	{
-		pass[j] = '*';
+		ret[j] = '*';
 	}
-	pass[i-1] = '\0';
-	return pass;
+	ret[i-1] = '\0';
 }
 
 //判断是否是。。。

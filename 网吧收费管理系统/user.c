@@ -77,15 +77,19 @@ void setRoot(pAdmin root) {
 }
 
 //修改管理员
-void editUser(int type, pAdmin p,char *pass1,char *pass2) {
+void editUser(int type, pAdmin p,char *password1,char *password2) {
+	char *pass1 = (char *)malloc(sizeof(char) * 16);
+	char *pass2 = (char *)malloc(sizeof(char) * 16);
+	printfPassword(password1, pass1);
+	printfPassword(password2, pass2);
 	system("mode con cols=80 lines=24");
 	myCls();
 	printf("\n\n");
 	printf("                         -----=====修改管理员=====-----                        \n\n");
 	printf("                               -----基本信息-----                              \n\n");
 	printf("                              用户名：%s\n\n", 0 == type ?  "" : p->name);
-	printf("                                密码：%s\n\n", 1 == type ? "" : printfPassword(pass1));
-	printf("                            确认密码：%s\n\n", 2 == type ? "" : printfPassword(pass2));
+	printf("                                密码：%s\n\n", 1 == type ? "" : pass1);
+	printf("                            确认密码：%s\n\n", 2 == type ? "" : pass2);
 	printf("                                 -----权限-----                                \n\n");
 	printf("                    电脑类型： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
 		, 3 == type ? '>' : ' ', isPower(p->power, 14) ? getAttri("is") : getAttri("isNot")
@@ -119,6 +123,8 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 	);
 	printf("                                  ");
 	OPTION_OK(21 == type);
+	free(pass1);
+	free(pass2);
 	key k;
 	if (0==type)
 	{
@@ -126,11 +132,11 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 	}
 	else if (1==type)
 	{
-		k = input(38, 5, pass1, 1, NUM | LETTER | SYMBOL, NULL);
+		k = input(38, 5, password1, 1, NUM | LETTER | SYMBOL, NULL);
 	}
 	else if (2 == type)
 	{
-		k = input(38, 7, pass2, 1, NUM | LETTER | SYMBOL, NULL);
+		k = input(38, 7, password2, 1, NUM | LETTER | SYMBOL, NULL);
 	}
 	else
 	{
@@ -266,15 +272,15 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 			p->power ^= STATISTICS;
 			break;
 		case 21:
-			if (!strcmp(pass1,pass2)&&'/0'!=pass1[0])
+			if (!strcmp(password1, password2)&&'/0'!= password1[0])
 			{
-				strcpy(p->password, pass1);
+				strcpy(p->password, password1);
 				return;
 			}
 			else
 			{
-				pass1[0] = '\0';
-				pass2[0] = '\0';
+				password1[0] = '\0';
+				password2[0] = '\0';
 			}
 		default:
 			break;
@@ -282,7 +288,7 @@ void editUser(int type, pAdmin p,char *pass1,char *pass2) {
 	default:
 		break;
 	}
-	editUser(type, p, pass1, pass2);
+	editUser(type, p, password1, password2);
 }
 
 //输出权限

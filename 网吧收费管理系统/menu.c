@@ -92,7 +92,7 @@ int prMenuOption(char* option, int menuOption, int menuID, int type) {
 //菜单
 void mainMenu(int type) {
 	static int menuOption = 0;
-	if (0==mainMenu)
+	if (0== menuOption)
 	{
 		menuOption = toMenu(getUser()->power);
 	}
@@ -320,6 +320,8 @@ void mainMenu(int type) {
 
 //登录
 void login(pAdmin user, int type, char* text) {
+	char *pass = (char *)malloc(sizeof(char) * 16);
+	printfPassword(user->password, pass);
 	myCls();
 	printf("                                                       \n");
 	printf("                                                       \n");
@@ -336,7 +338,7 @@ void login(pAdmin user, int type, char* text) {
 	printf("                                                             \n");
 	printf("             用户名：%s\n", 1 == type ? "" : user->name);
 	printf("                                                         \n");
-	printf("             密  码：%s\n", 2 == type ? "" : printfPassword(user->password));
+	printf("             密  码：%s\n", 2 == type ? "" : pass);
 	printf("\n                  %s\n", text);
 	printf("                                                         \n");
 	printf("              ESC:退出   上/下方向键、TAB：切换选项   ENTER：确认");

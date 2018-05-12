@@ -84,6 +84,10 @@ void prCard(pCard p, int isOption) {
 }
 
 void showCard(int type, pCard p,char * text, char *password, char *password2) {
+	char *pass1 = (char *)malloc(sizeof(char) * 16);
+	char *pass2 = (char *)malloc(sizeof(char) * 16);
+	printfPassword(password, pass1);
+	printfPassword(password2, pass2);
 	if (0 > p->id)
 	{
 		maxCardId++;
@@ -108,21 +112,11 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    密码：                     |");
-	if (2!=type)
-	{
-		gotoxy(x + 27, y - 1); 
-		printf(printfPassword(password));
-	}
+	printf("|                    密码：%-21s|", 2 == type ? "" : pass1);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                再次输入：                     |");
-	if (3!=type)
-	{
-		gotoxy(x + 27, y - 1);
-		printf(printfPassword(password2));
-	}
+	printf("|                再次输入：%-21s|", 3 == type ? "" : pass1);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
@@ -140,6 +134,8 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("=================================================");
 	gotoxy(x, y++);
+	free(pass1);
+	free(pass2);
 
 	key k;
 	switch (type)
