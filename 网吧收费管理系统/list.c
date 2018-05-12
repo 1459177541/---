@@ -973,7 +973,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 	case d_pcType:
 		printf("\n\n                                 请设置您的网吧规模\n\n");
 		printf("                  ================================================            \n");
-		printf("                    类型         |      数量      |    起始编号               \n");
+		printf("                        类型     |      数量      |    起始编号               \n");
 		printf("                  ---------------+----------------+---------------         \n");
 		strcpy(nMore, "                                 |                |                          \n");
 		break;
@@ -994,7 +994,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 	case d_rate:
 		printf("\n\n                             请设置您的网吧收费标准\n\n");
 		printf("                  ================================================            \n");
-		printf("             电脑类型          |     会员卡类型     |     收费标准            \n");
+		printf("                    电脑类型   |     会员卡类型     |     收费标准            \n");
 		printf("                  -------------+--------------------+-------------            \n");
 		strcpy(nMore, "                               |                    |                         \n");
 		break;
@@ -1103,6 +1103,14 @@ pList scrollMenu(pList list, dateType type, int option) {
 	prOption("  帮助  ", 3 == option, 13);
 	printf(" ");
 	prOption("  返回  ", 4 == option, 13);
+	if (d_rate == type)
+	{
+		printf("\n\n                    ");
+		prOption("  上移  ", 5 == option, 13);
+		printf("               ");
+		prOption("  下移  ", 6 == option, 13);
+		printf(" ");
+	}
 	free(nMore);
 	if (isFirst)
 	{
@@ -1130,14 +1138,14 @@ pList scrollMenu(pList list, dateType type, int option) {
 	case left:
 		if (0==option)
 		{
-			option = 5;
+			option = d_rate == type ? 7 : 5;
 		}
 		option--;
 		ret = scrollMenu(list, type, option);
 		break;
 	case tab:
 	case right:
-		if (4 == option)
+		if ((d_rate == type ? 6 : 4) == option)
 		{
 			option = -1;
 		}
@@ -1161,6 +1169,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 				list = list->next;
 			}
 		}
+		ret = scrollMenu(list, type, option);
 		break;
 	case enter:
 	{
@@ -1440,7 +1449,20 @@ pList scrollMenu(pList list, dateType type, int option) {
 			break;
 		case 4:
 			isFirst = 1;
-			return ret;;
+			return ret;
+		case 5:
+			if (NULL != list->last)
+			{
+				swap(list, list->last);
+				list = list->last;
+			}
+			break;
+		case 6:
+			if (NULL != list->next)
+			{
+				swap(list, list->next);
+				list = list->next;
+			}
 		default:
 			break;
 		}
@@ -1451,6 +1473,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 		isFirst = 1;
 		return ret;
 	default:
+		ret = scrollMenu(list, type, option);
 		break;
 	}
 	return ret;

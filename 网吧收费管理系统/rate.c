@@ -152,9 +152,7 @@ void setRule(int type, pRate p) {
 
 //修改计费标准
 void editRate(int type,int option[], pRate p) {
-	myCls();
-	printf("\n\n\n");
-	printf("\n\n\n            %c关联电脑类型：",0==type?'>':' ');
+	char *pctype = (char*)malloc(sizeof(char) * 16);
 	int i = 0;
 	pList pPC = getPCtypeList();
 	while (i!=option[0] && NULL != pPC)
@@ -163,9 +161,9 @@ void editRate(int type,int option[], pRate p) {
 		i++;
 	}
 	strcpy(p->pc, pPC->date.pcType->type);
-	printf("%s", pPC->date.pcType->type);
+	sprintf(pctype,"%s", pPC->date.pcType->type);
 	
-	printf("\n\n               %c关联卡名称：", 1 == type ? '>' : ' ');
+	char *cardtype = (char*)malloc(sizeof(char) * 32);
 	i = 0;
 	pList pCardType = getCardTypeList();
 	while (i != option[1] && NULL!=pCardType)
@@ -174,12 +172,40 @@ void editRate(int type,int option[], pRate p) {
 		i++;
 	}
 	strcpy(p->card, pCardType->date.cardType->name);
-	printf("%s", pCardType->date.cardType->name);
-	
-	printf("\n\n              ");
+	sprintf(cardtype, "%s", pCardType->date.cardType->name);
+
+	int x = 16;
+	int y = 6;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|          %c关联电脑类型：%-21s |",0==type?'>':' ', pctype);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|            %c关联卡名称：%-21s |", 1 == type ? '>' : ' ',cardtype);
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|               ");
 	prOption("   计费标准   ", 2 == type, 22);
-	printf("\n\n              ");
+	printf("            |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                    ");
 	OPTION_OK(3 == type);
+	printf("                    |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+
+	free(pctype);
+	free(cardtype);
 
 	int in = getch();
 	key k= isKey(in);

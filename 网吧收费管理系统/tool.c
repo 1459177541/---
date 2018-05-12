@@ -184,6 +184,14 @@ key isKey(int in){
 	{
 		return number;
 	}
+	else if (isLetter(in))
+	{
+		return letter;
+	}
+	else if (isSymbol(in))
+	{
+		return symbol;
+	}
 	else if (224==in||-32==in)
 	{
 		switch (getch())
