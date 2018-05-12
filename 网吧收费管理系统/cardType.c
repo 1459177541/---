@@ -39,7 +39,6 @@ int initCardType() {
 		q = q->next;
 		p = (pCardType)malloc(sizeof(cardType));
 		o = (pList)malloc(sizeof(List));
-		p->name[0] = '\0';
 	}
 	free(p);
 	free(o);

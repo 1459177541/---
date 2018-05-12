@@ -28,7 +28,7 @@ int initRate() {
 	pList q = getRateList();
 	pList o = (pList)malloc(sizeof(List));
 	p = (pRate)malloc(sizeof(rate));
-	while (fread(p, sizeof(card), 1, fp)>0)
+	while (fread(p, sizeof(rate), 1, fp)>0)
 	{
 		o->type = d_rate;
 		o->date.rate = p;
@@ -78,40 +78,43 @@ void prRate(pRate p) {
 void setRule(int type, pRate p) {
 	int x = 16;
 	int y = 5;
-	gotoxy(x, y++);
+	gotoxy(x, y++); 
 	printf("=================================================");
 	gotoxy(x, y++);
 	printf("|                  设置收费标准                 |");
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
-	printf("|            %-29s      |",p->rule);
+	printf("|            %-29s      |", 0 == type ? "" : p->rule);
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
-	printf("|        设置方法：字母x为上一符合条件          |");
+	printf("|        设置方法:在此处输入一个含有x(          |");//字母x为上一符合条件
 	gotoxy(x, y++);
-	printf("|        的计算结果(单位:元/时)(若为第一        |");
+	printf("|        单位:元/时)的式子,用于计算符           |");
 	gotoxy(x, y++);
-	printf("|        个计费标准则为0),字母t为时间(         |");
+	printf("|        合本条标准的金额(若为第一个计          |");
 	gotoxy(x, y++);
-	printf("|        单位:h)，经过加减乘除得到结果         |");
+	printf("|        费标准则为 0),字母t为时间(单           |");
 	gotoxy(x, y++);
-	printf("|        传递给下一个符合条件的计费             |");
+	printf("|        位:h),然后根据下一个符合条件           |");
 	gotoxy(x, y++);
-	printf("|        标准，若为最后一个，则为收费金额。     |");
+	printf("|        的计费标准进行计算,若该标准为          |");
+	gotoxy(x, y++);
+	printf("|        最后一个,则为最后收费金额。            |");
 	gotoxy(x, y++);
 	printf("|        -------------------------------        |");
 	gotoxy(x, y++);
 	printf("|                    ");
-	OPTION_OK(1==type);
+	OPTION_OK(1 == type);
 	printf("                    |");
 	gotoxy(x, y++);
 	printf("=================================================");
+
 	key k;
 	if (0==type)
 	{
-		k = input(x + 16, 8, p->rule, 0, NUM | OTHER, "+-*/xXtT");
+		k = input(x + 13, 8, p->rule, 0, NUM | OTHER, "+-*/xXtT");
 	}
 	else
 	{

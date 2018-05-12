@@ -1,6 +1,6 @@
 #include"config.h"
 
-int maxCardId = 1;
+int maxCardId = 0;
 pList cardLists = NULL;
 int CardLength = 0;
 int initCard() {

@@ -218,6 +218,7 @@ void addHistory(historyType type, date date, double other) {
 		pl->last = historyFinal;
 		pl->next = NULL;
 		historyFinal->next = pl;
+		historyFinal = historyFinal->next;
 	}
 	pHistory d = (pHistory)malloc(sizeof(history));
 	pl->date.history = d;
@@ -266,7 +267,7 @@ void addHistory(historyType type, date date, double other) {
 		sprintf(d->text, "修改%s类型电脑", date.pcType->type);
 		break;
 	case C_CARD_TYPE_T:
-		sprintf(d->text, "新增会员卡类型%s，售价: %.2lf", date.cardType->name, date.cardType->price);
+		sprintf(d->text, "新增会员卡类型%s，售价: %.2lf", date.cardType->name, date.cardType->price/100.0);
 		break;
 	case D_CARD_TYPE_T:
 		sprintf(d->text, "删除会员卡类型%s", date.cardType->name);

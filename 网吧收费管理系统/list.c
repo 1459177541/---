@@ -178,11 +178,11 @@ void closeAll() {
 	close(d_attri);
 	close(d_card);
 //	close(d_cardType);
+	close(d_statistics);
 	close(d_history);
 	close(d_pc);
 	close(d_pcType);
 	close(d_rate);
-	close(d_statistics);
 }
 
 //Á´±í½»»»
@@ -730,7 +730,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					strcpy(pass2, "***************");
 					free(pass1);
 					free(pass2);
-					addHistory(C_CARD_TYPE_T, pl->date, 0);
+					addHistory(C_CARD_TYPE_T, ql ->date, 0);
 				}
 				else
 				{

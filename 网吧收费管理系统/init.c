@@ -179,5 +179,6 @@ int initialization() {
 	save(d_pcType);
 	save(d_cardType);
 	save(d_rate);
+	save(d_history);
 	return 0;
 }
