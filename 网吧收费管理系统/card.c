@@ -237,7 +237,15 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 			}
 			if (0 == strcmp(password, password2))
 			{
-				strcpy(p->password, password);
+				pList typeList = getCardTypeList();
+				while (0 != strcmp(p->type, typeList->date.cardType->name) && NULL != typeList->next)
+				{
+					typeList = typeList->next;
+				}
+				char *money = (char *)malloc(sizeof(char) * 16);
+				sprintf(money, "请收取%.2lf注册费用\n(非充值)", typeList->date.cardType->price / 100.0);
+				prPrompt("注册", money);
+ 				strcpy(p->password, password);
 				return;
 			}
 			else

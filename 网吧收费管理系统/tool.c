@@ -498,8 +498,6 @@ int saveExit(int type) {
 		case 1:
 			prPrompt("退出中", "正在结算金额");
 			logoutPCAll();
-			prPrompt("已成功关闭", "感谢您的使用");
-			gotoxy(x + 15, 13);
 //			exit(0);
 			return 1;
 		case 2:

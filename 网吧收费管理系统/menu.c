@@ -10,6 +10,7 @@ void init() {
 	getCards();
 	getHistorys();
 	getPCs();
+	getStat();
 }
 
 //验证登录用户合法性

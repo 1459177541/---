@@ -27,7 +27,7 @@ typedef struct {
 //会员卡类型
 typedef struct {
 	char name[16];
-	int price;
+	int price;		//为真实值的100倍
 }cardType,* pCardType;
 
 //会员卡
@@ -208,7 +208,6 @@ void editPCtype(int type, pPCtype p);
 int editPCTypePS(int type);
 
 //PC
-void clossPC();
 pList getPCs();
 void logoutPCAll();
 void prPC(pPC p, int isOption);
@@ -248,6 +247,8 @@ void addHistory(historyType type, date date, double other);
 //list
 void save(dateType type);
 void saveAll();
+void close(dateType type);
+void closeAll();
 pList paginationMenu(pList list, dateType type, int index, int option);	//上/下机、会员卡、历史记录
 pList scrollMenu(pList list, dateType type, int option);		//电脑类型、会员卡类型、管理员、收费标准
 

@@ -107,6 +107,83 @@ void save(dateType type) {
 	fclose(fp);
 }
 
+//全部保存
+void saveAll() {
+	save(d_admin);
+	save(d_attri);
+	save(d_pcType);
+	save(d_cardType);
+	save(d_rate);
+	save(d_card);
+	save(d_history);
+}
+
+//关闭资源
+void close(dateType type) {
+	pList p = NULL;
+	switch (type)
+	{
+	case d_admin:
+		p = getAdminHead();
+		break;
+	case d_attri:
+		p = getAttriList();
+		break;
+	case d_card:
+		p = getCards();
+		break;
+	case d_cardType:
+		p = getCardTypeList();
+		break;
+	case d_history:
+		p = getHistorys();
+		break;
+	case d_pc:
+		if (hasLoginPC())
+		{
+			logoutPCAll();
+		}
+		p = getPCs();
+		break;
+	case d_pcType:
+		p = getPCtypeList();
+		break;
+	case d_rate:
+		p = getRateList();
+		break;
+	case d_statistics:
+		p = getStat();
+		break;
+	default:
+		p = NULL;
+		break;
+	}
+	if (NULL==p)
+	{
+		return;
+	}
+	pList q;
+	while (NULL != p->next)
+	{
+		q = p->next;
+		free(p);
+		p = q;
+	}
+}
+
+//关闭全部
+void closeAll() {
+	close(d_admin);
+	close(d_attri);
+	close(d_card);
+	close(d_cardType);
+	close(d_history);
+	close(d_pc);
+	close(d_pcType);
+	close(d_rate);
+	close(d_statistics);
+}
+
 //链表交换
 void swap(pList a, pList b) {
 	if (a==b)
@@ -208,17 +285,6 @@ pList sort(pList list, int (*isUP)(pList a, pList b)) {
 		list = list->last;
 	}
 	return list;
-}
-
-//全部保存
-void saveAll() {
-	save(d_admin);
-	save(d_attri);
-	save(d_pcType);
-	save(d_cardType);
-	save(d_rate);
-	save(d_card);
-	save(d_history);
 }
 
 //菜单帮助
@@ -614,7 +680,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				scrollMenu(getPCtypeList(), d_pcType, 0);
 				if (isEditPCType())
 				{
-					clossPC();
+					close(d_pc);
 					list = getPCs();
 					setEdit(0);
 					finalPage = -1;

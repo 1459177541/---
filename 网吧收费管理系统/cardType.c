@@ -52,12 +52,13 @@ pList getCardTypeList() {
 	{
 		if (initCardType())
 		{
-			cardTypeLists = (pList)malloc(sizeof(List));
-			cardTypeLists->last = NULL;
-			cardTypeLists->next = NULL;
 			pCardType cardTypeHeard = (pCardType)malloc(sizeof(cardType));
 			strcpy(cardTypeHeard->name, "所有类型");
 			cardTypeHeard->price = 0;
+			cardTypeLists = (pList)malloc(sizeof(List));
+			cardTypeLists->type = d_cardType;
+			cardTypeLists->last = NULL;
+			cardTypeLists->next = NULL;
 			cardTypeLists->date.cardType = cardTypeHeard;
 		}
 	}

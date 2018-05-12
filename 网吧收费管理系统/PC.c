@@ -49,22 +49,6 @@ void initPCToArray() {
 	return;
 }
 
-//释放资源
-void clossPC() {
-	if (hasLoginPC())
-	{
-		logoutPCAll();
-	}
-	pList p = getPCs();
-	pList q;
-	while (NULL!=p->next)
-	{
-		q = p->next;
-		free(p);
-	}
-	pcList = NULL;
-}
-
 //获得全部PC列表
 pList getPCs() {
 	if (NULL == pcList)
@@ -444,11 +428,12 @@ void logPC(pPC p) {
 	d.pc = p;
 	if (NULL == p->user)
 	{
+		//上机
 		void startCheck();
 		startCheck();
 		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
 		addHistory(UP_T, d, 0);
-		if (hasLoginPC)
+		if (hasLoginPC())
 		{
 			pList pl = (pList)malloc(sizeof(List));
 			pl->next = NULL;
@@ -470,6 +455,7 @@ void logPC(pPC p) {
 	}
 	else
 	{
+		//下机
 		time_t now = time(NULL);
 		time_t time = now - mktime(&(p->startTime));
 		double money = results(p, p->user, localtime(&time));
@@ -491,12 +477,12 @@ void logPC(pPC p) {
 		{
 			pl = pl->next;
 		}
-		if (NULL==pl->last)
+		if (loginPcList == pl)
 		{
 			loginPcList = loginPcList->next;
 			loginPcList->last = NULL;
 		}
-		else if (NULL==pl->next)
+		else if (loginPcListFinal == pl)
 		{
 			loginPcListFinal = loginPcListFinal->last;
 			loginPcListFinal->next = NULL;

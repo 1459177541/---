@@ -17,6 +17,10 @@ int main() {
 	user->password[0] = '\0';
 	system("title 登陆");
 	login(user,1,"");
+	prPrompt("退出中", "正在关闭资源");
 	free(user);
+	closeAll();
+	prPrompt("已成功关闭", "感谢您的使用");
+	gotoxy(31, 13);
 	return 0;
 }
