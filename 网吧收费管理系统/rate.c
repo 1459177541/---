@@ -152,28 +152,7 @@ void setRule(int type, pRate p) {
 
 //修改计费标准
 void editRate(int type,int option[], pRate p) {
-	char *pctype = (char*)malloc(sizeof(char) * 16);
-	int i = 0;
-	pList pPC = getPCtypeList();
-	while (i!=option[0] && NULL != pPC)
-	{
-		pPC = pPC->next;
-		i++;
-	}
-	strcpy(p->pc, pPC->date.pcType->type);
-	sprintf(pctype,"%s", pPC->date.pcType->type);
-	
-	char *cardtype = (char*)malloc(sizeof(char) * 32);
-	i = 0;
-	pList pCardType = getCardTypeList();
-	while (i != option[1] && NULL!=pCardType)
-	{
-		pCardType = pCardType->next;
-		i++;
-	}
-	strcpy(p->card, pCardType->date.cardType->name);
-	sprintf(cardtype, "%s", pCardType->date.cardType->name);
-
+	myCls();
 	int x = 16;
 	int y = 6;
 	gotoxy(x, y++);
@@ -181,11 +160,15 @@ void editRate(int type,int option[], pRate p) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|          %c关联电脑类型：%-21s |",0==type?'>':' ', pctype);
+	printf("|               ");
+	prOption(" 选择关联电脑 ", 0 == type, 22);
+	printf("            | ");
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|            %c关联卡名称：%-21s |", 1 == type ? '>' : ' ',cardtype);
+	printf("|               ");
+	prOption("  选择关联卡  ", 1 == type, 22);
+	printf("            | ");
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
@@ -204,29 +187,11 @@ void editRate(int type,int option[], pRate p) {
 	printf("=================================================");
 	gotoxy(x, y++);
 
-	free(pctype);
-	free(cardtype);
-
 	int in = getch();
 	key k= isKey(in);
 	switch (k)
 	{
 	case left:
-		option[type]--;
-		if (option[type] < 0)
-		{
-			option[type] = 0;
-		}
-		editRate(type, option, p);
-		break;
-	case right:
-		option[type]++;
-		if ((1 == type && NULL == pPC->next) || (2 == type && NULL == pCardType->next))
-		{
-			option[type]--;
-		}
-		editRate(type, option, p);
-		break;
 	case up:
 		type--;
 		if (type < 0)
@@ -235,6 +200,7 @@ void editRate(int type,int option[], pRate p) {
 		}
 		editRate(type, option, p);
 		break;
+	case right:
 	case down:
 	case tab:
 		type++;
@@ -248,9 +214,23 @@ void editRate(int type,int option[], pRate p) {
 		switch (type)
 		{
 		case 0:
+		{
+			system("title 选择关联电脑");
+			pList op = scrollMenu(getPCtypeList(), d_pcType, 4);
+			strcpy(p->pc, op->date.pcType->type);
+			system("title 收费标准管理");
+			editRate(type, option, p);
+			break;
+		}
 		case 1:
-			editRate(5, option, p);
-			return;
+		{
+			system("title 选择关联会员卡类型");
+			pList op = scrollMenu(getCardTypeList(), d_cardType, 4);
+			strcpy(p->card, op->date.cardType->name);
+			system("title 收费标准管理");
+			editRate(type, option, p);
+			break;
+		}
 		case 2:
 			setRule(0,p);
 			editRate(type, option, p);

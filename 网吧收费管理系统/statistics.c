@@ -70,19 +70,20 @@ pList getMoreStat(pList start) {
 		return NULL;
 	}
 	pList history = start->date.statistics->startHistory;
+	pStat ps = (pStat)malloc(sizeof(stat));
 	pList ret = (pList)malloc(sizeof(pList));
+	ps->startHistory = history;
+	ps->time = history->date.history->time;
+	ps->stat_card_login = 0;
+	ps->stat_card_logout = 0;
+	ps->stat_recharge_money = 0;
+	ps->stat_up = 0;
+	ps->stat_up_money = 0;
 	pList p = ret;
 	p->last = NULL;
 	p->next = NULL;
 	p->type = d_statistics_more;
-	p->date.statistics = (pStat)malloc(sizeof(stat));
-	p->date.statistics->startHistory = history;
-	p->date.statistics->time = history->date.history->time;
-	p->date.statistics->stat_card_login = 0;
-	p->date.statistics->stat_card_logout = 0;
-	p->date.statistics->stat_recharge_money = 0;
-	p->date.statistics->stat_up = 0;
-	p->date.statistics->stat_up_money = 0;
+	p->date.statistics = ps;
 	while (NULL != history
 		&& history->date.history->time.tm_yday != p->date.statistics->time.tm_yday)
 	{

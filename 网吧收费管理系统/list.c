@@ -381,14 +381,14 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n----------------------+-----------------+---------------------------------------");
 		optionLength = 6;
 		break;
-	case d_statistics:
-		optionLength--;
 	case d_statistics_more:
+		optionLength--;
+	case d_statistics:
 		printf("\n                               ---===统计===---\n");
 		printf("\n----------------------+-------------------+-------------------------------------");
 		printf("\n         时间         |      上机金额     |                充值金额             ");
 		printf("\n----------------------+-------------------+-------------------------------------");
-		optionLength += 7;
+		optionLength += 6;
 		break;
 	case d_attri:
 		printf("\n                               ---===设置===---\n");
@@ -532,17 +532,17 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		prOption("返回", 6 == option, 6);
 		break;
 	case d_statistics:
-		printf("\n\n                     ");
+		printf("\n\n                    ");
 		prOption("更多", 4 == option, 6);
 		printf("            ");
 		prOption("详细", 5 == option, 6);
-		printf("                  ");
+		printf("            ");
 		prOption("返回", 6 == option, 6);
 		break;
 	case d_statistics_more:
-		printf("\n\n                                           ");
+		printf("\n\n                          ");
 		prOption("更多", 4 == option, 6);
-		printf("            ");
+		printf("                ");
 		prOption("返回", 5 == option, 6);
 		break;
 	case d_attri:
@@ -701,7 +701,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 						{
 							return paginationMenu(list, type, index, option);							
 						}
+						system("title 会员卡类型管理");
 						scrollMenu(getCardTypeList(), d_cardType, 0);
+						system("title 会员卡管理");
 					}
 					char *pass1 = (char *)malloc(sizeof(char) * 16);
 					char *pass2 = (char *)malloc(sizeof(char) * 16);
@@ -859,7 +861,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				recharge(op->date.card);
 				break;
 			case d_history:		//退出
-			case d_statistics_more:
+			case d_statistics:
 				finalPage = -1;
 				thisPage = 0;
 				isFirst = 1;
@@ -971,28 +973,28 @@ pList scrollMenu(pList list, dateType type, int option) {
 	switch (type)
 	{
 	case d_pcType:
-		printf("\n\n                                 请设置您的网吧规模\n\n");
+		printf("\n\n                                      网吧规模\n\n");
 		printf("                  ================================================            \n");
 		printf("                        类型     |      数量      |    起始编号               \n");
 		printf("                  ---------------+----------------+---------------         \n");
 		strcpy(nMore, "                                 |                |                          \n");
 		break;
 	case d_cardType:
-		printf("\n\n                             请设置您的网吧会员卡类型\n\n");
+		printf("\n\n                                  网吧会员卡类型\n\n");
 		printf("                  ================================================            \n");
 		printf("                        会员卡名称       |     价格           \n");
 		printf("                  -----------------------+------------------------            \n");
 		strcpy(nMore, "                                         |                                 \n");
 		break;
 	case d_admin:
-		printf("\n\n                                   请设置管理员\n\n");
+		printf("\n\n                                      管理员\n\n");
 		printf("                  ================================================            \n");
 		printf("             用户名    |                        权限                          \n");
 		printf("                  -----+------------------------------------------         \n");
 		strcpy(nMore, "                       |                                            \n");
 		break;
 	case d_rate:
-		printf("\n\n                             请设置您的网吧收费标准\n\n");
+		printf("\n\n                                  网吧收费标准\n\n");
 		printf("                  ================================================            \n");
 		printf("                    电脑类型   |     会员卡类型     |     收费标准            \n");
 		printf("                  -------------+--------------------+-------------            \n");
