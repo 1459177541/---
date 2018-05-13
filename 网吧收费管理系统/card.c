@@ -15,6 +15,10 @@ int initCard() {
 	{
 		if (fread(p, sizeof(card),1,fp)>0)
 		{
+			if (p->id>maxCardId)
+			{
+				maxCardId = p->id;
+			}
 			cardLists = (pList)malloc(sizeof(List));
 			cardLists->next = NULL;
 			cardLists->last = NULL;
@@ -126,7 +130,7 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    %10s                 |",text);
+	printf("|           %13s          |",text);
 	gotoxy(x, y++);
 	printf("|                      ");
 	OPTION_OK(4 == type);
@@ -244,9 +248,11 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 				{
 					typeList = typeList->next;
 				}
-				char *money = (char *)malloc(sizeof(char) * 16);
-				sprintf(money, "请收取%.2lf注册费用\n(非充值)", typeList->date.cardType->price / 100.0);
+				char *money = (char *)malloc(sizeof(char) * 64);
+				sprintf(money, "请收取%.2lf注册费用\n(非充值)\n按任意键继续", typeList->date.cardType->price / 100.0);
 				prPrompt("注册", money);
+				getch();
+				free(money);
  				strcpy(p->password, password);
 				return;
 			}

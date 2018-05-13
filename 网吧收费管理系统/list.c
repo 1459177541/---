@@ -737,18 +737,27 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					{
 						pl = pl->next;
 					}
-					pList ql = (pList)malloc(sizeof(List));
-					ql->date.card = p;
-					ql->next = NULL;
-					ql->last = pl;
-					ql->type = d_card;
-					pl->next = ql;
+					pList ql;
+					if (NULL==list->date.card)
+					{
+						ql = list;
+						ql->date.card = p;
+					}
+					else
+					{
+						ql = (pList)malloc(sizeof(List));
+						ql->date.card = p;
+						ql->next = NULL;
+						ql->last = pl;
+						ql->type = d_card;
+						pl->next = ql;
+					}
 					showCard(0, p, "", pass1, pass2);
-					strcpy(pass1, "***************");
-					strcpy(pass2, "***************");
+					strcpy(pass1, "**************");
+					strcpy(pass2, "**************");
 					free(pass1);
 					free(pass2);
-					addHistory(C_CARD_TYPE_T, ql ->date, 0);
+					addHistory(C_CARD_T, ql ->date, 0);
 				}
 				else
 				{
@@ -803,15 +812,15 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 						{
 							op->next->last = op->last;
 						}
-						addHistory(D_CARD_TYPE_T, op->date, 0);
+						addHistory(D_CARD_T, op->date, 0);
 						free(op);
 						op = temp;
 					}
 					else
 					{
 						pCard temp = op->date.card;
+						addHistory(D_CARD_T, op->date, 0);
 						op->date.card = NULL;
-						addHistory(D_CARD_TYPE_T, op->date, 0);
 						free(temp);
 					}
 				}

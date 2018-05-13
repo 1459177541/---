@@ -60,6 +60,7 @@ pList getHistorys() {
 			historyLists->last = NULL;
 			historyLists->date.history = NULL;
 			historyLists->type = d_history;
+			historyFinal = NULL;
 		}
 	}
 	return historyLists;

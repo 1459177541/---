@@ -296,11 +296,11 @@ double compute(char *expression, int start, int end) {
 
 //计算价格(单条规则)
 double result(pPC pc, pCard user, pRate rate,pTm ptm_time, double src) {
-	if (strcmp(pc->type,rate->pc)!=0)
+	if (strcmp(pc->type, rate->pc) != 0 && strcmp(rate->pc, "所有类型") != 0)
 	{
 		return src;
 	}
-	if (strcmp(user->type,rate->card)!=0)
+	if (strcmp(user->type,rate->card)!=0 && strcmp(rate->card, "所有类型") != 0)
 	{
 		return src;
 	}
@@ -327,7 +327,7 @@ double results(pPC pc, pCard user, pTm time) {
 	{
 		return 0;
 	}
-	pList p = getRateList()->next;
+	pList p = getRateList();
 	double money = 0;
 	while (NULL!=p)
 	{

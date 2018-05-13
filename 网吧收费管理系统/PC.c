@@ -418,6 +418,7 @@ int hasLoginPC() {
 }
 
 //上/下机
+HANDLE handle = NULL;
 void logPC(pPC p) {
 	while (lock)
 	{
@@ -429,9 +430,24 @@ void logPC(pPC p) {
 	if (NULL == p->user)
 	{
 		//上机
-		void startCheck();
-		startCheck();
+		if (NULL==handle)
+		{
+			void startCheck();
+			startCheck();
+		}
+		system("title 选择上机用户");
 		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
+		system("title 上/下机");
+		if (NULL==p->user)
+		{
+			prPrompt("警告", "当前未选择会员卡\n按任意键取消上机操作");
+			getch();
+			lock = 0;
+			return;
+		}
+		time_t timer = time(NULL);
+		pTm tt = localtime(&timer);
+		p->startTime = *tt;
 		addHistory(UP_T, d, 0);
 		if (hasLoginPC())
 		{
@@ -468,10 +484,11 @@ void logPC(pPC p) {
 			char other[16];
 			sprintf(other, "对方账户余额不足\n请收取%.2ld元\n按任意键确认", money - p->user->balance);
 			prPrompt("下机",other);
+			getch();
 			p->user->balance = 0;
 		}
-		p->user = NULL;
 		addHistory(DOWN_T, d, money);
+		p->user = NULL;
 		pList pl = loginPcList;
 		while (pl!=NULL && pl->date.pc!=p)
 		{
@@ -480,7 +497,10 @@ void logPC(pPC p) {
 		if (loginPcList == pl)
 		{
 			loginPcList = loginPcList->next;
-			loginPcList->last = NULL;
+			if (NULL!=loginPcList)
+			{
+				loginPcList->last = NULL;
+			}
 		}
 		else if (loginPcListFinal == pl)
 		{
@@ -541,9 +561,10 @@ DWORD WINAPI check(LPVOID pM) {
 		pList pl = loginPcList;
 		while (pl!=NULL)
 		{
-			time_t time_t = time(NULL) - mktime(&(pl->date.pc->startTime));
-			double money = results(pl->date.pc, pl->date.pc->user, localtime(time_t + iTime));
-			double money2 = results(pl->date.pc, pl->date.pc->user, localtime(time_t));
+			time_t time_t1 = time(NULL) - mktime(&(pl->date.pc->startTime)) + iTime/1000;
+			time_t time_t2 = time(NULL) - mktime(&(pl->date.pc->startTime));
+			double money = results(pl->date.pc, pl->date.pc->user, localtime(&time_t1));
+			double money2 = results(pl->date.pc, pl->date.pc->user, localtime(&time_t2));
 			if (money2>pl->date.pc->user->balance)
 			{
 				logPC(pl->date.pc);
@@ -568,7 +589,6 @@ DWORD WINAPI check(LPVOID pM) {
 }
 
 //开始执行检查
-HANDLE handle = NULL;
 void startCheck() {
 	if (NULL == handle)
 	{
