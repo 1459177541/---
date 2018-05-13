@@ -54,7 +54,10 @@ int initAttri() {
 pList getAttriList() {
 	if (NULL==attributeLists)
 	{
-		initAttri();
+		if (initAttri())
+		{
+			setting();
+		}
 	}
 	return attributeLists;
 }

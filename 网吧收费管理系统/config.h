@@ -1,7 +1,7 @@
 #pragma once
 /*****************************
  *
- * 声明文件，以便调用
+ * 声明函数头及全局结构文件，以便调用
  *
  *****************************/
 #include<stdio.h>
@@ -166,6 +166,7 @@ void editAttri(pAttribute p);
 
 //init
 int initialization();
+void setting();
 
 //user
 	//权限，使用左移运算得到对应的二进制位

@@ -3,17 +3,16 @@
 //输出头
 void pr_weclome() {
 	system("title welcome");
-	system("mode con cols=80 lines=24");
 	myCls();
 	gotoxy(0, 0);
 	printf("                                                                             \n");
-	printf("                                                         \n");
-	printf("        \\\\    //\\\\    //         //                       \n");
+	printf("                                                                             \n");
+	printf("        \\\\    //\\\\    //         //                                      \n");
 	printf("         \\\\  //  \\\\  //  //~//  //     //~~  //~//  //\\\\  //\\\\    //~//  \n");
 	printf("          \\\\//    \\\\//  //~~   //     //    // //  //  \\\\//  \\\\  //~~ \n");
 	printf("           ~~      ~~   ~~~~   ~~~~~  ~~~~  ~~~~   ~    ~~    ~  ~~~~          \n");
 	printf("       ===================================================================    \n");
-	printf("                                                         \n");
+	printf("                                                                             \n");
 	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	gotoxy(0, 24);
 	printf("              ESC:上一步/退出   上/下方向键、TAB：切换选项   ENTER：确认");
@@ -93,9 +92,9 @@ void setRootPassword(int type,char * password1,char * password2,char *text) {
 //设置默认外观
 void setting() {
 	setAttri("L", "[", "选项选中左样式");
-	setAttri("R", "]", "选项选中左样式");
+	setAttri("R", "]", "选项选中右样式");
 	setAttri("NL", " ", "选项未选中左样式");
-	setAttri("NR", " ", "选项未选中左样式");
+	setAttri("NR", " ", "选项未选中右样式");
 	setAttri("is", "[X]", "选择确认样式");
 	setAttri("isNot", "[ ]", "选择未确认样式");
 	setAttri("checkTime", "10", "检查上机余额时间间隔(min)");
