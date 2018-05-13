@@ -17,10 +17,13 @@ int initRate() {
 			rateLists = (pList)malloc(sizeof(List));
 			rateLists->last = NULL;
 			rateLists->next = NULL;
+			rateLists->type = d_rate;
 			rateLists->date.rate = p;
 		}
 		else
 		{
+			free(rateLists);
+			free(p);
 			fclose(fp);
 			return 1;
 		}

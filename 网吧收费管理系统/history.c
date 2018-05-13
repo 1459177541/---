@@ -23,6 +23,8 @@ int initHistory() {
 		}
 		else
 		{
+			free(historyLists);
+			free(p);
 			fclose(fp);
 			return 1;
 		}

@@ -348,6 +348,22 @@ void initFinalPage(pList list) {
 	finalPage = (length-1)/10;
 }
 pList paginationMenu(pList list, dateType type, int index, int option) {
+	if (NULL==list||list->type!=type)
+	{
+		return NULL;
+	}
+	if (d_pc!=type
+		&& d_card!=type
+		&& d_history!=type
+		&& d_statistics!=type
+		&& d_statistics_more!=type
+		&& d_attri!=type
+		)
+	{
+		prPrompt("警告！", "该警告正常运行不会出现\n如果您看到该警告，请联系作者\n按任意键自动识别意图并继续");
+		getch();
+		return scrollMenu(list, type, option);
+	}
 	pList p = list;
 	if (-1==finalPage)
 	{
@@ -966,6 +982,20 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 
 //滚动菜单
 pList scrollMenu(pList list, dateType type, int option) {
+	if (NULL == list || list->type != type)
+	{
+		return NULL;
+	}
+	if (d_pcType != type
+		&& d_cardType != type
+		&& d_admin != type
+		&& d_rate != type
+		)
+	{
+		prPrompt("警告！", "该警告正常运行不会出现\n如果您看到该警告，请联系作者\n按任意键自动识别意图并继续");
+		getch();
+		return paginationMenu(list, type, 0, option);
+	}
 	pList ret = NULL;
 	char *nMore = (char*)malloc(160 * sizeof(char));
 	int isTop = 0;

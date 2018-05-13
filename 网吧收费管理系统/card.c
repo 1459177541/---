@@ -23,6 +23,8 @@ int initCard() {
 		}
 		else
 		{
+			free(cardLists);
+			free(p);
 			fclose(fp);
 			return 1;
 		}

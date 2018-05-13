@@ -13,13 +13,23 @@ int initAttri() {
 		return 1;
 	}
 	pAttribute p = (pAttribute)malloc(sizeof(attribute));
-	if (NULL == attributeLists && fread(p, sizeof(attribute), 1, fp)>0)
+	if (NULL == attributeLists)
 	{
-		attributeLists = (pList)malloc(sizeof(List));
-		attributeLists->next = NULL;
-		attributeLists->last = NULL;
-		attributeLists->type = d_attri;
-		attributeLists->date.card = p;
+		if (fread(p, sizeof(attribute), 1, fp)>0)
+		{
+			attributeLists = (pList)malloc(sizeof(List));
+			attributeLists->next = NULL;
+			attributeLists->last = NULL;
+			attributeLists->type = d_attri;
+			attributeLists->date.card = p;
+		}
+		else
+		{
+			free(attributeLists);
+			free(p);
+			fclose(fp);
+			return 1;
+		}
 	}
 	pList q = attributeLists;
 	pList o = (pList)malloc(sizeof(List));

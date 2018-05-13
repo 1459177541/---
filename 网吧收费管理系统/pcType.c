@@ -34,6 +34,8 @@ int initPCType() {
 		}
 		else
 		{
+			free(pcTypeList);
+			free(p);
 			fclose(fp);
 			return 1;
 		}
