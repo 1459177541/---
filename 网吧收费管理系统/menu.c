@@ -2,10 +2,10 @@
 
 //≥ı ºªØ
 void init() {
+	getCardTypeList();
 	getAdminHead();
 	getAttriList();
 	getPCtypeList();
-	getCardTypeList();
 	getRateList();
 	getCards();
 	getHistorys();

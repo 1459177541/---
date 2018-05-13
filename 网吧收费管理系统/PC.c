@@ -568,14 +568,14 @@ DWORD WINAPI check(LPVOID pM) {
 			if (money2>pl->date.pc->user->balance)
 			{
 				logPC(pl->date.pc);
-				char body[32];
+				char body[96];
 				sprintf(body, "%d号电脑余额不足\n已自动下机\n按任意键关闭", pl->date.pc->id);
 				prPrompt("提示", body);
 				getch();
 			}
 			else if (money>pl->date.pc->user->balance)
 			{
-				char body[32];
+				char body[96];
 				sprintf(body, "%d号电脑余额不足\n将在%s分钟内自动下机\n按任意键关闭", pl->date.pc->id, getAttri("checkTime"));
 				prPrompt("提示", body);
 				getch();

@@ -30,7 +30,7 @@ int initCardType() {
 	}
 	pList q = cardTypeLists;
 	pList o = (pList)malloc(sizeof(List));
-	p = (pCardType)malloc(sizeof(cardType));	
+	p = (pCardType)malloc(sizeof(cardType));
 	while (fread(p, sizeof(cardType), 1, fp)>0)
 	{
 		o->type = d_cardType;

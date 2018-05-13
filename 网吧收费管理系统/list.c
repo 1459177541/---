@@ -348,7 +348,7 @@ void initFinalPage(pList list) {
 	finalPage = (length-1)/10;
 }
 pList paginationMenu(pList list, dateType type, int index, int option) {
-	if (NULL==list||list->type!=type)
+	if (list->type!=type)
 	{
 		return NULL;
 	}
@@ -991,7 +991,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 
 //¹ö¶¯²Ëµ¥
 pList scrollMenu(pList list, dateType type, int option) {
-	if (NULL == list || list->type != type)
+	if (list->type != type)
 	{
 		return NULL;
 	}
