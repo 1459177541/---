@@ -226,3 +226,26 @@ int editPCTypePS(int type) {
 	}
 	return editPCTypePS(type);
 }
+
+//ĞÂ½¨
+pList newPCType(pList list) {
+	pList q = list;
+	while (NULL!=q->next)
+	{
+		q = q->next;
+	}
+	pPCtype p = (pPCtype)malloc(sizeof(PCtype));
+	p->startId = getPCtypeList()->date.pcType->num;
+	p->num = 0;
+	p->type[0] = '\0';
+	pList pl = (pList)malloc(sizeof(List));
+	pl->last = q;
+	pl->next = NULL;
+	pl->date.pcType = p;
+	pl->type = d_pcType;
+	q->next = pl;
+	editPCtype(0, p);
+	setEdit(1);
+	addHistory(C_PC_TYPE_T, pl->date, 0);
+	return list;
+}

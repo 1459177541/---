@@ -149,3 +149,24 @@ void editCardType(int type, pCardType p) {
 		break;
 	}
 }
+
+//ĞÂ½¨
+pList newCardType(pList list) {
+	pList q = list;
+	while (NULL != q->next)
+	{
+		q = q->next;
+	}
+	pCardType p = (pCardType)malloc(sizeof(cardType));
+	p->name[0] = '\0';
+	p->price = 0;
+	pList pl = (pList)malloc(sizeof(List));
+	pl->last = q;
+	pl->next = NULL;
+	pl->date.cardType = p;
+	pl->type = d_cardType;
+	q->next = pl;
+	editCardType(0, p);
+	addHistory(C_CARD_TYPE_T, pl->date, 0);
+	return list;
+}

@@ -275,6 +275,60 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	}
 }
 
+//新建
+pList newCard(pList list) {
+	while (NULL == getCardTypeList()->next)
+	{
+		prPrompt("没有会员卡类型", "按任意键转到会员卡类型列表\n按esc键取消新建");
+		key key = isKey(getch());
+		if (esc == key)
+		{
+			return list;
+		}
+		system("title 会员卡类型管理");
+		scrollMenu(getCardTypeList(), d_cardType, 0);
+		system("title 会员卡管理");
+	}
+	char *pass1 = (char *)malloc(sizeof(char) * 16);
+	char *pass2 = (char *)malloc(sizeof(char) * 16);
+	pass1[0] = '\0';
+	pass2[0] = '\0';
+	pCard p = (pCard)malloc(sizeof(card));
+	p->balance = 0.0;
+	p->id = -1;
+	p->idcardNum[0] = '\0';
+	p->masterName[0] = '\0';
+	p->password[0] = '\0';
+	strcpy(p->type, getCardTypeList()->date.cardType->name);
+	pList ql;
+	if (NULL == list->date.card)
+	{
+		ql = list;
+		ql->date.card = p;
+	}
+	else
+	{
+		pList pl = list;
+		while (NULL != pl->next)
+		{
+			pl = pl->next;
+		}
+		ql = (pList)malloc(sizeof(List));
+		ql->date.card = p;
+		ql->next = NULL;
+		ql->last = pl;
+		ql->type = d_card;
+		pl->next = ql;
+	}
+	showCard(0, p, "", pass1, pass2);
+	strcpy(pass1, "**************");
+	strcpy(pass2, "**************");
+	free(pass1);
+	free(pass2);
+	addHistory(C_CARD_T, ql->date, 0);
+	return list;
+}
+
 //搜索条件
 typedef struct
 {

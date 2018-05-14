@@ -709,55 +709,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			{
 				if (isPower(getUser()->power, 0))
 				{
-					while (NULL==getCardTypeList()->next)
-					{
-						prPrompt("没有会员卡类型", "按任意键转到会员卡类型列表\n按esc键取消新建");
-						key key = isKey(getch());
-						if (esc == key)
-						{
-							return paginationMenu(list, type, index, option);							
-						}
-						system("title 会员卡类型管理");
-						scrollMenu(getCardTypeList(), d_cardType, 0);
-						system("title 会员卡管理");
-					}
-					char *pass1 = (char *)malloc(sizeof(char) * 16);
-					char *pass2 = (char *)malloc(sizeof(char) * 16);
-					pass1[0] = '\0';
-					pass2[0] = '\0';
-					pCard p = (pCard)malloc(sizeof(card));
-					p->balance = 0.0;
-					p->id = -1;
-					p->idcardNum[0] = '\0';
-					p->masterName[0] = '\0';
-					p->password[0] = '\0';
-					strcpy(p->type, getCardTypeList()->date.cardType->name);
-					pList pl = list;
-					while (NULL!=pl->next)
-					{
-						pl = pl->next;
-					}
-					pList ql;
-					if (NULL==list->date.card)
-					{
-						ql = list;
-						ql->date.card = p;
-					}
-					else
-					{
-						ql = (pList)malloc(sizeof(List));
-						ql->date.card = p;
-						ql->next = NULL;
-						ql->last = pl;
-						ql->type = d_card;
-						pl->next = ql;
-					}
-					showCard(0, p, "", pass1, pass2);
-					strcpy(pass1, "**************");
-					strcpy(pass2, "**************");
-					free(pass1);
-					free(pass2);
-					addHistory(C_CARD_T, ql ->date, 0);
+					list = newCard(list);
 				}
 				else
 				{
@@ -806,7 +758,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					}
 					if (NULL != op->last)
 					{
-						pList temp = NULL != op->next ? op->next : op->last;
+						pList temp = (NULL != op->next) ? op->next : op->last;
 						op->last->next = op->next;
 						if (NULL != op->next)
 						{
@@ -1214,27 +1166,10 @@ pList scrollMenu(pList list, dateType type, int option) {
 		break;
 	case enter:
 	{
-		int a[] = { 0,0 };
 		switch (option)		//处理选择项
 		{
 		case 0:
 		{
-			int isNULL = 0;
-			pList q = list;
-			if (NULL == q)
-			{
-				q = (pList)malloc(sizeof(List));
-				q->date.admin = NULL;
-				q->last = NULL;
-				q->next = NULL;
-				q->type = type;
-				list = q;
-				isNULL = 1;
-			}
-			while (NULL != q->next)
-			{
-				q = q->next;
-			}
 			switch (type)		//处理链表类型
 			{
 			case d_pcType:
@@ -1245,19 +1180,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 					{
 						break;
 					}
-					pPCtype p = (pPCtype)malloc(sizeof(PCtype));
-					p->startId = getPCtypeList()->date.pcType->num;
-					p->num = 0;
-					p->type[0] = '\0';
-					pList pl = (pList)malloc(sizeof(List));
-					pl->last = q;
-					pl->next = NULL;
-					pl->date.pcType = p;
-					pl->type = d_pcType;
-					q->next = pl;
-					editPCtype(0, p);
-					setEdit(1);
-					addHistory(C_PC_TYPE_T, pl->date, 0);
+					list = newPCType(list);
 				}
 				else
 				{
@@ -1270,17 +1193,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 			{
 				if (isPower(getUser()->power, 11))
 				{
-					pCardType p = (pCardType)malloc(sizeof(cardType));
-					p->name[0] = '\0';
-					p->price = 0;
-					pList pl = (pList)malloc(sizeof(List));
-					pl->last = q;
-					pl->next = NULL;
-					pl->date.cardType = p;
-					pl->type = d_cardType;
-					q->next = pl;
-					editCardType(0, p);
-					addHistory(C_CARD_TYPE_T, pl->date, 0);
+					list = newCardType(list);
 				}
 				else
 				{
@@ -1293,24 +1206,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 			{
 				if (isPower(getUser()->power, 8))
 				{
-					char *pass1 = (char *)malloc(sizeof(char) * 16);
-					char *pass2 = (char *)malloc(sizeof(char) * 16);
-					pass1[0] = '\0';
-					pass2[0] = '\0';
-					pAdmin p = (pAdmin)malloc(sizeof(admin));
-					p->name[0] = '\0';
-					p->password[0] = '\0';
-					p->power = 0;
-					pList pl = (pList)malloc(sizeof(List));
-					pl->last = q;
-					pl->next = NULL;
-					pl->date.admin = p;
-					pl->type = d_admin;
-					q->next = pl;
-					editUser(0, p, pass1, pass2);
-					free(pass1);
-					free(pass2);
-					addHistory(C_ADMIN_T, pl->date, 0);
+					list = newAdmin(list);
 				}
 				else
 				{
@@ -1323,24 +1219,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 			{
 				if (isPower(getUser()->power, 3))
 				{
-					pRate p = (pRate)malloc(sizeof(rate));
-					p->card[0] = '\0';
-					p->pc[0] = '\0';
-					p->rule[0] = '\0';
-					pList pl = (pList)malloc(sizeof(List));
-					pl->last = q;
-					pl->next = NULL;
-					pl->date.rate = p;
-					pl->type = d_rate;
-					q->next = pl;
-					editRate(0, a, p);
-					if (isNULL)
-					{
-						list = list->next;
-						pl->last = NULL;
-						setRateList(pl);
-					}
-					addHistory(C_RATE_T, pl->date, 0);
+					list = newRate(list);
 				}
 				else
 				{

@@ -511,3 +511,30 @@ void helpFromUser() {
 	}
 }
 
+//ĞÂ½¨
+pList newAdmin(pList list) {
+	pList q = list;
+	while (NULL != q->next)
+	{
+		q = q->next;
+	}
+	char *pass1 = (char *)malloc(sizeof(char) * 16);
+	char *pass2 = (char *)malloc(sizeof(char) * 16);
+	pass1[0] = '\0';
+	pass2[0] = '\0';
+	pAdmin p = (pAdmin)malloc(sizeof(admin));
+	p->name[0] = '\0';
+	p->password[0] = '\0';
+	p->power = 0;
+	pList pl = (pList)malloc(sizeof(List));
+	pl->last = q;
+	pl->next = NULL;
+	pl->date.admin = p;
+	pl->type = d_admin;
+	q->next = pl;
+	editUser(0, p, pass1, pass2);
+	free(pass1);
+	free(pass2);
+	addHistory(C_ADMIN_T, pl->date, 0);
+	return list;
+}

@@ -250,6 +250,46 @@ void editRate(int type,int option[], pRate p) {
 	
 }
 
+//ĞÂ½¨
+pList newRate(pList list) {
+	if (NULL == list)
+	{
+		int a[] = { 0,0 };
+		pRate p = (pRate)malloc(sizeof(rate));
+		p->card[0] = '\0';
+		p->pc[0] = '\0';
+		p->rule[0] = '\0';
+		editRate(0, a, p);
+		list = (pList)malloc(sizeof(List));
+		list->last = NULL;
+		list->next = NULL;
+		list->date.rate = p;
+		list->type = d_rate;
+		rateLists = list;
+		addHistory(C_RATE_T, list->date, 0);
+		return list;
+	}
+	pList q = list;
+	while (NULL != q->next)
+	{
+		q = q->next;
+	}
+	pRate p = (pRate)malloc(sizeof(rate));
+	p->card[0] = '\0';
+	p->pc[0] = '\0';
+	p->rule[0] = '\0';
+	pList pl = (pList)malloc(sizeof(List));
+	pl->last = q;
+	pl->next = NULL;
+	pl->date.rate = p;
+	pl->type = d_rate;
+	q->next = pl;
+	int a[] = { 0,0 };
+	editRate(0, a, p);
+	addHistory(C_RATE_T, pl->date, 0);
+	return list;
+}
+
 //¼ÆËã
 double compute(char *expression, int start, int end) {
 	int index = -1;

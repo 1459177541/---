@@ -195,6 +195,7 @@ pAdmin getUser();
 void prUser(pAdmin p);
 void editUser(int type, pAdmin p, char *pass1, char *pass2);
 void helpFromUser();
+pList newAdmin(pList list);
 
 //menu
 int initAdminList();
@@ -207,6 +208,7 @@ pList getPCtypeList();
 void prPCtype(pPCtype p);
 void editPCtype(int type, pPCtype p);
 int editPCTypePS(int type);
+pList newPCType(pList list);
 
 //PC
 pList getPCs();
@@ -221,12 +223,14 @@ int hasLoginPC();
 pList getCardTypeList();
 void prCardType(pCardType p);
 void editCardType(int type, pCardType p);
+pList newCardType(pList list);
 
 //card
 pCard getCard(int id);
 pList getCards();
 void prCard(pCard p, int isOption);
 void showCard(int type, pCard p, char * text, char *password, char *password2);
+pList newCard(pList list);
 pList selectToCard();
 void recharge(pCard p);
 int isPasswordOfCard(pCard p);
@@ -237,6 +241,7 @@ double results(pPC pc, pCard user, pTm time);
 void prRate(pRate p);
 void editRate(int type, int option[], pRate p);
 void setRateList(pList p);
+pList newRate(pList list);
 
 //history
 pList getHistorys();
