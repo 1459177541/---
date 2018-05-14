@@ -954,7 +954,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 
 //¹ö¶¯²Ëµ¥
 pList scrollMenu(pList list, dateType type, int option) {
-	if (list->type != type)
+	if (NULL!=list && list->type != type)
 	{
 		return NULL;
 	}

@@ -580,28 +580,32 @@ DWORD WINAPI check(LPVOID pM) {
 			continue;
 		}
 		pList pl = loginPcList;
-		while (pl!=NULL)
+		pList next;
+		while (pl != NULL)
 		{
+			next = pl->next;
 			time_t time_t1 = time(NULL) - mktime(&(pl->date.pc->startTime)) + iTime/1000;
 			time_t time_t2 = time(NULL) - mktime(&(pl->date.pc->startTime));
 			double money = results(pl->date.pc, pl->date.pc->user, localtime(&time_t1));
 			double money2 = results(pl->date.pc, pl->date.pc->user, localtime(&time_t2));
-			if (money2>pl->date.pc->user->balance)
+			if (money2>=pl->date.pc->user->balance)
 			{
-				logPC(pl->date.pc);
 				char body[96];
 				sprintf(body, "%d号电脑余额不足\n已自动下机\n按任意键关闭", pl->date.pc->id);
+				lock = 0;
+				logPC(pl->date.pc);
+				lock = 1;
 				prPrompt("提示", body);
 				getch();
 			}
-			else if (money>pl->date.pc->user->balance)
+			else if (money>=pl->date.pc->user->balance)
 			{
 				char body[96];
 				sprintf(body, "%d号电脑余额不足\n将在%s分钟内自动下机\n按任意键关闭", pl->date.pc->id, getAttri("checkTime"));
 				prPrompt("提示", body);
 				getch();
 			}
-			pl = pl->next;
+			pl = next;
 		}
 		lock = 0;
 		Sleep(iTime);
