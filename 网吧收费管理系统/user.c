@@ -22,7 +22,6 @@ int initAdminList() {
 		}
 		else
 		{
-			free(adminLists);
 			free(p);
 			fclose(fp);
 			return 1;

@@ -22,7 +22,6 @@ int initCardType() {
 		}
 		else
 		{
-			free(cardTypeLists);
 			free(p);
 			fclose(fp);
 			return 1;

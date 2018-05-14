@@ -27,7 +27,6 @@ int initCard() {
 		}
 		else
 		{
-			free(cardLists);
 			free(p);
 			fclose(fp);
 			return 1;
@@ -226,7 +225,7 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 		{
 			if (strcmp(getCardTypeList()->date.card->type,p->type)==0)
 			{
-				showCard(type, p, "[     err:错误的类型     ]", password, password2);
+				showCard(type, p, "[ err:无法使用默认的类型 ]", password, password2);
 				return;
 			}
 			if ('\0' == p->masterName)

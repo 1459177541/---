@@ -1167,7 +1167,12 @@ pList scrollMenu(pList list, dateType type, int option) {
 		}
 		if ('-' == in && d_rate == type)
 		{
-			if (NULL!=list->next)
+			if (NULL==list->last)
+			{
+				prPrompt("警告", "默认的计费方案必须是第一个\n按任意键继续");
+				getch();
+			}
+			else if (NULL!=list->next)
 			{
 				swap(list, list->next);
 				list = list->next;
@@ -1251,17 +1256,17 @@ pList scrollMenu(pList list, dateType type, int option) {
 					|| (isPower(getUser()->power, 4) && d_rate == type)
 				)
 			{
-					if (d_pcType == type)
+				if (d_pcType == type)
+				{
+					if (!editPCTypePS(0))
 					{
-						if (!editPCTypePS(0))
-						{
-							break;
-						}
-						else
-						{
-							setEdit(1);
-						}
+						break;
 					}
+					else
+					{
+						setEdit(1);
+					}
+				}
 				if (NULL!=list->last)
 				{
 					pList temp = NULL!=list->next? list->next : list->last;
@@ -1380,12 +1385,20 @@ pList scrollMenu(pList list, dateType type, int option) {
 			{
 				helpFromUser();
 			}
+			MenuHelp(1);
+			getch();
+			return scrollMenu(list, type, option);
 			break;
 		case 4:
 			isFirst = 1;
 			return ret;
 		case 5:
-			if (NULL != list->last)
+			if (NULL == list->last)
+			{
+				prPrompt("警告", "默认的计费方案必须是第一个\n按任意键继续");
+				getch();
+			}
+			else if (NULL != list->last)
 			{
 				swap(list, list->last);
 				list = list->last;

@@ -22,7 +22,6 @@ int initRate() {
 		}
 		else
 		{
-			free(rateLists);
 			free(p);
 			fclose(fp);
 			return 1;
@@ -54,14 +53,15 @@ pList getRateList() {
 	{
 		if (initRate())
 		{
-			/*
-			pRate rateHead = (pRate)malloc(sizeof(rate));
-			strcpy(rateHead->pc, getPCtypeList()->date->type);
-			strcpy(rateHead->card, getCardTypeList()->date->name);
-			rateHead->startTime = NULL;
-			rateHead->endTime = NULL;
-			rateHead->rule[0] = '\0';
-			*/
+			pRate p = (pRate)malloc(sizeof(rate));
+			strcpy(p->card, getCardTypeList()->date.cardType->name);
+			strcpy(p->pc, getPCtypeList()->date.pcType->type);
+			strcpy(p->rule, "x*0+t*0");
+			rateLists = (pList)malloc(sizeof(List));
+			rateLists->date.rate = p;
+			rateLists->last = NULL;
+			rateLists->next = NULL;
+			rateLists->type = d_rate;
 		}
 	}
 	return rateLists;
@@ -247,23 +247,6 @@ void editRate(int type,int option[], pRate p) {
 
 //ÐÂ½¨
 pList newRate(pList list) {
-	if (NULL == list)
-	{
-		int a[] = { 0,0 };
-		pRate p = (pRate)malloc(sizeof(rate));
-		p->card[0] = '\0';
-		p->pc[0] = '\0';
-		p->rule[0] = '\0';
-		editRate(0, a, p);
-		list = (pList)malloc(sizeof(List));
-		list->last = NULL;
-		list->next = NULL;
-		list->date.rate = p;
-		list->type = d_rate;
-		rateLists = list;
-		addHistory(C_RATE_T, list->date, 0);
-		return list;
-	}
 	pList q = rateLists;
 	while (NULL != q->next)
 	{

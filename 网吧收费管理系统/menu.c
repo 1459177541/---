@@ -292,6 +292,8 @@ void mainMenu(int type) {
 			break;
 		case 9:
 			saveAll();
+			prPrompt("保存成功", "按任意键继续");
+			getch();
 			break;
 		case 10:
 		{

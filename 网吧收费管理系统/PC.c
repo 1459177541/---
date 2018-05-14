@@ -426,9 +426,9 @@ int hasLoginPC() {
 //上/下机
 HANDLE handle = NULL;
 void logPC(pPC p) {
-	if (NULL==getRateList())
+	if (NULL==getRateList()->next)
 	{
-		prPrompt("警告！！！", "当前无计费方案\n按enter键强制上机(可能会导致无收入)\n按esc取消，按其他任意键转到计费方案管理");
+		prPrompt("警告！！！", "当前只有默认的计费方案\n按enter键强制上机(可能会导致无收入)\n按esc取消，按其他任意键转到计费方案管理");
 		key k = isKey(getch());
 		switch (k)
 		{
