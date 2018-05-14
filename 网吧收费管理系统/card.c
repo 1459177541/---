@@ -550,7 +550,7 @@ void recharge(pCard p) {
 
 //验证密码
 int isPasswordOfCard(pCard p) {
-	prPrompt("请输入会员卡密码", "");
+	prPrompt("请输入会员卡密码", "\n按enter键确认，按esc键取消");
 	char * pass = (char*)malloc(sizeof(char) * 16);
 	key k = input(21, 12, pass, 1, INTER | LETTER | SYMBOL, NULL);
 	if (enter==k)

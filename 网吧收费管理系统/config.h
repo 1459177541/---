@@ -14,6 +14,11 @@
 //左移运算
 #define SHL(x) (1<<x)
 
+/*****************************
+*
+* 数据结构
+*
+*****************************/
 //时间
 typedef struct tm tm, * pTm;
 
@@ -131,6 +136,11 @@ typedef enum {
 	no, left, right, up, down, pgup, pgdn, ins, del, home, end, tab, esc, enter, backspace, number, letter, symbol
 }key;
 
+/*****************************
+*
+* 函数头
+*
+*****************************/
 //tool
 void gotoxy(int x, int y);
 void myCls();
@@ -150,7 +160,6 @@ key isKey(int in);
 int isPower(int powerCode, int point);
 	//默认外观
 	#define OPTION_OK(isOption) prOption("确定", isOption, 7);
-	#define OPTION_CANCEL(isOption) prOption("取消/删除", isOption, 15);
 void prOption(char * name, int isOption, int length);
 void prPrompt(char *title, char *body);
 key input(int x, int y, char *in, int isPassword, int power, char * other);
@@ -188,6 +197,7 @@ void setting();
 	#define D_PC_TYPE SHL(15)
 	#define U_PC_TYPE SHL(16)
 	#define STATISTICS SHL(17)
+int initAdminList();
 pList getAdminHead();
 void setRoot(pAdmin root);
 void setUser(pAdmin u);
@@ -198,7 +208,6 @@ void helpFromUser();
 pList newAdmin(pList list);
 
 //menu
-int initAdminList();
 void login(pAdmin user,int type,char* text);
 
 //pcType
@@ -240,7 +249,6 @@ pList getRateList();
 double results(pPC pc, pCard user, pTm time);
 void prRate(pRate p);
 void editRate(int type, int option[], pRate p);
-void setRateList(pList p);
 pList newRate(pList list);
 
 //history

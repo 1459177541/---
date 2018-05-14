@@ -2,15 +2,18 @@
 
 //初始化
 void init() {
-	getCardTypeList();
 	getAdminHead();
 	getAttriList();
-	getPCtypeList();
 	getRateList();
+
+	getCardTypeList();
 	getCards();
+
 	getHistorys();
-	getPCs();
 	getStat();
+
+	getPCtypeList();
+	getPCs();
 }
 
 //验证登录用户合法性

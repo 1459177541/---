@@ -53,6 +53,12 @@ void initPCToArray() {
 pList getPCs() {
 	if (NULL == pcList)
 	{
+		while (NULL == getPCtypeList()->next)
+		{
+			prPrompt("警告", "当前无网吧规模\n按任意键转到网吧规模");
+			getch();
+			scrollMenu(getPCtypeList(), d_pcType, 0);
+		}
 		initPCToArray();
 	}
 	return pcList;
@@ -482,7 +488,7 @@ void logPC(pPC p) {
 		else
 		{
 			char other[16];
-			sprintf(other, "对方账户余额不足\n请收取%.2ld元\n按任意键确认", money - p->user->balance);
+			sprintf(other, "对方账户余额不足\n请收取%.2lf元\n按任意键确认", money - p->user->balance/100.0);
 			prPrompt("下机",other);
 			getch();
 			p->user->balance = 0;

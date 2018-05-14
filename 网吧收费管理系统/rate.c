@@ -67,11 +67,6 @@ pList getRateList() {
 	return rateLists;
 }
 
-//设置列表
-void setRateList(pList p) {
-	rateLists = p;
-}
-
 //输出
 void prRate(pRate p) {
 	printf("%30s | %-19s| %-20s \n", p->pc, p->card, p->rule);
@@ -269,7 +264,7 @@ pList newRate(pList list) {
 		addHistory(C_RATE_T, list->date, 0);
 		return list;
 	}
-	pList q = list;
+	pList q = rateLists;
 	while (NULL != q->next)
 	{
 		q = q->next;

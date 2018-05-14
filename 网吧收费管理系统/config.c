@@ -21,7 +21,7 @@ int initAttri() {
 			attributeLists->next = NULL;
 			attributeLists->last = NULL;
 			attributeLists->type = d_attri;
-			attributeLists->date.card = p;
+			attributeLists->date.attri = p;
 		}
 		else
 		{
@@ -37,7 +37,7 @@ int initAttri() {
 	while (fread(p, sizeof(attribute), 1, fp)>0)
 	{
 		o->type = d_attri;
-		o->date.card = p;
+		o->date.attri = p;
 		o->last = q;
 		o->next = NULL;
 		q->next = o;

@@ -3,7 +3,9 @@
 //网络摘抄代码，实现光标的位置跳转
 void gotoxy(int x, int y)
 {
-	COORD coord = { x, y };
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
 	/*COORD是Windows API中定义的一种结构，表示一个字符在控制台屏幕上的坐标。其定义为：
 
 	typedef struct _COORD {
@@ -518,5 +520,4 @@ int saveExit(int type) {
 	default:
 		return saveExit(type);
 	}
-	return 1;
 }

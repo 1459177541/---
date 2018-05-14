@@ -239,7 +239,7 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 	p->last = NULL;
 	for (int i = 0; i < length; i++)
 	{
-		if (isUP(a,b) && ai < mid)
+		if (isUP(a,b) && ai <= minLength)
 		{
 			p->next = a;
 			a->last = p;
@@ -752,7 +752,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_card:		//É¾³ý
 				if (isPower(getUser()->power, 1))
 				{
-					if (!isPasswordOfCard(op))
+					if (!isPasswordOfCard(op->date.card))
 					{
 						break;
 					}
