@@ -1295,42 +1295,18 @@ pList scrollMenu(pList list, dateType type, int option) {
 					free(list);
 					list = temp;
 				}
-				else if (NULL!=list->next)
-				{
-					if (d_pcType == type || d_cardType == type)
-					{
-						prPrompt("删除失败", "无法删除该项\n按任意键返回");
-						getch();
-					}
-					else
-					{
-						pList temp = list->next;
-						list->next->last = NULL;
-						switch (type)
-						{
-						case d_pcType:
-							addHistory(D_PC_TYPE_T, list->date, 0);
-							break;
-						case d_cardType:
-							addHistory(D_CARD_T, list->date, 0);
-							break;
-						case d_admin:
-							addHistory(D_ADMIN_T, list->date, 0);
-							break;
-						case d_rate:
-							addHistory(D_RATE_T, list->date, 0);
-							break;
-						default:
-							break;
-						}
-						free(list);
-						list = temp;
-					}
-
-				}
 				else
 				{
-					list = NULL;
+					if (d_pcType == type || d_cardType == type || d_rate == type)
+					{
+						prPrompt("删除失败", "禁止删除默认选项\n按任意键返回");
+						getch();
+					}
+					else if (d_admin == type)
+					{
+						prPrompt("删除失败", "禁止删除超级管理员\n按任意键返回");
+						getch();
+					}
 				}
 			}
 			else
@@ -1341,6 +1317,43 @@ pList scrollMenu(pList list, dateType type, int option) {
 			break;
 		case 2:
 		{
+			if (NULL==list->last)
+			{
+				if (d_admin==type)
+				{
+					if (strcmp(getUser()->name,"root")==0)
+					{
+						char *pass = (char*)malloc(sizeof(char) * 32);
+						pass[0] = '\0';
+						prPrompt("请输入超级管理员的密码", "\n按enter键确认，按esc取消");
+						key k = input(32, 12, pass, 1, NUM | LETTER | SYMBOL, NULL);
+						if (enter==k)
+						{
+							while (strcmp(pass,getUser()->password)!=0)
+							{
+								prPrompt("密码错误，请重新输入", "\n按enter键确认，按esc取消");
+								k = input(32, 12, pass, 1, NUM | LETTER | SYMBOL, NULL);
+							}
+						}
+						else
+						{
+							break;
+						}
+						if (esc==k)
+						{
+							break;
+						}
+						prPrompt("提示", "除密码外的任何修改都不会保存\n按任意键继续");
+						getch();
+					}
+				}
+				else
+				{
+					prPrompt("禁止！！", "禁止修改默认选项\n按任意键继续");
+					getch();
+					break;
+				}
+			}
 			switch (type)		//处理链表类型
 			{
 			case d_pcType:
@@ -1366,6 +1379,11 @@ pList scrollMenu(pList list, dateType type, int option) {
 				free(pass1);
 				free(pass2);
 				addHistory(U_ADMIN_T, list->date, 0);
+				if (NULL==list->last)
+				{
+					list->date.admin->power = ~0;
+					strcpy(list->date.admin->name, "root");
+				}
 				break;
 			}
 			case d_rate:
