@@ -1353,9 +1353,12 @@ pList scrollMenu(pList list, dateType type, int option) {
 				break;
 			}
 			case d_rate:
+			{
+				int a[] = { 0,0 };
 				editRate(0, a, list->date.rate);
 				addHistory(U_RATE_T, list->date, 0);
 				break;
+			}
 			default:
 				break;
 			}
