@@ -70,6 +70,7 @@ pList getPCtypeList() {
 			pcTypeList = (pList)malloc(sizeof(List));
 			pcTypeList->last = NULL;
 			pcTypeList->next = NULL;
+			pcTypeList->type = d_pcType;
 			pPCtype pctype = (pPCtype)malloc(sizeof(PCtype));
 			strcpy(pctype->type, "所有类型");
 			pctype->num = 0;
