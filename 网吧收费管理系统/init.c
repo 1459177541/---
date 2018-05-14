@@ -26,7 +26,9 @@ void setRootPassword(int type,char * password1,char * password2,char *text) {
 	printfPassword(password1, pass1);
 	printfPassword(password2, pass2);
 	pr_weclome();
-	printf("              我们检测到您是第一次运行该程序，请设置超级管理员           \n");
+	printf("              我们检测到您是第一次运行该程序，请设置超级管理员密码           \n");
+	printf("                      请务必记住您的用户名及密码！！        \n");
+	printf("                                                         \n");
 	printf("                                                         \n");
 	printf("                        用户名 ：root \n");
 	printf("                                                         \n");
@@ -36,7 +38,7 @@ void setRootPassword(int type,char * password1,char * password2,char *text) {
 	printf("                                                         \n");
 	printf("\n                                                        \n");
 	printf("                       %s \n",text);
-	key in = 1 == type ? input(33, 13, password1, 1, NUM | LETTER, NULL) : input(33, 15, password2, 1, NUM | LETTER, NULL);
+	key in = 1 == type ? input(33, 15, password1, 1, NUM | LETTER, NULL) : input(33, 17, password2, 1, NUM | LETTER, NULL);
 	free(pass1);
 	free(pass2);
 	switch (in)

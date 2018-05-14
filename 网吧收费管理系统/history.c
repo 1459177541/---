@@ -348,6 +348,10 @@ pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
 			break;
 		case 1:
 			isAdd = 0;
+			char *time = (char*)malloc(sizeof(char) * 64);
+			sprintf(time, "%4d年%2d月%2d日 %2d时%2d分%2d秒"
+				, p->date.history->time.tm_year + 1900, p->date.history->time.tm_mon + 1, p->date.history->time.tm_mday
+				, p->date.history->time.tm_hour, p->date.history->time.tm_min, p->date.history->time.tm_sec);
 			if (NULL != strstr(getHistoryType(p->date.history->type),criteria->Criteria))
 			{
 				isAdd = 1;
@@ -356,6 +360,15 @@ pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
 			{
 				isAdd = 1;
 			}
+			if (NULL != strstr(p->date.history->text, criteria->Criteria))
+			{
+				isAdd = 1;
+			}
+			if (NULL != strstr(time, criteria->Criteria))
+			{
+				isAdd = 1;
+			}
+			free(time);
 			break;
 		default:
 			break;

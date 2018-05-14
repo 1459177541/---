@@ -327,10 +327,10 @@ void login(pAdmin user, int type, char* text) {
 	char *pass = (char *)malloc(sizeof(char) * 16);
 	printfPassword(user->password, pass);
 	myCls();
-	printf("                                                       \n");
-	printf("                                                       \n");
-	printf("                  //                                        \n");
-	printf("                 //                             --            \n");
+	printf("                                                             \n");
+	printf("                                                             \n");
+	printf("                  //                                         \n");
+	printf("                 //                             --           \n");
 	printf("                //         //^^//    //^^//    //    //^^//  \n");
 	printf("               //         //  //    //  //    //    //  //   \n");
 	printf("              ^^^^^^^     ^^^^^     ^^^//                    \n");
@@ -346,6 +346,7 @@ void login(pAdmin user, int type, char* text) {
 	printf("\n                  %s\n", text);
 	printf("                                                         \n");
 	printf("              ESC:退出   上/下方向键、TAB：切换选项   ENTER：确认");
+	free(pass);
 	key in = 1 == type ? input(21, 13, user->name, 0, NUM | LETTER, NULL) : input(21, 15, user->password, 1, NUM | LETTER, NULL);
 	switch (in)
 	{

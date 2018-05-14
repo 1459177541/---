@@ -426,6 +426,21 @@ int hasLoginPC() {
 //上/下机
 HANDLE handle = NULL;
 void logPC(pPC p) {
+	if (NULL==getRateList())
+	{
+		prPrompt("警告！！！", "当前无计费方案\n按enter键强制上机(可能会导致无收入)\n按esc取消，按其他任意键转到计费方案管理");
+		key k = isKey(getch());
+		switch (k)
+		{
+		case enter:
+			break;
+		case esc:
+			return;
+		default:
+			scrollMenu(getRateList(), d_rate, 0);
+			break;
+		}
+	}
 	while (lock)
 	{
 		Sleep(100);
@@ -481,7 +496,7 @@ void logPC(pPC p) {
 		time_t now = time(NULL);
 		time_t time = now - mktime(&(p->startTime));
 		double money = results(p, p->user, localtime(&time));
-		if (p->user->balance>money)
+		if (p->user->balance>=money)
 		{
 			p->user->balance -= money;
 		}

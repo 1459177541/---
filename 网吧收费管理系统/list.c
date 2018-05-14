@@ -756,6 +756,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					{
 						break;
 					}
+					int balance = 0;
 					if (NULL != op->last)
 					{
 						pList temp = (NULL != op->next) ? op->next : op->last;
@@ -765,6 +766,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 							op->next->last = op->last;
 						}
 						addHistory(D_CARD_T, op->date, 0);
+						balance = op->date.card->balance;
 						free(op);
 						op = temp;
 					}
@@ -772,8 +774,17 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					{
 						pCard temp = op->date.card;
 						addHistory(D_CARD_T, op->date, 0);
+						balance = op->date.card->balance;
 						op->date.card = NULL;
 						free(temp);
+					}
+					if (0.5<balance)
+					{
+						char *body = (char*)malloc(sizeof(char) * 32);
+						sprintf(body, "用户卡内剩余%.2lf元，请返还给用户\n按任意键关闭该对话框",balance/100.0);
+						prPrompt("注销", body);
+						free(body);
+						getch();
 					}
 				}
 				else
