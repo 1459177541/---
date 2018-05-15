@@ -100,6 +100,7 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	}
 	int x = 16;
 	int y = 2;
+	myCls();
 	gotoxy(x, y++);
 	printf("=================================================");
 	gotoxy(x, y++);
@@ -109,7 +110,7 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                   %c类型：%-21s|",0==type?'>':' ', p->type);
+	printf("|               %c选择类型：%-21s|",0==type?'>':' ', p->type);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
@@ -129,7 +130,7 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|           %13s          |",text);
+	printf("|                  %13s                |",text);
 	gotoxy(x, y++);
 	printf("|                      ");
 	OPTION_OK(4 == type);
@@ -147,38 +148,7 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	{
 	case 0:
 	{
-		pList typeList = getCardTypeList();
-		if ('\0'==p->type[0])
-		{
-			strcpy(p->type, typeList->next->date.cardType->name);
-		}
-		else
-		{
-			while (0!=strcmp(p->type,typeList->date.cardType->name) && NULL!=typeList->next)
-			{
-				typeList = typeList->next;
-			}
-			k = isKey(getch());
-			switch (k)
-			{
-			case left:
-				if (NULL!=typeList->last)
-				{
-					strcpy(p->type, typeList->last->date.cardType->name);
-				}
-				showCard(type, p, text, password, password2);
-				return;
-			case right:
-				if (NULL != typeList->next)
-				{
-					strcpy(p->type, typeList->next->date.cardType->name);
-				}
-				showCard(type, p, text, password, password2);
-				return;
-			default:
-				break;
-			}
-		}
+		k = isKey(getch());
 		break;
 	}
 	case 1:
@@ -242,16 +212,6 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 			}
 			if (0 == strcmp(password, password2))
 			{
-				pList typeList = getCardTypeList();
-				while (0 != strcmp(p->type, typeList->date.cardType->name) && NULL != typeList->next)
-				{
-					typeList = typeList->next;
-				}
-				char *money = (char *)malloc(sizeof(char) * 64);
-				sprintf(money, "请收取%.2lf注册费用\n(非充值)\n按任意键继续", typeList->date.cardType->price / 100.0);
-				prPrompt("注册", money);
-				getch();
-				free(money);
  				strcpy(p->password, password);
 				return;
 			}
@@ -262,6 +222,19 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 				showCard(type, p, "[ err:两次输入的密码不同 ]", password, password2);
 				return;
 			}
+		}
+		else if (0==type)
+		{
+			pList ct = scrollMenu(getCardTypeList(), d_cardType, 4);
+			while (NULL==ct->last)
+			{
+				prPrompt("禁止使用默认类型", "按任意键重新选择");
+				getch();
+				ct = scrollMenu(getCardTypeList(), d_cardType, 4);
+			}
+			strcpy(p->type, ct->date.cardType->name);
+			showCard(type, p, text, password, password2);
+			break;
 		}
 		else
 		{
@@ -298,7 +271,7 @@ pList newCard(pList list) {
 	p->idcardNum[0] = '\0';
 	p->masterName[0] = '\0';
 	p->password[0] = '\0';
-	strcpy(p->type, getCardTypeList()->date.cardType->name);
+	p->type[0] = '\0';
 	pList ql;
 	if (NULL == list->date.card)
 	{
@@ -324,6 +297,16 @@ pList newCard(pList list) {
 	strcpy(pass2, "**************");
 	free(pass1);
 	free(pass2);
+	pList typeList = getCardTypeList();
+	while (0 != strcmp(p->type, typeList->date.cardType->name) && NULL != typeList->next)
+	{
+		typeList = typeList->next;
+	}
+	char *money = (char *)malloc(sizeof(char) * 64);
+	sprintf(money, "请收取%.2lf注册费用\n(非充值)\n按任意键继续", typeList->date.cardType->price / 100.0);
+	prPrompt("注册", money);
+	free(money);
+	getch();
 	addHistory(C_CARD_T, ql->date, 0);
 	return list;
 }

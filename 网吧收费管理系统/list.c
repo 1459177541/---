@@ -523,7 +523,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("   ");
 		prOption("筛选", 7 == option, 6);
 		printf("   ");
-		prOption("返回", 8 == option, 6);
+		prOption("完成", 8 == option, 6);
 		break;
 	case d_card:
 		printf("\n\n            ");
@@ -537,7 +537,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("    ");
 		prOption("筛选", 8 == option, 6);
 		printf("    ");
-		prOption("返回", 9 == option, 6);
+		prOption("完成", 9 == option, 6);
 		break;
 	case d_history:
 		printf("\n\n                 ");
@@ -545,7 +545,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("            ");
 		prOption("筛选", 5 == option, 6);
 		printf("            ");
-		prOption("返回", 6 == option, 6);
+		prOption("完成", 6 == option, 6);
 		break;
 	case d_statistics:
 		printf("\n\n                    ");
@@ -553,19 +553,19 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("            ");
 		prOption("详细", 5 == option, 6);
 		printf("            ");
-		prOption("返回", 6 == option, 6);
+		prOption("完成", 6 == option, 6);
 		break;
 	case d_statistics_more:
 		printf("\n\n                          ");
 		prOption("更多", 4 == option, 6);
 		printf("                ");
-		prOption("返回", 5 == option, 6);
+		prOption("完成", 5 == option, 6);
 		break;
 	case d_attri:
 		printf("\n\n                         ");
 		prOption("修改", 4 == option, 6);
 		printf("                  ");
-		prOption("返回", 5 == option, 6);
+		prOption("完成", 5 == option, 6);
 		break;
 	default:
 		break;
@@ -878,6 +878,12 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				return ret;
 			case d_card:		//详细
 			{
+				pList typeList = getCardTypeList();
+				while (0 != strcmp(op->date.card->type, typeList->date.cardType->name) && NULL != typeList->next)
+				{
+					typeList = typeList->next;
+				}
+
 				char *pass1 = (char *)malloc(sizeof(char) * 16);
 				char *pass2 = (char *)malloc(sizeof(char) * 16);
 				strcpy(pass1, op->date.card->password);
@@ -887,12 +893,33 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				strcpy(pass2, "***************");
 				free(pass1);
 				free(pass2);
+
+				pList typeList2 = getCardTypeList();
+				while (0 != strcmp(op->date.card->type, typeList2->date.cardType->name) && NULL != typeList2->next)
+				{
+					typeList2 = typeList2->next;
+				}
+				char *money = (char *)malloc(sizeof(char) * 64);
+				int iMoney = typeList2->date.cardType->price - typeList->date.cardType->price;
+				if (iMoney>0)
+				{
+					sprintf(money, "请收取%.2lf注册费用\n(非充值)\n按任意键继续", iMoney / 100.0);
+					prPrompt("注册", money);
+					getch();
+				}
+				else if (iMoney<0)
+				{
+					sprintf(money, "请返还%.2lf注册费用\n按任意键继续", -iMoney / 100.0);
+					prPrompt("注册", money);
+					getch();
+				}
+				free(money);
 				break;
 			}
 			default:
 				break;
 			}
-			return ret;
+			break;
 		}
 		case 8:	
 		{
@@ -918,6 +945,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			default:
 				break;
 			}
+			break;
 		}
 		case 9:
 		{
@@ -1106,7 +1134,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 	printf(" ");
 	prOption("  帮助  ", 3 == option, 13);
 	printf(" ");
-	prOption("  返回  ", 4 == option, 13);
+	prOption("  完成  ", 4 == option, 13);
 	if (d_rate == type)
 	{
 		printf("\n\n                    ");
