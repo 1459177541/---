@@ -413,6 +413,7 @@ pList selectCard(int type, pCriteriaCard criteria, pList p) {
 		printf("                                ");
 		OPTION_OK(2 == type);
 		k = isKey(getch());
+		printf("\n                       ×óÓÒ¼ü:ÇÐ»» enter:È·ÈÏ");
 	}
 	else if (1 == criteria->type)
 	{

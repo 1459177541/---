@@ -136,6 +136,32 @@ typedef enum {
 	no, left, right, up, down, pgup, pgdn, ins, del, home, end, tab, esc, enter, backspace, number, letter, symbol
 }key;
 
+//É¸Ñ¡
+typedef enum {
+	condition, fuzzy
+}filterType;
+
+typedef union {
+	struct pc {
+		pPCtype pcType;
+		enum isUse{
+			C_PC_ALL, C_PC_IS, C_PC_NOT
+		}isUse;
+	} pc;
+	struct history
+	{
+		historyType historyType;
+		pAdmin editor;
+	} history;
+	pCardType cardType;
+}conditionDate;
+
+typedef struct {
+	filterType type;
+	conditionDate condition;
+	char Criteria[16];
+}Criteria, *pCriteria;
+
 /*****************************
 *
 * º¯ÊýÍ·

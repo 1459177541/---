@@ -424,6 +424,7 @@ pList selectHistory(int type, pCriteriaHistory criteria, pList p) {
 		printf("                                ");
 		OPTION_OK(3 == type);
 		k = isKey(getch());
+		printf("\n                       ×óÓÒ¼ü:ÇÐ»» enter:È·ÈÏ");
 	}
 	else if (1 == criteria->type)
 	{

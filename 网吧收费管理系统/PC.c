@@ -129,24 +129,17 @@ void showPC(pPC p) {
 }
 
 //搜索条件
-typedef struct
-{
-	int type;
-	char PCType[16];
-	int isUse;
-	char Criteria[16];
-}CriteriaPC,* pCriteriaPC;
-pCriteriaPC getDefaultCriteriaPC() {
-	pCriteriaPC p = (pCriteriaPC)malloc(sizeof(CriteriaPC));
-	p->type = 0;
-	p->isUse = 0;
-	strcpy(p->PCType, getPCtypeList()->date.pc->type);
+pCriteria getDefaultCriteriaPC() {
+	pCriteria p = (pCriteria)malloc(sizeof(Criteria));
+	p->type = condition;
+	p->condition.pc.pcType = getPCtypeList()->date.pcType;
+	p->condition.pc.isUse = C_PC_ALL;
 	p->Criteria[0] = '\0';
 	return p;
 }
 
 //依据条件获得列表
-pList getListFromPcCriteria(pCriteriaPC criteria) {
+pList getListFromPcCriteria(pCriteria criteria) {
 	pList list = (pList)malloc(sizeof(List));
 	list->last = NULL;
 	list->next = NULL;
@@ -160,20 +153,20 @@ pList getListFromPcCriteria(pCriteriaPC criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->PCType,"所有类型"))
+			if (0 != strcmp(criteria->condition.pc.pcType,"所有类型"))
 			{
-				if (0!=strcmp(criteria->PCType,p->date.pc->type))
+				if (0!=strcmp(criteria->condition.pc.pcType,p->date.pc->type))
 				{
 					isAdd = 0;
 				}
 			}
-			if (0 != criteria->isUse)
+			if (C_PC_ALL != criteria->condition.pc.isUse)
 			{
-				if (1 != criteria->isUse&&NULL != p->date.pc->user)
+				if (1 != criteria->condition.pc.isUse&&NULL != p->date.pc->user)
 				{
 					isAdd = 0;
 				}
-				else if (2 != criteria->isUse&&NULL == p->date.pc->user)
+				else if (2 != criteria->condition.pc.isUse&&NULL == p->date.pc->user)
 				{
 					isAdd = 0;
 				}
@@ -222,196 +215,242 @@ pList getListFromPcCriteria(pCriteriaPC criteria) {
 			q->next = NULL;
 			q->last = o;
 			q->date = p->date;
+			q->type = p->type;
 			o->next = q;
 			o = o->next;
 		}
 		p = p->next;
 	}
 	free(temp);
-	return list->next;
+	pList ret = list->next;
+	ret->last = NULL;
+	free(list);
+	return ret;
+}
+
+void setIsUseFormCriteria(pCriteria p, int type) {
+	int x = 16;
+	int y = 6;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                 ");
+	prOption(" 全部情况 ", 0 == type, 16);
+	printf("                |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                 ");
+	prOption(" 当前上机 ", 1 == type, 16);
+	printf("                |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                 ");
+	prOption("当前无用户", 2 == type, 16);
+	printf("                |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	key k = isKey(getch());
+	switch (k)
+	{
+	case up:
+		type--;
+		if (0>type)
+		{
+			type = 2;
+		}
+		break;
+	case down:
+		type++;
+		if (2<type)
+		{
+			type = 0;
+		}
+		break;
+	case enter:
+		switch (type)
+		{
+		case 0:
+			p->condition.pc.isUse = C_PC_ALL;
+			return;
+		case 1:
+			p->condition.pc.isUse = C_PC_IS;
+			return;
+		case 2:
+			p->condition.pc.isUse = C_PC_NOT;
+			return;
+		default:
+			break;
+		}
+	default:
+		break;
+	}
+	return setIsUseFormCriteria(p, type);
 }
 
 //筛选
-pList selectPC(int type, pCriteriaPC criteria,pList p) {
-	key k;
-	pList pt = getPCtypeList();
-	system("title 筛选");
-	system("mode con cols=80 lines=24");
+pList selectPC(int type, pCriteria criteria) {
+	char *isUse = (char*)malloc(sizeof(char) * 16);
+	isUse[0] = '\0';
+	if (C_PC_ALL == criteria->condition.pc.isUse)
+	{
+		strcpy(isUse, "全部情况");
+	}
+	else if (C_PC_IS == criteria->condition.pc.isUse)
+	{
+		strcpy(isUse, "当前上机");
+	}
+	else if (C_PC_NOT == criteria->condition.pc.isUse)
+	{
+		strcpy(isUse, "当前无用户");
+	}
+	int x = 16;
+	int y = 4;
 	myCls();
-	printf("\n\n");
-	printf("                       ============= 筛 选 =============                       \n\n");
-	printf("                            %c方式:", 0 == type ? '>' : ' ');
-	if (0==criteria->type)
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                      筛选                     |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|          %c切换方式: %-15s           |", 0 == type ? '>' : ' ', condition == criteria->type?"条件搜索":"模糊搜索");
+	if (condition == criteria->type)
 	{
-		printf("条件搜索\n\n");
-		printf("                           %c电脑类型：",1==type?'>':' ');
-		while (strcmp(criteria->PCType,pt->date.pcType->type)!=0&&pt->next!=NULL)
-		{
-			pt = pt->next;
-		}
-		if (NULL==pt->next)
-		{
-			pt = getPCtypeList();
-		}
-		printf("%s\n\n", pt->date.pcType->type);
-		printf("                          %c 当前状态：", 2 == type ? '>' : ' ');
-		switch (criteria->isUse)
-		{
-		case 0:
-			printf("全部");
-			break;
-		case 1:
-			printf("已有上机");
-			break;
-		case 2:
-			printf("未有上机");
-			break;
-		default:
-			break;
-		}
-		printf("\n\n");
-		printf("                                ");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|          %c选择电脑类型: %-15s       |", 1 == type ? '>' : ' ', criteria->condition.pc.pcType->type);
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|          %c选择上机情况: %-15s       |", 2 == type ? '>' : ' ',isUse);
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|                      ");
 		OPTION_OK(3 == type);
-		k = isKey(getch());
-	}
-	else if (1==criteria->type)
-	{
-		printf("模糊搜索\n\n");
-		printf("                       %c 含有的内容：", 1 == type ? '>' : ' ');
-		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
-		printf("\n\n");
-		printf("                                ");
-		OPTION_OK(2 == type);
-	}
-	switch (k)
-	{
-	case esc:
-		return p;
-	case left:
-		if (0==type)
+		printf("                  |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("=================================================");
+		key k = isKey(getch());
+		switch (k)
 		{
-			criteria->type--;
-			if (0>criteria->type)
+		case down:
+			type++;
+			if (3 < type)
 			{
-				criteria->type = 1;
+				type = 0;
 			}
-			return selectPC(type, criteria, p);
-		}
-		if (criteria->type==0)
-		{
+			break;
+		case up:
+			type--;
+			if (0>type)
+			{
+				type = 3;
+			}
+			break;
+		case enter:
 			switch (type)
-			{
-			case 1:
-			{
-				if (NULL != pt->last)
-				{
-					strcpy(criteria->PCType, pt->last->date.pcType->type);
-				}
-				return selectPC(type, criteria, p);
-			}
-			case 2:
-				criteria->isUse--;
-				if (0>criteria->isUse)
-				{
-					criteria->isUse = 2;
-				}
-				break;
-			default:
-				break;
-			}
-			return selectPC(type, criteria, p);
-		}
-	case up:
-		type--;
-		if (type<0)
-		{
-			switch (criteria->type)
 			{
 			case 0:
-				type = 3;
+				criteria->type = fuzzy;
 				break;
 			case 1:
-			case 2:
-				type = 2;
+			{
+				pList pcType = scrollMenu(getPCtypeList(), d_pcType, 4);
+				criteria->condition.pc.pcType = pcType->date.pcType;
 				break;
-			default:
-				break;
-			}
-		}
-		return selectPC(type, criteria, p);
-	case right:
-		if (0 == type)
-		{
-			criteria->type++;
-			if (1<criteria->type)
-			{
-				criteria->type = 0;
-			}
-			return selectPC(type, criteria, p);
-		}
-		if (criteria->type == 0)
-		{
-			switch (type)
-			{
-			case 1:
-			{
-				if (NULL!=pt->next)
-				{
-					strcpy(criteria->PCType, pt->next->date.pcType->type);
-				}
-				return selectPC(type, criteria, p);
 			}
 			case 2:
-				criteria->isUse--;
-				if (0>criteria->isUse)
-				{
-					criteria->isUse = 2;
-				}
+				setIsUseFormCriteria(criteria,0);
 				break;
+			case 3:
+				return getListFromPcCriteria(criteria);
 			default:
 				break;
-			}
-			return selectPC(type, criteria, p);
-		}
-	case down:
-		type++;
-		if (criteria->type==0&&type>3)
-		{
-			type = 0;
-		}
-		else if(criteria->type!=0&&type>2)
-		{
-			type = 0;
-		}
-		return selectPC(type, criteria, p);
-	case enter:
-		switch (criteria->type)
-		{
-		case 0:
-			if (3!=type)
-			{
-				type = 3;
-				return selectPC(type, criteria, p);
-			}
-			break;
-		case 1:
-			if (2!=type)
-			{
-				type = 2;
-				return selectPC(type, criteria, p);
 			}
 			break;
 		default:
 			break;
 		}
-		return getListFromPcCriteria(criteria);
-	default:
-		return selectPC(type, criteria, p);
 	}
+	else
+	{
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|              %c请输入待搜索的内容             |",1==type?'>':' ');
+		gotoxy(x, y++);
+		printf("|                                               |");//12
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|                      ");
+		OPTION_OK(2 == type);
+		printf("                  |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("=================================================");
+		key k;
+		if (1==type)
+		{
+			k = input(x + 16, 12, criteria->Criteria, 0, NUM | SYMBOL | LETTER | CHINESE, NULL);
+		}
+		else
+		{
+			k = isKey(getch());
+		}
+		switch (k)
+		{
+		case up:
+			type++;
+			if (2 < type)
+			{
+				type = 0;
+			}
+			break;
+		case down:
+			type--;
+			if (0>type)
+			{
+				type = 2;
+			}
+			break;		
+		case enter:
+			switch (type)
+			{
+			case 0:
+				criteria->type = condition;
+				break;
+			case 1:
+				type = 2;
+				break;
+			case 2:
+				return getListFromPcCriteria(criteria);
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	return selectPC(type, criteria);
 }
 
 pList selectToPC() {
-	return selectPC(0, getDefaultCriteriaPC(), getPCs());
+	return selectPC(0, getDefaultCriteriaPC());
 }
 
 pList loginPcList = NULL;
