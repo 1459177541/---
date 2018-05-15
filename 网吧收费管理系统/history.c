@@ -300,29 +300,22 @@ void prHistory(pHistory p, int isOption) {
 }
 
 //搜索条件
-typedef struct
-{
-	int type;
-	historyType hType;
-	char editor[16];
-	char Criteria[16];
-}CriteriaHistory, *pCriteriaHistory;
-pCriteriaHistory getDefaultCriteriaHistory() {
-	pCriteriaHistory p = (pCriteriaHistory)malloc(sizeof(CriteriaHistory));
-	p->type = 0;
-	p->hType = ALL_T;
-	strcpy(p->editor, "所有管理员");
+pCriteria getDefaultCriteriaHistory() {
+	pCriteria p = (pCriteria)malloc(sizeof(Criteria));
+	p->type = condition;
+	p->condition.history.editor = getAdminHead()->date.admin;
+	p->condition.history.historyType = ALL_T;
 	p->Criteria[0] = '\0';
 	return p;
 }
 
 //依据条件获得列表
-pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
+pList getListFromHistoryCriteria(pCriteria criteria) {
 	pList list = (pList)malloc(sizeof(List));
 	list->last = NULL;
 	list->next = NULL;
 	pList o = list;
-	pList p = getPCs();
+	pList p = getHistorys();
 	int isAdd = 0;
 	while (NULL != p)
 	{
@@ -330,16 +323,16 @@ pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->editor, "所有管理员"))
+			if (0 != strcmp(criteria->condition.history.editor->name,getAdminHead()->date.admin->name))
 			{
-				if (0 != strcmp(criteria->editor, p->date.history->editor))
+				if (0 != strcmp(criteria->condition.history.editor->name, p->date.admin->name))
 				{
 					isAdd = 0;
 				}
 			}
-			if (ALL_T != criteria->hType)
+			if (ALL_T != criteria->condition.history.historyType)
 			{
-				if (criteria->hType != p->type)
+				if (criteria->condition.history.historyType != p->date.history->type)
 				{
 					isAdd = 0;
 				}
@@ -378,6 +371,7 @@ pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
 			q->next = NULL;
 			q->last = o;
 			q->date = p->date;
+			q->type = p->type;
 			o->next = q;
 			o = o->next;
 		}
@@ -387,183 +381,341 @@ pList getListFromHistoryCriteria(pCriteriaHistory criteria) {
 }
 
 //筛选
-pList selectHistory(int type, pCriteriaHistory criteria, pList p) {
-	key k;
-	historyType ht = ALL_T;
-	pList admin = getAdminHead();
-	system("title 筛选");
-	system("mode con cols=80 lines=24");
-	myCls();
-	printf("\n\n");
-	printf("                       ============= 筛 选 =============                       \n\n");
-	printf("                            %c方式:", 0 == type ? '>' : ' ');
-	if (0 == criteria->type)
-	{
-		printf("条件搜索\n\n");
-		printf("                           %c操作人：", 1 == type ? '>' : ' ');
-		while (strcmp(criteria->editor, admin->date.admin->name) != 0 && admin->next != NULL)
-		{
-			admin = admin->next;
-		}
-		if (NULL == admin->next)
-		{
-			admin = getAdminHead();
-		}
-		printf(admin->date.admin->name);
-		printf("                           %c类型：", 2 == type ? '>' : ' ');
-		while ( ht != criteria->hType && FINAL_T != criteria->hType)
-		{
-			ht = (historyType)((int)ht + 1);
-		}
-		if (FINAL_T == ht)
-		{
-			ht = ALL_T;
-		}
-		printf(getHistoryType(ht));
-		printf("\n\n");
-		printf("                                ");
-		OPTION_OK(3 == type);
-		k = isKey(getch());
-		printf("\n                       左右键:切换 enter:确认");
-	}
-	else if (1 == criteria->type)
-	{
-		printf("模糊搜索\n\n");
-		printf("                         %c含有的内容：", 1 == type ? '>' : ' ');
-		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
-		printf("\n\n");
-		printf("                                ");
-		OPTION_OK(2 == type);
-	}
-	else
-	{
-		k = isKey(getch());
-	}
+void setHistoryFormCriteria(pCriteria p, int type) {
+	int x = 12;
+	int y = 0;
+	gotoxy(x, y++);
+	printf("=========================================================");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption("     全部     ", 0 == type, 22);
+	printf("     ");
+	prOption("     充值     ", 1 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption("     上机     ", 2 == type, 22);
+	printf("     ");
+	prOption("     下机     ", 3 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption("新增会员卡类型", 4 == type, 22);
+	printf("     ");
+	prOption("删除会员卡类型", 5 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption("修改会员卡类型", 6 == type, 22);
+	printf("     ");
+	prOption(" 新建计费标准 ", 7 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption(" 删除计费标准 ", 8 == type, 22);
+	printf("     ");
+	prOption(" 修改计费标准 ", 9 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption("  创建管理员  ", 10 == type, 22);
+	printf("     ");
+	prOption("  删除管理员  ", 11 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption("  修改管理员  ", 12 == type, 22);
+	printf("     ");
+	prOption("  注册会员卡  ", 13 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption("  注销会员卡  ", 14 == type, 22);
+	printf("     ");
+	prOption("修改会员卡信息", 15 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|     ");
+	prOption(" 新增电脑类型 ", 16 == type, 22);
+	printf("     ");
+	prOption(" 删除电脑类型 ", 17 == type, 22);
+	printf("     |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("|                   ");
+	prOption(" 修改电脑类型 ", 18 == type, 22);
+	printf("                   |");
+	gotoxy(x, y++);
+	printf("|                                                       |");
+	gotoxy(x, y++);
+	printf("=========================================================");
+	key k = isKey(getch());
 	switch (k)
 	{
-	case esc:
-		return p;
-	case left:
-		if (0 == type)
-		{
-			criteria->type--;
-			if (0>criteria->type)
-			{
-				criteria->type = 1;
-			}
-			return selectHistory(type, criteria, p);
-		}
-		if (criteria->type == 0)
-		{
-			switch (type)
-			{
-			case 1:
-			{
-				if (NULL != admin->last)
-				{
-					strcpy(criteria->editor, admin->last->date.admin->name);
-				}
-				return selectHistory(type, criteria, p);
-			}
-			case 2:
-				if (ALL_T!=criteria->hType)
-				{
-					criteria->hType = (historyType)((int)criteria->hType - 1);
-				}
-				break;
-			default:
-				break;
-			}
-			return selectHistory(type, criteria, p);
-		}
 	case up:
-		type--;
-		if (type<0)
+		type -= 2;
+		if (0>type)
 		{
-			switch (criteria->type)
-			{
-			case 0:
-				type = 3;
-				break;
-			case 1:
-			case 2:
-				type = 2;
-				break;
-			default:
-				break;
-			}
+			type = 18;
 		}
-		return selectHistory(type, criteria, p);
-	case right:
-		if (0 == type)
-		{
-			criteria->type++;
-			if (1<criteria->type)
-			{
-				criteria->type = 0;
-			}
-			return selectHistory(type, criteria, p);
-		}
-		if (criteria->type == 0)
-		{
-			switch (type)
-			{
-			case 1:
-			{
-				if (NULL != admin->next)
-				{
-					strcpy(criteria->editor, admin->next->date.admin->name);
-				}
-				return selectHistory(type, criteria, p);
-			}
-			case 2:
-				if (FINAL_T != criteria->hType)
-				{
-					criteria->hType = (historyType)((int)criteria->hType + 1);
-				}
-				break;
-			default:
-				break;
-			}
-			return selectHistory(type, criteria, p);
-		}
+		break;
 	case down:
+		type += 2;
+		if (19==type)
+		{
+			type = 18;
+		}
+		else if (20 == type)
+		{
+			type = 0;
+		}
+		break;
+	case left:
+		type--;
+		if (0>type)
+		{
+			type = 18;
+		}
+		break;
+	case right:
 		type++;
-		if (criteria->type == 0 && type>3)
+		if (18<type)
 		{
 			type = 0;
 		}
-		else if (criteria->type != 0 && type>2)
-		{
-			type = 0;
-		}
-		return selectHistory(type, criteria, p);
+		break;
 	case enter:
-		switch (criteria->type)
+		switch (type)
 		{
 		case 0:
-			if (3 != type)
+			p->condition.history.historyType = ALL_T;
+			return;
+		case 1:
+			p->condition.history.historyType = RECHARGE_T;
+			return;
+		case 2:
+			p->condition.history.historyType = UP_T;
+			return;
+		case 3:
+			p->condition.history.historyType = DOWN_T;
+			return;
+		case 4:
+			p->condition.history.historyType = C_CARD_TYPE_T;
+			return;
+		case 5:
+			p->condition.history.historyType = D_CARD_TYPE_T;
+			return;
+		case 6:
+			p->condition.history.historyType = U_CARD_TYPE_T;
+			return;
+		case 7:
+			p->condition.history.historyType = C_RATE_T;
+			return;
+		case 8:
+			p->condition.history.historyType = D_RATE_T;
+			return;
+		case 9:
+			p->condition.history.historyType = U_RATE_T;
+			return;
+		case 10:
+			p->condition.history.historyType = C_ADMIN_T;
+			return;
+		case 11:
+			p->condition.history.historyType = D_ADMIN_T;
+			return;
+		case 12:
+			p->condition.history.historyType = U_ADMIN_T;
+			return;
+		case 13:
+			p->condition.history.historyType = D_CARD_T;
+			return;
+		case 14:
+			p->condition.history.historyType = U_CARD_T;
+			return;
+		case 15:
+			p->condition.history.historyType = U_CARD_T;
+			return;
+		case 16:
+			p->condition.history.historyType = C_PC_TYPE_T;
+			return;
+		case 17:
+			p->condition.history.historyType = D_PC_TYPE_T;
+			return;
+		case 18:
+			p->condition.history.historyType = U_PC_TYPE_T;
+			return;
+		default:
+			break;
+		}
+	default:
+		break;
+	}
+	return setHistoryFormCriteria(p, type);
+}
+
+//筛选
+pList selectHistory(int type, pCriteria criteria) {
+	char *historyType = getHistoryType(criteria->condition.history.historyType);
+	int x = 16;
+	int y = 4;
+	myCls();
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                      筛选                     |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|          %c切换方式: %-15s           |", 0 == type ? '>' : ' ', condition == criteria->type ? "条件搜索" : "模糊搜索");
+	if (condition == criteria->type)
+	{
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|          %c选择记录类型: %-15s       |", 1 == type ? '>' : ' ', historyType);
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|            %c选择记录人: %-15s       |"
+			, 2 == type ? '>' : ' ', criteria->condition.history.editor->name);
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|                      ");
+		OPTION_OK(3 == type);
+		printf("                  |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("=================================================");
+		key k = isKey(getch());
+		switch (k)
+		{
+		case down:
+			type++;
+			if (3 < type)
 			{
-				type = 3;
-				return selectHistory(type, criteria, p);
+				type = 0;
 			}
 			break;
-		case 1:
-			if (2 != type)
+		case up:
+			type--;
+			if (0>type)
 			{
-				type = 2;
-				return selectHistory(type, criteria, p);
+				type = 3;
+			}
+			break;
+		case enter:
+			switch (type)
+			{
+			case 0:
+				criteria->type = fuzzy;
+				break;
+			case 1:
+				setHistoryFormCriteria(criteria, 0);
+				break;
+			case 2:
+			{
+				pList editor = scrollMenu(getAdminHead(), d_admin, 4);
+				criteria->condition.history.editor = editor->date.admin;
+				break;
+			}
+			case 3:
+				return getListFromHistoryCriteria(criteria,0);
+			default:
+				break;
 			}
 			break;
 		default:
 			break;
 		}
-		return getListFromHistoryCriteria(criteria);
-	default:
-		return selectHistory(type, criteria, p);
 	}
+	else
+	{
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|              %c请输入待搜索的内容              |", 1 == type ? '>' : ' ');
+		gotoxy(x, y++);
+		printf("|                                               |");//12
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|                      ");
+		OPTION_OK(2 == type);
+		printf("                  |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("=================================================");
+		key k;
+		if (1 == type)
+		{
+			k = input(x + 16, 12, criteria->Criteria, 0, NUM | SYMBOL | LETTER | CHINESE, NULL);
+		}
+		else
+		{
+			k = isKey(getch());
+		}
+		switch (k)
+		{
+		case up:
+			type++;
+			if (2 < type)
+			{
+				type = 0;
+			}
+			break;
+		case down:
+			type--;
+			if (0>type)
+			{
+				type = 2;
+			}
+			break;
+		case enter:
+			switch (type)
+			{
+			case 0:
+				criteria->type = condition;
+				break;
+			case 1:
+				type = 2;
+				break;
+			case 2:
+				return getListFromHistoryCriteria(criteria);
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	return selectHistory(type, criteria);
 }
 
 pList selectToHistory() {
-	return selectHistory(0, getDefaultCriteriaHistory(), getHistorys());
+	return selectHistory(0, getDefaultCriteriaHistory());
 }

@@ -153,7 +153,7 @@ typedef union {
 		historyType historyType;
 		pAdmin editor;
 	} history;
-	pCardType cardType;
+	pCardType card;
 }conditionDate;
 
 typedef struct {

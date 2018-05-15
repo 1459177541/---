@@ -153,20 +153,20 @@ pList getListFromPcCriteria(pCriteria criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->condition.pc.pcType,"所有类型"))
+			if (0 != strcmp(criteria->condition.pc.pcType, getPCtypeList()->date.pcType))
 			{
-				if (0!=strcmp(criteria->condition.pc.pcType,p->date.pc->type))
+				if (0 != strcmp(criteria->condition.pc.pcType, p->date.pcType))
 				{
 					isAdd = 0;
 				}
 			}
 			if (C_PC_ALL != criteria->condition.pc.isUse)
 			{
-				if (1 != criteria->condition.pc.isUse&&NULL != p->date.pc->user)
+				if (C_PC_IS != criteria->condition.pc.isUse && NULL != p->date.pc->user)
 				{
 					isAdd = 0;
 				}
-				else if (2 != criteria->condition.pc.isUse&&NULL == p->date.pc->user)
+				else if (C_PC_NOT != criteria->condition.pc.isUse && NULL == p->date.pc->user)
 				{
 					isAdd = 0;
 				}
@@ -327,7 +327,8 @@ pList selectPC(int type, pCriteria criteria) {
 		gotoxy(x, y++);
 		printf("|                                               |");
 		gotoxy(x, y++);
-		printf("|          %c选择电脑类型: %-15s       |", 1 == type ? '>' : ' ', criteria->condition.pc.pcType->type);
+		printf("|          %c选择电脑类型: %-15s       |"
+			, 1 == type ? '>' : ' ', criteria->condition.pc.pcType->type);
 		gotoxy(x, y++);
 		printf("|                                               |");
 		gotoxy(x, y++);
@@ -389,7 +390,7 @@ pList selectPC(int type, pCriteria criteria) {
 		gotoxy(x, y++);
 		printf("|                                               |");
 		gotoxy(x, y++);
-		printf("|              %c请输入待搜索的内容             |",1==type?'>':' ');
+		printf("|              %c请输入待搜索的内容              |",1==type?'>':' ');
 		gotoxy(x, y++);
 		printf("|                                               |");//12
 		gotoxy(x, y++);

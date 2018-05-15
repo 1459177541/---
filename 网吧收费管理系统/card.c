@@ -312,22 +312,16 @@ pList newCard(pList list) {
 }
 
 //搜索条件
-typedef struct
-{
-	int type;
-	char CardType[16];
-	char Criteria[16];
-}CriteriaCard, *pCriteriaCard;
-pCriteriaCard getDefaultCriteriaCard() {
-	pCriteriaCard p = (pCriteriaCard)malloc(sizeof(CriteriaCard));
-	p->type = 0;
-	strcpy(p->CardType, getCardTypeList()->date.card->type);
+pCriteria getDefaultCriteriaCard() {
+	pCriteria p = (pCriteria)malloc(sizeof(Criteria));
+	p->type = condition;
+	p->condition.card = getCardTypeList()->date.cardType;
 	p->Criteria[0] = '\0';
 	return p;
 }
 
 //依据条件获得列表
-pList getListFromCardCriteria(pCriteriaCard criteria) {
+pList getListFromCardCriteria(pCriteria criteria) {
 	pList list = (pList)malloc(sizeof(List));
 	list->last = NULL;
 	list->next = NULL;
@@ -341,9 +335,9 @@ pList getListFromCardCriteria(pCriteriaCard criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->CardType, "所有类型"))
+			if (0 != strcmp(criteria->condition.card->name,getCardTypeList()->date.cardType->name))
 			{
-				if (0 != strcmp(criteria->CardType, p->date.card->type))
+				if (0 != strcmp(criteria->condition.card->name, p->date.cardType->name))
 				{
 					isAdd = 0;
 				}
@@ -377,6 +371,7 @@ pList getListFromCardCriteria(pCriteriaCard criteria) {
 			q->next = NULL;
 			q->last = o;
 			q->date = p->date;
+			q->type = p->type;
 			o->next = q;
 			o = o->next;
 		}
@@ -387,111 +382,113 @@ pList getListFromCardCriteria(pCriteriaCard criteria) {
 }
 
 //筛选
-pList selectCard(int type, pCriteriaCard criteria, pList p) {
-	key k;
-	pList pt = getCardTypeList();
-	system("title 筛选");
-	system("mode con cols=80 lines=24");
+pList selectCard(int type, pCriteria criteria) {
+	int x = 16;
+	int y = 4;
 	myCls();
-	printf("\n\n");
-	printf("                       ============= 筛 选 =============                       \n\n");
-	printf("                            %c方式:", 0 == type ? '>' : ' ');
-	if (0 == criteria->type)
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                      筛选                     |");
+	gotoxy(x, y++);
+	printf("|        -------------------------------        |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|          %c切换方式: %-15s           |", 0 == type ? '>' : ' ', condition == criteria->type ? "条件搜索" : "模糊搜索");
+	if (condition == criteria->type)
 	{
-		printf("条件搜索\n\n");
-		printf("                         %c会员卡类型：", 1 == type ? '>' : ' ');
-		while (strcmp(criteria->CardType, pt->date.cardType->name) != 0 && pt->next != NULL)
-		{
-			pt = pt->next;
-		}
-		if (NULL == pt->next)
-		{
-			pt = getCardTypeList();
-		}
-		printf("%s\n\n", pt->date.cardType->name);
-		printf("\n\n");
-		printf("                                ");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|        %c选择会员卡类型: %-15s       |", 1 == type ? '>' : ' ', criteria->condition.card->name);
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|                      ");
 		OPTION_OK(2 == type);
-		k = isKey(getch());
-		printf("\n                       左右键:切换 enter:确认");
+		printf("                  |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("=================================================");
 	}
-	else if (1 == criteria->type)
+	else
 	{
-		printf("模糊搜索\n\n");
-		printf("                        %c含有的内容：", 1 == type ? '>' : ' ');
-		k = input(5, 39, criteria->Criteria, 0, NUM | LETTER | CHINESE | SYMBOL, NULL);
-		printf("\n\n");
-		printf("                                ");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|              %c请输入待搜索的内容              |", 1 == type ? '>' : ' ');
+		gotoxy(x, y++);
+		printf("|                                               |");//12
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("|                      ");
 		OPTION_OK(2 == type);
+		printf("                  |");
+		gotoxy(x, y++);
+		printf("|                                               |");
+		gotoxy(x, y++);
+		printf("=================================================");
+	}
+	key k;
+	if (1 == type && fuzzy == criteria->type)
+	{
+		k = input(x + 16, 12, criteria->Criteria, 0, NUM | SYMBOL | LETTER | CHINESE, NULL);
+	}
+	else
+	{
+		k = isKey(getch());
 	}
 	switch (k)
 	{
-	case esc:
-		return p;
-	case left:
-		if (0 == type)
-		{
-			criteria->type--;
-			if (0>criteria->type)
-			{
-				criteria->type = 1;
-			}
-			return selectCard(type, criteria, p);
-		}
-		if (criteria->type == 0)
-		{
-			if (NULL != pt->last)
-			{
-				strcpy(criteria->CardType, pt->last->date.cardType->name);
-			}
-			return selectCard(type, criteria, p);
-		}
 	case up:
-		type--;
-		if (type<0)
-		{
-			type = 2;
-		}
-		return selectCard(type, criteria, p);
-	case right:
-		if (0 == type)
-		{
-			criteria->type++;
-			if (1<criteria->type)
-			{
-				criteria->type = 0;
-			}
-			return selectCard(type, criteria, p);
-		}
-		if (criteria->type == 0)
-		{
-			if (NULL != pt->next)
-			{
-				strcpy(criteria->CardType, pt->next->date.cardType->name);
-			}
-			return selectCard(type, criteria, p);
-		}
-	case down:
 		type++;
-		if (criteria->type != 0 && type>2)
+		if (2 < type)
 		{
 			type = 0;
 		}
-		return selectCard(type, criteria, p);
-	case enter:
-		if (2 != type)
+		break;
+	case down:
+		type--;
+		if (0>type)
 		{
 			type = 2;
-			return selectCard(type, criteria, p);
 		}
-		return getListFromCardCriteria(criteria);
+		break;
+	case enter:
+		switch (type)
+		{
+		case 0:
+			criteria->type = (condition == criteria->type) ? fuzzy : condition;
+			break;
+		case 1:
+			if (condition==criteria->type)
+			{
+				pList cardType = scrollMenu(getCardTypeList(), d_cardType, 4);
+				criteria->condition.card = cardType->date.cardType;
+				break;
+			}
+			else
+			{
+				type = 2;
+			}
+			break;
+		case 2:
+			return getListFromCardCriteria(criteria);
+		default:
+			break;
+		}
+		break;
 	default:
-		return selectCard(type, criteria, p);
+		break;
 	}
+	return selectCard(type, criteria);
 }
 
 pList selectToCard() {
-	return selectCard(0, getDefaultCriteriaCard(), getCards());
+	return selectCard(0, getDefaultCriteriaCard());
 }
 
 void recharge(pCard p) {
