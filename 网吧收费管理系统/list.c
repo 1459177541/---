@@ -517,7 +517,14 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n\n           ");
 		prOption("转到网吧规模", 4 == option, 18);
 		printf(" ");
-		prOption("上/下机", 5 == option, 12);
+		if (NULL==op->date.pc->user)
+		{
+			prOption("上机", 5 == option, 6);
+		}
+		else
+		{
+			prOption("下机", 5 == option, 6);
+		}
 		printf("   ");
 		prOption("详细", 6 == option, 6);
 		printf("   ");

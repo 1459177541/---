@@ -297,6 +297,7 @@ void mainMenu(int type) {
 			break;
 		case 10:
 		{
+			system("title µÇÂ½");
 			pAdmin user = (pAdmin)malloc(sizeof(admin));
 			user->name[0] = '\0';
 			user->password[0] = '\0';
