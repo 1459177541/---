@@ -143,6 +143,10 @@ void close(dateType type) {
 		{
 			logoutPCAll();
 		}
+		if (NULL==getPCtypeList()->next)
+		{
+			return;
+		}
 		p = getPCs();
 		break;
 	case d_pcType:
@@ -704,11 +708,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				scrollMenu(getPCtypeList(), d_pcType, 0);
 				if (isEditPCType())
 				{
-					close(d_pc);
-					list = getPCs();
-					setEdit(0);
-					finalPage = -1;
 					thisPage = 0;
+					finalPage = -1;
+					list = getPCs();
 				}
 				system("title ио/об╩З");
 				break;
@@ -1332,11 +1334,8 @@ pList scrollMenu(pList list, dateType type, int option) {
 					{
 						break;
 					}
-					else
-					{
-						setEdit(1);
-					}
 				}
+				setEdit(1);
 				if (NULL!=list->last)
 				{
 					pList temp = NULL!=list->next? list->next : list->last;

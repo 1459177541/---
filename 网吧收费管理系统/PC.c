@@ -51,6 +51,12 @@ void initPCToArray() {
 
 //获得全部PC列表
 pList getPCs() {
+	if (isEditPCType())
+	{
+		setEdit(0);
+		close(d_pc);
+		pcList = NULL;
+	}
 	if (NULL == pcList)
 	{
 		while (NULL == getPCtypeList()->next)
