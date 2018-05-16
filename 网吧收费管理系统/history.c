@@ -1,7 +1,6 @@
 #include"config.h"
 
 pList historyLists = NULL;
-pList historyFinal = NULL;
 int HistoryLength = 0;
 int initHistory() {
 	prPrompt("正在加载", "正在加载历史记录");
@@ -42,7 +41,6 @@ int initHistory() {
 		p = (pHistory)malloc(sizeof(history));
 		o = (pList)malloc(sizeof(List));
 	}
-	historyFinal = q;
 	free(p);
 	free(o);
 	fclose(fp);
@@ -59,7 +57,6 @@ pList getHistorys() {
 			historyLists->last = NULL;
 			historyLists->date.history = NULL;
 			historyLists->type = d_history;
-			historyFinal = NULL;
 		}
 	}
 	return historyLists;
@@ -208,19 +205,18 @@ void showHistory(pHistory p) {
 void addHistory(historyType type, date date, double other) {
 	char * prPower(int power);
 	pList pl = NULL;
-	if (NULL==historyFinal)
+	if (NULL==historyLists->date.history)
 	{
-		historyFinal = getHistorys();
-		pl = historyFinal;
+		pl = historyLists;
 	}
 	else
 	{
 		pl = (pList)malloc(sizeof(List));
 		pl->type = d_history;
-		pl->last = historyFinal;
-		pl->next = NULL;
-		historyFinal->next = pl;
-		historyFinal = historyFinal->next;
+		pl->next = historyLists;
+		pl->last = NULL;
+		historyLists->last = pl;
+		historyLists = pl;
 	}
 	pHistory d = (pHistory)malloc(sizeof(history));
 	pl->date.history = d;
