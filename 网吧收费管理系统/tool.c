@@ -137,7 +137,7 @@ void replaceString(char *src, char old, char *new) {
 }
 
 //µ√µΩ√‹¬Î
-void *printfPassword(char *src, char *ret) {
+void printfPassword(char *src, char *ret) {
 	int i = 0;
 	while ('\0'!=src[i++])	{	}
 	for (int j = 0; j < i-1; j++)

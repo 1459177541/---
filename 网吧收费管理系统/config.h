@@ -174,7 +174,7 @@ int stringToInt(char * string);
 char * intToString(int num);
 void splitString(char *src, char *ret, int start, int length);
 void replaceString(char *src, char old, char *new);
-void *printfPassword(char *src, char *ret);
+void printfPassword(char *src, char *ret);
 key isKey(int in);
 	//输入限定，使用左移运算得到对应的二进制位
 	#define NUM SHL(0)

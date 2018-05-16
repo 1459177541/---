@@ -303,6 +303,7 @@ void mainMenu(int type) {
 			user->password[0] = '\0';
 			setUser(NULL);
 			menuOption = 0;
+			system("mode con cols=80 lines=24");
 			login(user, 1, "");
 			free(user);
 			return;
@@ -317,6 +318,7 @@ void mainMenu(int type) {
 		default:
 			break;
 		}
+		system("mode con cols=80 lines=24");
 		mainMenu(type);
 		break;
 	default:
@@ -373,6 +375,7 @@ void login(pAdmin user, int type, char* text) {
 			{
 				setUser(p);
 				init();
+				system("mode con cols=80 lines=24");
 				mainMenu(0);
 				return;
 			}

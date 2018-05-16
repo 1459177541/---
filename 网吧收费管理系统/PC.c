@@ -153,9 +153,9 @@ pList getListFromPcCriteria(pCriteria criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->condition.pc.pcType, getPCtypeList()->date.pcType))
+			if (0 != strcmp(criteria->condition.pc.pcType->type, getPCtypeList()->date.pcType))
 			{
-				if (0 != strcmp(criteria->condition.pc.pcType, p->date.pcType))
+				if (0 != strcmp(criteria->condition.pc.pcType->type, p->date.pcType))
 				{
 					isAdd = 0;
 				}

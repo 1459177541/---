@@ -104,7 +104,6 @@ void setting() {
 
 //初始化流程控制
 int initialization() {
-	setting();
 	mkdir("data");
 	char *pass1 = (char *)malloc(sizeof(char)*16);
 	char *pass2 = (char *)malloc(sizeof(char)*16);

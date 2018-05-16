@@ -801,9 +801,20 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				}
 				break;
 			case d_history:		//筛选
+			{
+				pList t = NULL;
 				finalPage = -1;
-				p = selectToHistory();
-				ret = paginationMenu(p, type, index, option);
+				t = selectToHistory();
+				if (NULL == t || NULL == t->date.pc)
+				{
+					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
+					getch();
+					ret = paginationMenu(list, type, index, option);
+				}
+				else
+				{
+					ret = paginationMenu(t, type, index, option);
+				}
 				pList q = p->next;
 				while (NULL != q)
 				{
@@ -812,21 +823,22 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					q = q->next;
 				}
 				return ret;
+			}
 			case d_statistics:	//详细
 			{
 				int	ttp = thisPage;
 				int tfp = finalPage;
 				thisPage = 0;
 				finalPage = -1;
-				pList p = getMoreStat(op);
-				paginationMenu(p, d_statistics_more, 0, 0);
+				pList ms = getMoreStat(op);
+				paginationMenu(ms, d_statistics_more, 0, 0);
 				thisPage = ttp;
 				finalPage = tfp;
-				pList q = p->next;
+				pList q = ms->next;
 				while (NULL != q)
 				{
-					free(p);
-					p = q;
+					free(ms);
+					ms = q;
 					q = q->next;
 				}
 				break;
@@ -867,22 +879,33 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			break;
 		case 7:	
 		{
-			pList p;
 			//处理链表类型
 			switch (type)		
 			{
 			case d_pc:			//筛选
+			{
+				pList t = NULL;
 				finalPage = -1;
-				p = selectToPC();
-				ret = paginationMenu(p, type, index, option);
-				pList q = p->next;
+				t = selectToPC();
+				if (NULL==t||NULL==t->date.pc)
+				{
+					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
+					getch();
+					ret = paginationMenu(list, type, index, option);
+				}
+				else
+				{
+					ret = paginationMenu(t, type, index, option);
+				}
+				pList q = t->next;
 				while (NULL != q)
 				{
-					free(p);
-					p = q;
+					free(t);
+					t = q;
 					q = q->next;
 				}
 				return ret;
+			}
 			case d_card:		//详细
 			{
 				pList typeList = getCardTypeList();
@@ -938,9 +961,20 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				isFirst = 1;
 				return op;
 			case d_card:		//筛选
+			{
+				pList t = NULL;
 				finalPage = -1;
-				p = selectToCard();
-				ret = paginationMenu(p, type, index, option);
+				t = selectToCard();
+				if (NULL == t || NULL == t->date.pc)
+				{
+					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
+					getch();
+					ret = paginationMenu(list, type, index, option);
+				}
+				else
+				{
+					ret = paginationMenu(t, type, index, option);
+				}
 				pList q = p->next;
 				while (NULL != q)
 				{
@@ -949,6 +983,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					q = q->next;
 				}
 				return ret;
+			}
 			default:
 				break;
 			}
@@ -1361,13 +1396,13 @@ pList scrollMenu(pList list, dateType type, int option) {
 						char *pass = (char*)malloc(sizeof(char) * 32);
 						pass[0] = '\0';
 						prPrompt("请输入超级管理员的密码", "\n按enter键确认，按esc取消");
-						key k = input(32, 12, pass, 1, NUM | LETTER | SYMBOL, NULL);
-						if (enter==k)
+						key key = input(32, 12, pass, 1, NUM | LETTER | SYMBOL, NULL);
+						if (enter==key)
 						{
 							while (strcmp(pass,getUser()->password)!=0)
 							{
 								prPrompt("密码错误，请重新输入", "\n按enter键确认，按esc取消");
-								k = input(32, 12, pass, 1, NUM | LETTER | SYMBOL, NULL);
+								key = input(32, 12, pass, 1, NUM | LETTER | SYMBOL, NULL);
 							}
 						}
 						else

@@ -565,7 +565,8 @@ void setHistoryFormCriteria(pCriteria p, int type) {
 	default:
 		break;
 	}
-	return setHistoryFormCriteria(p, type);
+	setHistoryFormCriteria(p, type);
+	return ;
 }
 
 //ɸѡ
@@ -638,7 +639,7 @@ pList selectHistory(int type, pCriteria criteria) {
 				break;
 			}
 			case 3:
-				return getListFromHistoryCriteria(criteria,0);
+				return getListFromHistoryCriteria(criteria);
 			default:
 				break;
 			}

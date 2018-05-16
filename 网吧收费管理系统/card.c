@@ -118,22 +118,22 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    密码：%-21s|", 2 == type ? "" : pass1);
+	printf("|                身份证号：%-21s|", 2 == type ? "" : p->idcardNum);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                再次输入：%-21s|", 3 == type ? "" : pass1);
+	printf("|                    密码：%-21s|", 3 == type ? "" : pass1);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|                    余额：%-21.2lf|", p->balance);
+	printf("|                再次输入：%-21s|", 4 == type ? "" : pass1);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
 	printf("|                  %13s                |",text);
 	gotoxy(x, y++);
 	printf("|                      ");
-	OPTION_OK(4 == type);
+	OPTION_OK(5 == type);
 	printf("                  |");
 	gotoxy(x, y++);
 	printf("|                                               |");
@@ -153,16 +153,19 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	}
 	case 1:
 	{
-		k = input(x + 27, 8, p->masterName, 0, NUM | LETTER | CHINESE, NULL);
+		k = input(x + 27, 8, p->masterName, 0, LETTER | CHINESE | OTHER, " -.");
 		break;
 	}
 	case 2:
-		k = input(x + 27, 10, password, 1, INTER | LETTER | SYMBOL, NULL);
+		k = input(x + 27, 10, p->idcardNum, 0, NUM | OTHER, "xX");
 		break;
 	case 3:
-		k = input(x + 27, 12, password2, 1, INTER | LETTER | SYMBOL, NULL);
+		k = input(x + 27, 12, password, 1, INTER | LETTER | SYMBOL, NULL);
 		break;
 	case 4:
+		k = input(x + 27, 14, password2, 1, INTER | LETTER | SYMBOL, NULL);
+		break;
+	case 5:
 		k = isKey(getch());
 		break;
 	default:
