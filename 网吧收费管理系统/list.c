@@ -170,6 +170,7 @@ void close(dateType type) {
 	while (NULL != p->next)
 	{
 		q = p->next;
+		free(p->date.admin);
 		free(p);
 		p = q;
 	}
@@ -201,7 +202,7 @@ void swap(pList a, pList b) {
 }
 
 //排序---可能出错
-pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
+pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b), int isNot) {
 	if (0>=length)
 	{
 		return start;
@@ -217,7 +218,11 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 			while (tt!=end)
 			{
 				tt = tt->next;
-				if (isUP(min,tt))
+				if (isUP(min,tt)&&!isNot)
+				{
+					min = tt;
+				}
+				else if (isUP(tt,min)&&isNot)
 				{
 					min = tt;
 				}
@@ -230,50 +235,66 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b)) {
 	//归并排序
 	pList mid = start;
 	int minLength = length / 2;
-	for (int i = 0; i < minLength; i++)
+	for (int i = 0; i < minLength-1; i++)
 	{
 		mid = mid->next;
 	}
-	pList a = _sort(start, mid, minLength, isUP);
-	pList b = _sort(mid->next, end, length - minLength, isUP);
+	pList midNext = mid->next;
+	pList endNext = end->next;
+	pList a = _sort(start, mid, minLength, isUP, isNot);
+	pList b = _sort(midNext, end, length - minLength, isUP, isNot);
+	if (isNot)
+	{
+		pList t = a;
+		a = b;
+		b = t;
+	}
 	int ai = 0;
 	int bi = 0;
 	pList p = (pList)malloc(sizeof(List));
+	pList ret = p;
 	p->next = NULL;
 	p->last = NULL;
 	for (int i = 0; i < length; i++)
 	{
-		if (isUP(a,b) && ai <= minLength)
+		if (ai < minLength)
 		{
-			p->next = a;
-			a->last = p;
-			a = a->next;
-			ai++;
+			if (endNext != b || isUP(a,b))
+			{
+				p->next = a;
+				a->last = p;
+				a = a->next;
+				ai++;
+				p = p->next;
+				p->next = NULL;
+				continue;
+			}
 		}
-		else if(bi < length-minLength)
+		if(bi < length-minLength)
 		{
 			p->next = b;
 			b->last = p;
 			b = b->next;
 			bi++;
+			p = p->next;
+			p->next = NULL;
+			continue;
 		}
-		p = p->next;
-		p->next = NULL;
 	}
-	pList pp = p->next;
+	pList pp = ret->next;
 	pp->last = NULL;
-	free(p);
+	free(ret);
 	return pp;
 }
 
-pList sort(pList list, int (*isUP)(pList a, pList b)) {
+pList sort(pList list, int (*isUP)(pList a, pList b), int isNot) {
 	if (NULL==list)
 	{
 		return NULL;
 	}
 	pList s = list;
 	pList e = list;
-	int l = 0;
+	int l = 1;
 	while (NULL!=s->last)
 	{
 		l++;
@@ -284,7 +305,7 @@ pList sort(pList list, int (*isUP)(pList a, pList b)) {
 		l++;
 		e = e->next;
 	}
-	list = _sort(s, e, l, isUP);
+	list = _sort(s, e, l, isUP, isNot);
 	while (NULL != list->last)
 	{
 		list = list->last;
@@ -392,7 +413,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("\n-------------------+--------------------+--------------------+------------------");
 		printf("\n        id         |        类型        |       用户名       |      余额    ");
 		printf("\n-------------------+--------------------+--------------------+------------------");
-		optionLength = 9;
+		optionLength = 10;
 		break;
 	case d_history:
 		printf("\n                           ---===历史记录===---\n");
@@ -537,7 +558,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		prOption("完成", 8 == option, 6);
 		break;
 	case d_card:
-		printf("\n\n            ");
+		printf("\n\n       ");
 		prOption("新建", 4 == option, 6);
 		printf("    ");
 		prOption("删除", 5 == option, 6);
@@ -548,7 +569,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 		printf("    ");
 		prOption("筛选", 8 == option, 6);
 		printf("    ");
-		prOption("完成", 9 == option, 6);
+		prOption("排序", 9 == option, 6);
+		printf("    ");
+		prOption("完成", 10 == option, 6);
 		break;
 	case d_history:
 		printf("\n\n                 ");
@@ -992,6 +1015,21 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			break;
 		}
 		case 9:
+			switch (type)
+			{
+			case d_card:		//排序
+			{
+				sortCard();
+				list = getCards();
+				thisPage = 0;
+				initFinalPage(list);
+				break;
+			}
+			default:
+				break;
+			}
+			break;
+		case 10:
 		{
 			switch (type)
 			{

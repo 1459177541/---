@@ -556,3 +556,92 @@ int isPasswordOfCard(pCard p) {
 		return isPasswordOfCard(p);
 	}
 }
+
+int _sortCardByBalance(pList a, pList b) {
+	return a->date.card->balance > b->date.card->balance;
+}
+
+int _sortCardById(pList a, pList b) {
+	return a->date.card->id > b->date.card->id;
+}
+
+//ÅÅÐò
+void sortCard() {
+	static int type = 0;
+	int x = 16;
+	int y = 6;
+	gotoxy(x, y++);
+	printf("=================================================");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                 ");
+	prOption("  IDÉýÐò  ", 0 == type, 16);
+	printf("                |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                 ");
+	prOption("  ID½µÐò  ", 1 == type, 16);
+	printf("                |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                 ");
+	prOption(" Óà¶îÉýÐò ", 2 == type, 16);
+	printf("                |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("|                 ");
+	prOption(" Óà¶î½µÐò ", 3 == type, 16);
+	printf("                |");
+	gotoxy(x, y++);
+	printf("|                                               |");
+	gotoxy(x, y++);
+	printf("=================================================");
+	key k = isKey(getch());
+	switch (k)
+	{
+	case up:
+		type--;
+		if (0>type)
+		{
+			type = 3;
+		}
+		break;
+	case down:
+		type++;
+		if (3<type)
+		{
+			type = 0;
+		}
+		break;
+	case enter:
+	{
+		pList list = getCards();
+		switch (type)
+		{
+		case 0:
+			cardLists = sort(list, _sortCardById, 0);
+			break;
+		case 1:
+			cardLists = sort(list, _sortCardById, 1);
+			break;
+		case 2:
+			cardLists = sort(list, _sortCardByBalance, 0);
+			break;
+		case 3:
+			cardLists = sort(list, _sortCardByBalance, 1);
+			break;
+		default:
+			break;
+		}
+		type = 0;
+		return;
+	}
+	default:
+		break;
+	}
+	sortCard();
+}
