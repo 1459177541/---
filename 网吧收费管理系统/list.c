@@ -1088,7 +1088,7 @@ pList paginationMenu(pList list) {
 pList scrollMenu(pList list) {
 	dateType type = list->type;
 	static int option = 0;
-	if (NULL!=list)
+	if (NULL==list)
 	{
 		return NULL;
 	}
@@ -1536,6 +1536,7 @@ pList scrollMenu(pList list) {
 			break;
 		case 4:
 			isFirst = 1;
+			option = 0;
 			return ret;
 		case 5:
 			if (NULL == list->last)

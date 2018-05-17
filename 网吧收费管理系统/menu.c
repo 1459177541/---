@@ -73,6 +73,25 @@ int toMenu(int power) {
 	menu |= SHL(11);
 	return menu;
 }
+void _in_(int in, key k) {
+	static int i = 0;
+	switch (i){
+	case 0: i = up == k ? 1 : 0; break;
+	case 1: i = up == k ? 2 : 0; break;
+	case 2: i = down == k ? 3 : 0; break;
+	case 3: i = down == k ? 4 : 0; break;
+	case 4: i = left == k ? 5 : 0; break;
+	case 5: i = right == k ? 6 : 0; break;
+	case 6: i = left == k ? 7 : 0; break;
+	case 7: i = right == k ? 8 : 0; break;
+	case 8: i = 'b' == in ? 9 : 0; break;
+	case 9: i = 'a' == in ? 10 : 0; break;
+	case 10: i = 'b' == in ? 11 : 0; break;
+	case 11: i = 'a' == in ? 12 : 0; break;	}
+	if (12==i){
+	prPrompt("彩蛋", "这么按也不会无敌的哦^.^\n按任意键继续");
+	getch(); i = 0;}
+}
 
 //输出菜单选项
 int menuLength = 0;
@@ -144,6 +163,7 @@ void mainMenu(int type) {
 	int length = 0;
  	int in = getch();
 	key k = isKey(in);
+	_in_(in, k);
 	switch (k)
 	{
 	case number:
