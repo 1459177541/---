@@ -228,12 +228,12 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 		}
 		else if (0==type)
 		{
-			pList ct = scrollMenu(getCardTypeList(), d_cardType, 4);
+			pList ct = scrollMenu(getCardTypeList());
 			while (NULL==ct->last)
 			{
 				prPrompt("禁止使用默认类型", "按任意键重新选择");
 				getch();
-				ct = scrollMenu(getCardTypeList(), d_cardType, 4);
+				ct = scrollMenu(getCardTypeList());
 			}
 			strcpy(p->type, ct->date.cardType->name);
 			showCard(type, p, text, password, password2);
@@ -261,7 +261,7 @@ pList newCard(pList list) {
 			return list;
 		}
 		system("title 会员卡类型管理");
-		scrollMenu(getCardTypeList(), d_cardType, 0);
+		scrollMenu(getCardTypeList());
 		system("title 会员卡管理");
 	}
 	char *pass1 = (char *)malloc(sizeof(char) * 16);
@@ -469,7 +469,7 @@ pList selectCard(int type, pCriteria criteria) {
 		case 1:
 			if (condition==criteria->type)
 			{
-				pList cardType = scrollMenu(getCardTypeList(), d_cardType, 4);
+				pList cardType = scrollMenu(getCardTypeList());
 				criteria->condition.card = cardType->date.cardType;
 				break;
 			}

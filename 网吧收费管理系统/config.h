@@ -291,8 +291,8 @@ void saveAll();
 void close(dateType type);
 void closeAll();
 pList sort(pList list, int(*isUP)(pList a, pList b), int isNot);
-pList paginationMenu(pList list, dateType type, int index, int option);	//上/下机、会员卡、历史记录
-pList scrollMenu(pList list, dateType type, int option);		//电脑类型、会员卡类型、管理员、收费标准
+pList paginationMenu(pList list);	//上/下机、会员卡、历史记录
+pList scrollMenu(pList list);		//电脑类型、会员卡类型、管理员、收费标准
 
 //stztistics
 void prStat(pStat p, int isOption);

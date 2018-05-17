@@ -63,7 +63,7 @@ pList getPCs() {
 		{
 			prPrompt("警告", "当前无网吧规模\n按任意键转到网吧规模");
 			getch();
-			scrollMenu(getPCtypeList(), d_pcType, 0);
+			scrollMenu(getPCtypeList());
 		}
 		initPCToArray();
 	}
@@ -374,7 +374,7 @@ pList selectPC(int type, pCriteria criteria) {
 				break;
 			case 1:
 			{
-				pList pcType = scrollMenu(getPCtypeList(), d_pcType, 4);
+				pList pcType = scrollMenu(getPCtypeList());
 				criteria->condition.pc.pcType = pcType->date.pcType;
 				break;
 			}
@@ -483,7 +483,7 @@ void logPC(pPC p) {
 		case esc:
 			return;
 		default:
-			scrollMenu(getRateList(), d_rate, 0);
+			scrollMenu(getRateList());
 			break;
 		}
 	}
@@ -503,7 +503,7 @@ void logPC(pPC p) {
 			startCheck();
 		}
 		system("title 选择上机用户");
-		p->user = paginationMenu(getCards(), d_card, 0, 9)->date.card;
+		p->user = paginationMenu(getCards())->date.card;
 		system("title 上/下机");
 		if (NULL==p->user)
 		{

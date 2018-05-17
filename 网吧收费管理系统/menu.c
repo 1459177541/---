@@ -257,39 +257,39 @@ void mainMenu(int type) {
 		{
 		case 0:
 			system("title 上/下机");
-			paginationMenu(getPCs(), d_pc, 0, 0);
+			paginationMenu(getPCs());
 			break;
 		case 1:
 			system("title 会员卡管理");
-			paginationMenu(getCards(), d_card, 0, 0);
+			paginationMenu(getCards());
 			break;
 		case 2:
 			system("title 网吧规模管理");
-			scrollMenu(getPCtypeList(), d_pcType, 0);
+			scrollMenu(getPCtypeList());
 			break;
 		case 3:
 			system("title 会员卡类型管理");
-			scrollMenu(getCardTypeList(), d_cardType, 0);
+			scrollMenu(getCardTypeList());
 			break;
 		case 4:
 			system("title 收费标准管理");
-			scrollMenu(getRateList(), d_rate, 0);
+			scrollMenu(getRateList());
 			break;
 		case 5:
 			system("title 管理员管理");
-			scrollMenu(getAdminHead(),d_admin,0);
+			scrollMenu(getAdminHead());
 			break;
 		case 6:
 			system("title 历史记录");
-			paginationMenu(getHistorys(), d_history, 0, 0);
+			paginationMenu(getHistorys());
 			break;
 		case 7:
 			system("title 统计");
-			paginationMenu(getStat(), d_statistics, 0, 0);
+			paginationMenu(getStat());
 			break;
 		case 8:
 			system("title 设置");
-			paginationMenu(getAttriList(), d_attri, 0, 0);
+			paginationMenu(getAttriList());
 			break;
 		case 9:
 			saveAll();

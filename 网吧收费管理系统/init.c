@@ -155,13 +155,13 @@ int initialization() {
 			switch (type)
 			{
 			case 0:
-				scrollMenu(getPCtypeList(), d_pcType, 0);
+				scrollMenu(getPCtypeList());
 				break;
 			case 1:
-				scrollMenu(getCardTypeList(), d_cardType, 0);
+				scrollMenu(getCardTypeList());
 				break;
 			case 2:
-				scrollMenu(getRateList(), d_rate, 0);
+				scrollMenu(getRateList());
 				break;
 			case 3:
 				isWhile = 0;

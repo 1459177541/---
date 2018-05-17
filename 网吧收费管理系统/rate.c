@@ -214,7 +214,7 @@ void editRate(int type,int option[], pRate p) {
 		case 0:
 		{
 			system("title 选择关联电脑");
-			pList op = scrollMenu(getPCtypeList(), d_pcType, 4);
+			pList op = scrollMenu(getPCtypeList());
 			strcpy(p->pc, op->date.pcType->type);
 			system("title 收费标准管理");
 			editRate(type, option, p);
@@ -223,7 +223,7 @@ void editRate(int type,int option[], pRate p) {
 		case 1:
 		{
 			system("title 选择关联会员卡类型");
-			pList op = scrollMenu(getCardTypeList(), d_cardType, 4);
+			pList op = scrollMenu(getCardTypeList());
 			strcpy(p->card, op->date.cardType->name);
 			system("title 收费标准管理");
 			editRate(type, option, p);

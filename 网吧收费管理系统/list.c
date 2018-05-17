@@ -243,12 +243,7 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b), in
 	pList endNext = end->next;
 	pList a = _sort(start, mid, minLength, isUP, isNot);
 	pList b = _sort(midNext, end, length - minLength, isUP, isNot);
-	if (isNot)
-	{
-		pList t = a;
-		a = b;
-		b = t;
-	}
+	midNext = b;
 	int ai = 0;
 	int bi = 0;
 	pList p = (pList)malloc(sizeof(List));
@@ -257,9 +252,9 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b), in
 	p->last = NULL;
 	for (int i = 0; i < length; i++)
 	{
-		if (ai < minLength)
+		if (a != midNext)
 		{
-			if (endNext != b || isUP(a,b))
+			if (endNext == b || (isNot && isUP(a,b)))
 			{
 				p->next = a;
 				a->last = p;
@@ -270,7 +265,7 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b), in
 				continue;
 			}
 		}
-		if(bi < length-minLength)
+		if(b != endNext)
 		{
 			p->next = b;
 			b->last = p;
@@ -361,22 +356,21 @@ void MenuHelp(int type) {
 }
 
 //分页菜单
-int thisPage = 0;
-int finalPage = -1;
-void initFinalPage(pList list) {
+int initFinalPage(pList list) {
 	int length = 0;
 	while (NULL!=list)
 	{
 		length++;
 		list = list->next;
 	}
-	finalPage = (length-1)/10;
+	return (length-1)/10;
 }
-pList paginationMenu(pList list, dateType type, int index, int option) {
-	if (list->type!=type)
-	{
-		return NULL;
-	}
+pList paginationMenu(pList list) {
+	dateType type = list->type;
+	static int index = 0;
+	static int option = 0;
+	static int thisPage = 0;
+	static int finalPage = -1;
 	if (d_pc!=type
 		&& d_card!=type
 		&& d_history!=type
@@ -387,12 +381,12 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	{
 		prPrompt("警告！", "该警告正常运行不会出现\n如果您看到该警告，请联系作者\n按任意键自动识别意图并继续");
 		getch();
-		return scrollMenu(list, type, option);
+		return scrollMenu(list);
 	}
 	pList p = list;
 	if (-1==finalPage)
 	{
-		initFinalPage(list);
+		finalPage = initFinalPage(list);
 	}
 	pList ret = NULL;
 	pList op = list;
@@ -607,7 +601,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	if (isFirst)
 	{
 		MenuHelp(0);
-		return paginationMenu(list, type, index, option);
+		return paginationMenu(list);
 	}
 	int in = getch();
 	key k = isKey(in);
@@ -615,7 +609,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	{
 	case number:
 	{
-		ret = paginationMenu(list, type, in - '0', option);
+		index = in - '0';
 		break;
 	}
 	case up:
@@ -659,8 +653,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	case pgup:
 		if (0>=thisPage)
 		{
-			ret = paginationMenu(list, type, index, option);
-			return ret;
+			break;
 		}
 		for (int i = 0; i < 10; i++)
 		{
@@ -671,8 +664,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 	case pgdn:
 		if (finalPage<=thisPage)
 		{
-			ret = paginationMenu(list, type, index, option);
-			return ret;
+			break;
 		}
 		for (int i = 0; i < 10; i++)
 		{
@@ -728,7 +720,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				prPrompt("即将进入网吧规模", "按任意键继续");
 				getch();
 				system("title 网吧规模管理");
-				scrollMenu(getPCtypeList(), d_pcType, 0);
+				scrollMenu(getPCtypeList());
 				if (isEditPCType())
 				{
 					thisPage = 0;
@@ -774,9 +766,15 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			{
 				int	ttp = thisPage;
 				int tfp = finalPage;
+				int tin = index;
+				int top = option;
+				index = 0;
+				option = 9;
 				thisPage = 0;
 				finalPage = -1;
 				logPC(op->date.pc);
+				index = tin;
+				option = top;
 				thisPage = ttp;
 				finalPage = tfp;
 				break;
@@ -818,6 +816,7 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 						free(body);
 						getch();
 					}
+					finalPage = initFinalPage(list);
 				}
 				else
 				{
@@ -828,17 +827,19 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			case d_history:		//筛选
 			{
 				pList t = NULL;
+				index = 0;
+				thisPage = 0;
 				finalPage = -1;
 				t = selectToHistory();
 				if (NULL == t || NULL == t->date.pc)
 				{
 					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
 					getch();
-					ret = paginationMenu(list, type, index, option);
+					ret = paginationMenu(list);
 				}
 				else
 				{
-					ret = paginationMenu(t, type, index, option);
+					ret = paginationMenu(t);
 				}
 				pList q = p->next;
 				while (NULL != q)
@@ -847,16 +848,24 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					p = q;
 					q = q->next;
 				}
+				index = 0;
+				option = 0;
 				return ret;
 			}
 			case d_statistics:	//详细
 			{
 				int	ttp = thisPage;
 				int tfp = finalPage;
+				int tin = index;
+				int top = option;
+				index = 0;
+				option = 0;
 				thisPage = 0;
 				finalPage = -1;
 				pList ms = getMoreStat(op);
-				paginationMenu(ms, d_statistics_more, 0, 0);
+				paginationMenu(ms);
+				index = tin;
+				option = top;
 				thisPage = ttp;
 				finalPage = tfp;
 				pList q = ms->next;
@@ -869,11 +878,9 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				break;
 			}
 			case d_statistics_more:	//退出
-				finalPage = -1;
-				thisPage = 0;
-				isFirst = 1;
-				return op;
 			case d_attri:
+				index = 0;
+				option = 0;
 				finalPage = -1;
 				thisPage = 0;
 				isFirst = 1;
@@ -894,6 +901,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				break;
 			case d_history:		//退出
 			case d_statistics:
+				index = 0;
+				option = 0;
 				finalPage = -1;
 				thisPage = 0;
 				isFirst = 1;
@@ -911,16 +920,19 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			{
 				pList t = NULL;
 				finalPage = -1;
+				thisPage = 0;
+				index = 0;
+				option = 0;
 				t = selectToPC();
 				if (NULL==t||NULL==t->date.pc)
 				{
 					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
 					getch();
-					ret = paginationMenu(list, type, index, option);
+					ret = paginationMenu(list);
 				}
 				else
 				{
-					ret = paginationMenu(t, type, index, option);
+					ret = paginationMenu(t);
 				}
 				pList q = t->next;
 				while (NULL != q)
@@ -929,6 +941,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					t = q;
 					q = q->next;
 				}
+				index = 0;
+				option = 0;
 				return ret;
 			}
 			case d_card:		//详细
@@ -981,6 +995,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			switch (type)
 			{
 			case d_pc:			//退出
+				index = 0;
+				option = 0;
 				finalPage = -1;
 				thisPage = 0;
 				isFirst = 1;
@@ -989,16 +1005,19 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			{
 				pList t = NULL;
 				finalPage = -1;
+				thisPage = 0;
+				index = 0;
+				option = 0;
 				t = selectToCard();
 				if (NULL == t || NULL == t->date.pc)
 				{
 					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
 					getch();
-					ret = paginationMenu(list, type, index, option);
+					ret = paginationMenu(list);
 				}
 				else
 				{
-					ret = paginationMenu(t, type, index, option);
+					ret = paginationMenu(t);
 				}
 				pList q = p->next;
 				while (NULL != q)
@@ -1007,6 +1026,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 					p = q;
 					q = q->next;
 				}
+				index = 0;
+				option = 0;
 				return ret;
 			}
 			default:
@@ -1022,7 +1043,6 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 				sortCard();
 				list = getCards();
 				thisPage = 0;
-				initFinalPage(list);
 				break;
 			}
 			default:
@@ -1034,6 +1054,8 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			switch (type)
 			{
 			case d_card:		//退出
+				index = 0;
+				option = 0;
 				finalPage = -1;
 				thisPage = 0;
 				isFirst = 1;
@@ -1041,30 +1063,32 @@ pList paginationMenu(pList list, dateType type, int index, int option) {
 			default:
 				break;
 			}
-		ret = paginationMenu(list, type, index, option);
-		return ret;
+			break;
 		}
 		default:
 			break;
 		}
-		return paginationMenu(list, type, index, option);
+		break;
 	case esc:
 	{
+		index = 0;
+		option = 0;
 		finalPage = -1;
 		thisPage = 0;
 		isFirst = 1;
-		return NULL;
+		return op;
 	}
 	default:
 		break;
 	}
-	ret = paginationMenu(list, type, index, option);
-	return ret;
+	return paginationMenu(list);
 }
 
 //滚动菜单
-pList scrollMenu(pList list, dateType type, int option) {
-	if (NULL!=list && list->type != type)
+pList scrollMenu(pList list) {
+	dateType type = list->type;
+	static int option = 0;
+	if (NULL!=list)
 	{
 		return NULL;
 	}
@@ -1076,7 +1100,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 	{
 		prPrompt("警告！", "该警告正常运行不会出现\n如果您看到该警告，请联系作者\n按任意键自动识别意图并继续");
 		getch();
-		return paginationMenu(list, type, 0, option);
+		return paginationMenu(list);
 	}
 	pList ret = NULL;
 	char *nMore = (char*)malloc(160 * sizeof(char));
@@ -1229,7 +1253,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 	if (isFirst)
 	{
 		MenuHelp(1);
-		return scrollMenu(list, type, option);
+		return scrollMenu(list);
 	}
 	int in = getch();
 	key k = isKey(in);
@@ -1240,14 +1264,12 @@ pList scrollMenu(pList list, dateType type, int option) {
 		{
 			list = list->last;
 		}
-		ret = scrollMenu(list, type, option);
 		break;
 	case down:
 		if (NULL != list->next)
 		{
 			list = list->next;
 		}
-		ret= scrollMenu(list, type, option);
 		break;
 	case left:
 		if (0==option)
@@ -1255,7 +1277,6 @@ pList scrollMenu(pList list, dateType type, int option) {
 			option = d_rate == type ? 7 : 5;
 		}
 		option--;
-		ret = scrollMenu(list, type, option);
 		break;
 	case tab:
 	case right:
@@ -1264,7 +1285,6 @@ pList scrollMenu(pList list, dateType type, int option) {
 			option = -1;
 		}
 		option++;
-		ret = scrollMenu(list, type, option);
 		break;
 	case symbol:
 		if ('+' == in && d_rate == type)
@@ -1288,7 +1308,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 				list = list->next;
 			}
 		}
-		ret = scrollMenu(list, type, option);
+		ret = scrollMenu(list);
 		break;
 	case enter:
 	{
@@ -1512,7 +1532,7 @@ pList scrollMenu(pList list, dateType type, int option) {
 			}
 			MenuHelp(1);
 			getch();
-			return scrollMenu(list, type, option);
+			return scrollMenu(list);
 			break;
 		case 4:
 			isFirst = 1;
@@ -1538,15 +1558,15 @@ pList scrollMenu(pList list, dateType type, int option) {
 		default:
 			break;
 		}
-		ret = scrollMenu(list, type, option);
+		ret = scrollMenu(list);
 		return ret;
 	}
 	case esc:
+		option = 0;
 		isFirst = 1;
 		return ret;
 	default:
-		ret = scrollMenu(list, type, option);
 		break;
 	}
-	return ret;
+	return scrollMenu(list);
 }

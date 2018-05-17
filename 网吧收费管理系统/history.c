@@ -634,7 +634,7 @@ pList selectHistory(int type, pCriteria criteria) {
 				break;
 			case 2:
 			{
-				pList editor = scrollMenu(getAdminHead(), d_admin, 4);
+				pList editor = scrollMenu(getAdminHead());
 				criteria->condition.history.editor = editor->date.admin;
 				break;
 			}
