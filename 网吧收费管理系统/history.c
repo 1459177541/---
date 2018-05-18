@@ -205,6 +205,10 @@ void showHistory(pHistory p) {
 void addHistory(historyType type, date date, double other) {
 	char * prPower(int power);
 	pList pl = NULL;
+	if (NULL == historyLists)
+	{
+		getHistorys();
+	}
 	if (NULL==historyLists->date.history)
 	{
 		pl = historyLists;
@@ -281,6 +285,7 @@ void addHistory(historyType type, date date, double other) {
 		break;
 	case RECHARGE_T:
 		sprintf(d->text, "用户: %16d 充值了 %16lf 元", date.card->id, other);
+		break;
 	default:
 		strcpy(pl->date.history->text, "ERROR");
 		break;
@@ -373,7 +378,14 @@ pList getListFromHistoryCriteria(pCriteria criteria) {
 		}
 		p = p->next;
 	}
-	return list->next;
+	if (NULL == list->next)
+	{
+		return NULL;
+	}
+	pList ret = list->next;
+	ret->last = NULL;
+	free(list);
+	return ret;
 }
 
 //筛选
@@ -655,7 +667,7 @@ pList selectHistory(int type, pCriteria criteria) {
 		gotoxy(x, y++);
 		printf("|              %c请输入待搜索的内容              |", 1 == type ? '>' : ' ');
 		gotoxy(x, y++);
-		printf("|                                               |");//12
+		printf("|                                               |");
 		gotoxy(x, y++);
 		printf("|                                               |");
 		gotoxy(x, y++);
@@ -677,14 +689,14 @@ pList selectHistory(int type, pCriteria criteria) {
 		}
 		switch (k)
 		{
-		case up:
+		case down:
 			type++;
 			if (2 < type)
 			{
 				type = 0;
 			}
 			break;
-		case down:
+		case up:
 			type--;
 			if (0>type)
 			{

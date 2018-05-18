@@ -827,7 +827,7 @@ pList paginationMenu(pList list) {
 				thisPage = 0;
 				finalPage = -1;
 				t = selectToHistory();
-				if (NULL == t || NULL == t->date.pc)
+				if (NULL == t || NULL == t->date.history)
 				{
 					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
 					getch();
@@ -836,13 +836,14 @@ pList paginationMenu(pList list) {
 				else
 				{
 					ret = paginationMenu(t);
-				}
-				pList q = p->next;
-				while (NULL != q)
-				{
-					free(p);
-					p = q;
-					q = q->next;
+					pList q = t->next;
+					while (NULL != q)
+					{
+						t->date.history = NULL;
+						free(t);
+						t = q;
+						q = q->next;
+					}
 				}
 				index = 0;
 				option = 0;
@@ -929,13 +930,14 @@ pList paginationMenu(pList list) {
 				else
 				{
 					ret = paginationMenu(t);
-				}
-				pList q = t->next;
-				while (NULL != q)
-				{
-					free(t);
-					t = q;
-					q = q->next;
+					pList q = t->next;
+					while (NULL != q)
+					{
+						t->date.pc = NULL;
+						free(t);
+						t = q;
+						q = q->next;
+					}
 				}
 				index = 0;
 				option = 0;
@@ -1005,7 +1007,7 @@ pList paginationMenu(pList list) {
 				index = 0;
 				option = 0;
 				t = selectToCard();
-				if (NULL == t || NULL == t->date.pc)
+				if (NULL == t || NULL == t->date.card)
 				{
 					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
 					getch();
@@ -1014,13 +1016,14 @@ pList paginationMenu(pList list) {
 				else
 				{
 					ret = paginationMenu(t);
-				}
-				pList q = p->next;
-				while (NULL != q)
-				{
-					free(p);
-					p = q;
-					q = q->next;
+					pList q = t->next;
+					while (NULL != q)
+					{
+						t->date.card = NULL;
+						free(t);
+						t = q;
+						q = q->next;
+					}
 				}
 				index = 0;
 				option = 0;

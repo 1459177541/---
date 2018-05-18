@@ -331,7 +331,6 @@ pList getListFromCardCriteria(pCriteria criteria) {
 	pList o = list;
 	pList p = getCards();
 	int isAdd;
-	char *temp = (char*)malloc(sizeof(char) * 32);
 	while (NULL != p)
 	{
 		switch (criteria->type)
@@ -380,8 +379,14 @@ pList getListFromCardCriteria(pCriteria criteria) {
 		}
 		p = p->next;
 	}
-	free(temp);
-	return list->next;
+	if (NULL == list->next)
+	{
+		return NULL;
+	}
+	pList ret = list->next;
+	ret->last = NULL;
+	free(list);
+	return ret;
 }
 
 //É¸Ñ¡
@@ -423,7 +428,7 @@ pList selectCard(int type, pCriteria criteria) {
 		gotoxy(x, y++);
 		printf("|              %cÇëÊäÈë´ýËÑË÷µÄÄÚÈÝ              |", 1 == type ? '>' : ' ');
 		gotoxy(x, y++);
-		printf("|                                               |");//12
+		printf("|                                               |");
 		gotoxy(x, y++);
 		printf("|                                               |");
 		gotoxy(x, y++);

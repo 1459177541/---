@@ -227,6 +227,10 @@ pList getListFromPcCriteria(pCriteria criteria) {
 		}
 		p = p->next;
 	}
+	if (NULL==list->next)
+	{
+		return NULL;
+	}
 	free(temp);
 	pList ret = list->next;
 	ret->last = NULL;
@@ -398,7 +402,7 @@ pList selectPC(int type, pCriteria criteria) {
 		gotoxy(x, y++);
 		printf("|              %cÇëÊäÈë´ýËÑË÷µÄÄÚÈÝ              |",1==type?'>':' ');
 		gotoxy(x, y++);
-		printf("|                                               |");//12
+		printf("|                                               |");
 		gotoxy(x, y++);
 		printf("|                                               |");
 		gotoxy(x, y++);
@@ -420,14 +424,14 @@ pList selectPC(int type, pCriteria criteria) {
 		}
 		switch (k)
 		{
-		case up:
+		case down:
 			type++;
 			if (2 < type)
 			{
 				type = 0;
 			}
 			break;
-		case down:
+		case up:
 			type--;
 			if (0>type)
 			{
