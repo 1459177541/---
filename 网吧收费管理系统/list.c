@@ -244,8 +244,6 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b), in
 	pList a = _sort(start, mid, minLength, isUP, isNot);
 	pList b = _sort(midNext, end, length - minLength, isUP, isNot);
 	midNext = b;
-	int ai = 0;
-	int bi = 0;
 	pList p = (pList)malloc(sizeof(List));
 	pList ret = p;
 	p->next = NULL;
@@ -254,12 +252,11 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b), in
 	{
 		if (a != midNext)
 		{
-			if (endNext == b || (isNot && isUP(a,b)))
+			if (endNext == b || (isNot && isUP(a,b)) || (!isNot && isUP(b,a)))
 			{
 				p->next = a;
 				a->last = p;
 				a = a->next;
-				ai++;
 				p = p->next;
 				p->next = NULL;
 				continue;
@@ -270,7 +267,6 @@ pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b), in
 			p->next = b;
 			b->last = p;
 			b = b->next;
-			bi++;
 			p = p->next;
 			p->next = NULL;
 			continue;
