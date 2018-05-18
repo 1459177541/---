@@ -554,10 +554,10 @@ void setHistoryFormCriteria(pCriteria p, int type) {
 			p->condition.history.historyType = U_ADMIN_T;
 			return;
 		case 13:
-			p->condition.history.historyType = D_CARD_T;
+			p->condition.history.historyType = C_CARD_T;
 			return;
 		case 14:
-			p->condition.history.historyType = U_CARD_T;
+			p->condition.history.historyType = D_CARD_T;
 			return;
 		case 15:
 			p->condition.history.historyType = U_CARD_T;
@@ -667,7 +667,7 @@ pList selectHistory(int type, pCriteria criteria) {
 		gotoxy(x, y++);
 		printf("|              %cÇëÊäÈë´ýËÑË÷µÄÄÚÈÝ              |", 1 == type ? '>' : ' ');
 		gotoxy(x, y++);
-		printf("|                                               |");
+		printf("|               %-15s                 |", 1 == type ? "" : criteria->Criteria);
 		gotoxy(x, y++);
 		printf("|                                               |");
 		gotoxy(x, y++);
@@ -681,7 +681,7 @@ pList selectHistory(int type, pCriteria criteria) {
 		key k;
 		if (1 == type)
 		{
-			k = input(x + 16, 12, criteria->Criteria, 0, NUM | SYMBOL | LETTER | CHINESE, NULL);
+			k = input(x + 16, 11, criteria->Criteria, 0, NUM | SYMBOL | LETTER | CHINESE, NULL);
 		}
 		else
 		{

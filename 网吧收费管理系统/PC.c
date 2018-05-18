@@ -402,7 +402,7 @@ pList selectPC(int type, pCriteria criteria) {
 		gotoxy(x, y++);
 		printf("|              %cÇëÊäÈë´ýËÑË÷µÄÄÚÈÝ              |",1==type?'>':' ');
 		gotoxy(x, y++);
-		printf("|                                               |");
+		printf("|               %-15s                 |",1==type?"":criteria->Criteria);
 		gotoxy(x, y++);
 		printf("|                                               |");
 		gotoxy(x, y++);
@@ -416,7 +416,7 @@ pList selectPC(int type, pCriteria criteria) {
 		key k;
 		if (1==type)
 		{
-			k = input(x + 16, 12, criteria->Criteria, 0, NUM | SYMBOL | LETTER | CHINESE, NULL);
+			k = input(x + 16, 11, criteria->Criteria, 0, NUM | SYMBOL | LETTER | CHINESE, NULL);
 		}
 		else
 		{
