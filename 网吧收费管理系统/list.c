@@ -359,7 +359,7 @@ int initFinalPage(pList list) {
 		length++;
 		list = list->next;
 	}
-	return (length-1)/10;
+	return length;
 }
 pList paginationMenu(pList list) {
 	dataType type = list->type;
@@ -367,6 +367,7 @@ pList paginationMenu(pList list) {
 	static int option = 0;
 	static int thisPage = 0;
 	static int finalPage = -1;
+	static int Length = 0;
 	if (d_pc!=type
 		&& d_card!=type
 		&& d_history!=type
@@ -379,11 +380,16 @@ pList paginationMenu(pList list) {
 		getch();
 		return scrollMenu(list);
 	}
-	pList p = list;
 	if (-1==finalPage)
 	{
-		finalPage = initFinalPage(list);
+		Length = initFinalPage(list);
+		finalPage = (Length - 1) / 10;
 	}
+	if (thisPage == finalPage && (Length-1)%10<index)
+	{
+		index = (Length-1) % 10;
+	}
+	pList p = list;
 	pList ret = NULL;
 	pList op = list;
 	int length = 0;
