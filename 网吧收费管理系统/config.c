@@ -21,7 +21,7 @@ int initAttri() {
 			attributeLists->next = NULL;
 			attributeLists->last = NULL;
 			attributeLists->type = d_attri;
-			attributeLists->date.attri = p;
+			attributeLists->data.attri = p;
 		}
 		else
 		{
@@ -37,7 +37,7 @@ int initAttri() {
 	while (fread(p, sizeof(attribute), 1, fp)>0)
 	{
 		o->type = d_attri;
-		o->date.attri = p;
+		o->data.attri = p;
 		o->last = q;
 		o->next = NULL;
 		q->next = o;
@@ -68,9 +68,9 @@ char* getAttri(char * key) {
 	pList p = attributeLists;
 	while (NULL!=p)
 	{
-		if (0 == strcmp(p->date.attri->key,key))
+		if (0 == strcmp(p->data.attri->key,key))
 		{
-			return p->date.attri->value;
+			return p->data.attri->value;
 		}
 		p = p->next;
 	}
@@ -82,16 +82,16 @@ void setAttri(char *key, char *value, char *name) {
 	pList p = attributeLists;
 	while (NULL != p && NULL != p->next)
 	{
-		if (0==strcmp(p->date.attri->key, key))
+		if (0==strcmp(p->data.attri->key, key))
 		{
-			strcpy(p->date.attri->value, value);
+			strcpy(p->data.attri->value, value);
 			return;
 		}
 		p = p->next;		
 	}
-	if (NULL!=p && 0 == strcmp(p->date.attri->key, key))
+	if (NULL!=p && 0 == strcmp(p->data.attri->key, key))
 	{
-		strcpy(p->date.attri->value, value);
+		strcpy(p->data.attri->value, value);
 		return;
 	}
 	pAttribute d = (pAttribute)malloc(sizeof(attribute));
@@ -104,7 +104,7 @@ void setAttri(char *key, char *value, char *name) {
 		q->last = p;
 		q->next = NULL;
 		q->type = d_attri;
-		q->date.attri = d;
+		q->data.attri = d;
 		p->next = q;
 	}
 	else
@@ -113,7 +113,7 @@ void setAttri(char *key, char *value, char *name) {
 		attributeLists->last = p;
 		attributeLists->next = NULL;
 		attributeLists->type = d_attri;
-		attributeLists->date.attri = d;
+		attributeLists->data.attri = d;
 	}
 }
 

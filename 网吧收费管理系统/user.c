@@ -18,7 +18,7 @@ int initAdminList() {
 			adminLists->next = NULL;
 			adminLists->last = NULL;
 			adminLists->type = d_admin;
-			adminLists->date.admin = p;
+			adminLists->data.admin = p;
 		}
 		else
 		{
@@ -33,7 +33,7 @@ int initAdminList() {
 	while (fread(p, sizeof(admin), 1, fp)>0)
 	{
 		o->type = d_admin;
-		o->date.admin = p;
+		o->data.admin = p;
 		o->last = q;
 		o->next = NULL;
 		q->next = o;
@@ -56,7 +56,7 @@ pList getAdminHead() {
 			adminLists = (pList)malloc(sizeof(List));
 			adminLists->next = NULL;
 			adminLists->last = NULL;
-			adminLists->date.admin = NULL;
+			adminLists->data.admin = NULL;
 			adminLists->type = d_admin;
 		}
 	}
@@ -74,7 +74,7 @@ pAdmin getUser() {
 //设置超级管理员
 void setRoot(pAdmin root) {
 	pList p = getAdminHead();
-	p->date.admin = root;
+	p->data.admin = root;
 }
 
 //修改管理员
@@ -481,7 +481,7 @@ void helpFromUser() {
 	gotoxy(x, y++);
 	printf("|             全部(All)、增加(Create)、         |");
 	gotoxy(x, y++);
-	printf("|             修改(Update)、删除(Detele)        |");
+	printf("|             修改(Updata)、删除(Detele)        |");
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
@@ -528,12 +528,12 @@ pList newAdmin(pList list) {
 	pList pl = (pList)malloc(sizeof(List));
 	pl->last = q;
 	pl->next = NULL;
-	pl->date.admin = p;
+	pl->data.admin = p;
 	pl->type = d_admin;
 	q->next = pl;
 	editUser(0, p, pass1, pass2);
 	free(pass1);
 	free(pass2);
-	addHistory(C_ADMIN_T, pl->date, 0);
+	addHistory(C_ADMIN_T, pl->data, 0);
 	return list;
 }

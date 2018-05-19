@@ -22,9 +22,9 @@ pAdmin isCanLogin(pAdmin user) {
 	pList p = getAdminHead();
 	while (NULL != p)
 	{
-		if (0 == strcmp(p->date.admin->name, user->name) && 0 == strcmp(p->date.admin->password, user->password))
+		if (0 == strcmp(p->data.admin->name, user->name) && 0 == strcmp(p->data.admin->password, user->password))
 		{
-			return p->date.admin;
+			return p->data.admin;
 		}
 		p = p->next;
 	}

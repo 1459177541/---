@@ -18,7 +18,7 @@ int initHistory() {
 			historyLists->next = NULL;
 			historyLists->last = NULL;
 			historyLists->type = d_history;
-			historyLists->date.history = p;
+			historyLists->data.history = p;
 		}
 		else
 		{
@@ -32,7 +32,7 @@ int initHistory() {
 	p = (pHistory)malloc(sizeof(history));
 	while (fread(p, sizeof(history), 1, fp)>0)
 	{
-		o->date.history = p;
+		o->data.history = p;
 		o->type = d_history;
 		o->last = q;
 		o->next = NULL;
@@ -55,7 +55,7 @@ pList getHistorys() {
 			historyLists = (pList)malloc(sizeof(List));
 			historyLists->next = NULL;
 			historyLists->last = NULL;
-			historyLists->date.history = NULL;
+			historyLists->data.history = NULL;
 			historyLists->type = d_history;
 		}
 	}
@@ -202,14 +202,14 @@ void showHistory(pHistory p) {
 	free(textTime1);
 }
 
-void addHistory(historyType type, date date, double other) {
+void addHistory(historyType type, data data, double other) {
 	char * prPower(int power);
 	pList pl = NULL;
 	if (NULL == historyLists)
 	{
 		getHistorys();
 	}
-	if (NULL==historyLists->date.history)
+	if (NULL==historyLists->data.history)
 	{
 		pl = historyLists;
 	}
@@ -223,7 +223,7 @@ void addHistory(historyType type, date date, double other) {
 		historyLists = pl;
 	}
 	pHistory d = (pHistory)malloc(sizeof(history));
-	pl->date.history = d;
+	pl->data.history = d;
 	time_t timer = time(NULL);
 	pTm tt = localtime(&timer);
 	d->time = *tt;
@@ -233,61 +233,61 @@ void addHistory(historyType type, date date, double other) {
 	switch (type)
 	{
 	case C_ADMIN_T:
-		sprintf(d->text, "新建管理员: %-16s 权限: %-40s ", date.admin->name, prPower(date.admin->power));
+		sprintf(d->text, "新建管理员: %-16s 权限: %-40s ", data.admin->name, prPower(data.admin->power));
 		break;
 	case D_ADMIN_T:
-		sprintf(d->text, "删除管理员: %-16s", date.admin->name);
+		sprintf(d->text, "删除管理员: %-16s", data.admin->name);
 		break;
 	case U_ADMIN_T:
-		sprintf(d->text, "修改管理员信息: %-16s", date.admin->name);
+		sprintf(d->text, "修改管理员信息: %-16s", data.admin->name);
 		break;
 	case C_RATE_T:
-		sprintf(d->text, "新建计费方案: %-16s 对于 %s 在 %s 上机适用", date.rate->rule, date.rate->card, date.rate->pc);
+		sprintf(d->text, "新建计费方案: %-16s 对于 %s 在 %s 上机适用", data.rate->rule, data.rate->card, data.rate->pc);
 		break;
 	case D_RATE_T:
-		sprintf(d->text, "删除计费方案: %s", date.rate->rule);
+		sprintf(d->text, "删除计费方案: %s", data.rate->rule);
 		break;
 	case U_RATE_T:
-		sprintf(d->text, "修改计费方案: %s", date.rate->rule);
+		sprintf(d->text, "修改计费方案: %s", data.rate->rule);
 		break;
 	case C_CARD_T:
-		sprintf(d->text, "开户: %s(证件号: %s)，开通%s", date.card->masterName, date.card->idcardNum, date.card->type);
+		sprintf(d->text, "开户: %s(证件号: %s)，开通%s", data.card->masterName, data.card->idcardNum, data.card->type);
 		break;
 	case D_CARD_T:
-		sprintf(d->text, "注销: %s(证件号: %s)，注销%s", date.card->masterName, date.card->idcardNum, date.card->type);
+		sprintf(d->text, "注销: %s(证件号: %s)，注销%s", data.card->masterName, data.card->idcardNum, data.card->type);
 		break;
 	case U_CARD_T:
-		sprintf(d->text, "修改: %s(证件号: %s)", date.card->masterName, date.card->idcardNum);
+		sprintf(d->text, "修改: %s(证件号: %s)", data.card->masterName, data.card->idcardNum);
 		break;
 	case C_PC_TYPE_T:
-		sprintf(d->text, "新增电脑类型%s %d台，编号: %d~%d", date.pcType->type, date.pcType->num, date.pcType->startId, date.pcType->startId + date.pcType->num);
+		sprintf(d->text, "新增电脑类型%s %d台，编号: %d~%d", data.pcType->type, data.pcType->num, data.pcType->startId, data.pcType->startId + data.pcType->num);
 		break;
 	case D_PC_TYPE_T:
-		sprintf(d->text, "删除%s类型电脑", date.pcType->type);
+		sprintf(d->text, "删除%s类型电脑", data.pcType->type);
 		break;
 	case U_PC_TYPE_T:
-		sprintf(d->text, "修改%s类型电脑", date.pcType->type);
+		sprintf(d->text, "修改%s类型电脑", data.pcType->type);
 		break;
 	case C_CARD_TYPE_T:
-		sprintf(d->text, "新增会员卡类型%s，售价: %.2lf", date.cardType->name, date.cardType->price/100.0);
+		sprintf(d->text, "新增会员卡类型%s，售价: %.2lf", data.cardType->name, data.cardType->price/100.0);
 		break;
 	case D_CARD_TYPE_T:
-		sprintf(d->text, "删除会员卡类型%s", date.cardType->name);
+		sprintf(d->text, "删除会员卡类型%s", data.cardType->name);
 		break;
 	case U_CARD_TYPE_T:
-		sprintf(d->text, "修改类型%s的会员卡", date.cardType->name);
+		sprintf(d->text, "修改类型%s的会员卡", data.cardType->name);
 		break;
 	case UP_T:
-		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑上机", date.pc->user->id, date.pc->type, date.pc->id);
+		sprintf(d->text, "用户: %16d 在 %s 类型 %d 电脑上机", data.pc->user->id, data.pc->type, data.pc->id);
 		break;
 	case DOWN_T:
-		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5.2lf元", date.pc->user->id, date.pc->type, date.pc->id, other);
+		sprintf(d->text, "用户: %16d 在 %16s 类型 %16d 电脑下机, 消费%5.2lf元", data.pc->user->id, data.pc->type, data.pc->id, other);
 		break;
 	case RECHARGE_T:
-		sprintf(d->text, "用户: %16d 充值了 %16lf 元", date.card->id, other);
+		sprintf(d->text, "用户: %16d 充值了 %16lf 元", data.card->id, other);
 		break;
 	default:
-		strcpy(pl->date.history->text, "ERROR");
+		strcpy(pl->data.history->text, "ERROR");
 		break;
 	}
 }
@@ -304,7 +304,7 @@ void prHistory(pHistory p, int isOption) {
 pCriteria getDefaultCriteriaHistory() {
 	pCriteria p = (pCriteria)malloc(sizeof(Criteria));
 	p->type = condition;
-	p->condition.history.editor = getAdminHead()->date.admin;
+	p->condition.history.editor = getAdminHead()->data.admin;
 	p->condition.history.historyType = ALL_T;
 	p->Criteria[0] = '\0';
 	return p;
@@ -324,16 +324,16 @@ pList getListFromHistoryCriteria(pCriteria criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->condition.history.editor->name,getAdminHead()->date.admin->name))
+			if (0 != strcmp(criteria->condition.history.editor->name,getAdminHead()->data.admin->name))
 			{
-				if (0 != strcmp(criteria->condition.history.editor->name, p->date.admin->name))
+				if (0 != strcmp(criteria->condition.history.editor->name, p->data.admin->name))
 				{
 					isAdd = 0;
 				}
 			}
 			if (ALL_T != criteria->condition.history.historyType)
 			{
-				if (criteria->condition.history.historyType != p->date.history->type)
+				if (criteria->condition.history.historyType != p->data.history->type)
 				{
 					isAdd = 0;
 				}
@@ -343,17 +343,17 @@ pList getListFromHistoryCriteria(pCriteria criteria) {
 			isAdd = 0;
 			char *time = (char*)malloc(sizeof(char) * 64);
 			sprintf(time, "%4d年%2d月%2d日 %2d时%2d分%2d秒"
-				, p->date.history->time.tm_year + 1900, p->date.history->time.tm_mon + 1, p->date.history->time.tm_mday
-				, p->date.history->time.tm_hour, p->date.history->time.tm_min, p->date.history->time.tm_sec);
-			if (NULL != strstr(getHistoryType(p->date.history->type),criteria->Criteria))
+				, p->data.history->time.tm_year + 1900, p->data.history->time.tm_mon + 1, p->data.history->time.tm_mday
+				, p->data.history->time.tm_hour, p->data.history->time.tm_min, p->data.history->time.tm_sec);
+			if (NULL != strstr(getHistoryType(p->data.history->type),criteria->Criteria))
 			{
 				isAdd = 1;
 			}
-			if (NULL != strstr(p->date.history->editor,criteria->Criteria))
+			if (NULL != strstr(p->data.history->editor,criteria->Criteria))
 			{
 				isAdd = 1;
 			}
-			if (NULL != strstr(p->date.history->text, criteria->Criteria))
+			if (NULL != strstr(p->data.history->text, criteria->Criteria))
 			{
 				isAdd = 1;
 			}
@@ -371,7 +371,7 @@ pList getListFromHistoryCriteria(pCriteria criteria) {
 			pList q = (pList)malloc(sizeof(List));
 			q->next = NULL;
 			q->last = o;
-			q->date = p->date;
+			q->data = p->data;
 			q->type = p->type;
 			o->next = q;
 			o = o->next;
@@ -647,7 +647,7 @@ pList selectHistory(int type, pCriteria criteria) {
 			case 2:
 			{
 				pList editor = scrollMenu(getAdminHead());
-				criteria->condition.history.editor = editor->date.admin;
+				criteria->condition.history.editor = editor->data.admin;
 				break;
 			}
 			case 3:

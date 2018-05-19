@@ -1,7 +1,7 @@
 #include"config.h"
 
 //保存
-void save(dateType type) {
+void save(dataType type) {
 	FILE *fp = NULL;
 	pList p = NULL;
 	char fileName[14] = "";
@@ -51,7 +51,7 @@ void save(dateType type) {
 	}
 	while (NULL != p)
 	{
-		if (NULL == p->date.admin)
+		if (NULL == p->data.admin)
 		{
 			p = p->next;
 			continue;
@@ -59,43 +59,43 @@ void save(dateType type) {
 		switch (type)
 		{
 		case d_admin:
-			if (fwrite(p->date.admin, sizeof(admin), 1, fp)>0)
+			if (fwrite(p->data.admin, sizeof(admin), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_pcType:
-			if (fwrite(p->date.pcType, sizeof(PCtype), 1, fp)>0)
+			if (fwrite(p->data.pcType, sizeof(PCtype), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_cardType:
-			if (fwrite(p->date.cardType, sizeof(cardType), 1, fp)>0)
+			if (fwrite(p->data.cardType, sizeof(cardType), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_rate:
-			if (fwrite(p->date.rate, sizeof(rate), 1, fp)>0)
+			if (fwrite(p->data.rate, sizeof(rate), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_history:
-			if (fwrite(p->date.history, sizeof(history), 1, fp)>0)
+			if (fwrite(p->data.history, sizeof(history), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;
 		case d_card:
-			if (fwrite(p->date.card, sizeof(card), 1, fp)>0)
+			if (fwrite(p->data.card, sizeof(card), 1, fp)>0)
 			{
 				p = p->next;
 			}
 			break;;
 		case d_attri:
-			if (fwrite(p->date.card, sizeof(attribute), 1, fp)>0)
+			if (fwrite(p->data.card, sizeof(attribute), 1, fp)>0)
 			{
 				p = p->next;
 			}
@@ -119,7 +119,7 @@ void saveAll() {
 }
 
 //关闭资源
-void close(dateType type) {
+void close(dataType type) {
 	pList p = NULL;
 	switch (type)
 	{
@@ -170,7 +170,7 @@ void close(dateType type) {
 	while (NULL != p->next)
 	{
 		q = p->next;
-		free(p->date.admin);
+		free(p->data.admin);
 		free(p);
 		p = q;
 	}
@@ -196,9 +196,9 @@ void swap(pList a, pList b) {
 	{
 		return;
 	}
-	date t = a->date;
-	a->date = b->date;
-	b->date = t;
+	data t = a->data;
+	a->data = b->data;
+	b->data = t;
 }
 
 //排序---可能出错
@@ -362,7 +362,7 @@ int initFinalPage(pList list) {
 	return (length-1)/10;
 }
 pList paginationMenu(pList list) {
-	dateType type = list->type;
+	dataType type = list->type;
 	static int index = 0;
 	static int option = 0;
 	static int thisPage = 0;
@@ -436,28 +436,28 @@ pList paginationMenu(pList list) {
 	{
 		if (NULL != p)
 		{
-			if (NULL != p->date.admin)
+			if (NULL != p->data.admin)
 			{
 				length++;
 				switch (type)
 				{
 				case d_pc:
-					prPC(p->date.pc, i == index);
+					prPC(p->data.pc, i == index);
 					break;
 				case d_card:
-					prCard(p->date.card, i == index);
+					prCard(p->data.card, i == index);
 					break;
 				case d_history:
-					prHistory(p->date.history, i == index);
+					prHistory(p->data.history, i == index);
 					break;
 				case d_statistics:
-					prStat(p->date.statistics, i == index);
+					prStat(p->data.statistics, i == index);
 					break;
 				case d_statistics_more:
-					prStatMore(p->date.statistics, i == index);
+					prStatMore(p->data.statistics, i == index);
 					break;
 				case d_attri:
-					prAttri(p->date.attri, i == index);
+					prAttri(p->data.attri, i == index);
 					break;
 				default:
 					break;
@@ -532,7 +532,7 @@ pList paginationMenu(pList list) {
 		printf("\n\n           ");
 		prOption("转到网吧规模", 4 == option, 18);
 		printf(" ");
-		if (NULL==op->date.pc->user)
+		if (NULL==op->data.pc->user)
 		{
 			prOption("上机", 5 == option, 6);
 		}
@@ -739,16 +739,16 @@ pList paginationMenu(pList list) {
 				break;
 			}
 			case d_history:		//详细
-				showHistory(op->date.history);
+				showHistory(op->data.history);
 				break;
 			case d_statistics:			//更多信息
-				showStat(op->date.statistics, 0);
+				showStat(op->data.statistics, 0);
 				break;
 			case d_statistics_more:		//更多信息
-				showStat(op->date.statistics, 1);
+				showStat(op->data.statistics, 1);
 				break;
 			case d_attri:
-				editAttri(op->date.attri);
+				editAttri(op->data.attri);
 				break;
 			default:
 				break;
@@ -768,7 +768,7 @@ pList paginationMenu(pList list) {
 				option = 9;
 				thisPage = 0;
 				finalPage = -1;
-				logPC(op->date.pc);
+				logPC(op->data.pc);
 				index = tin;
 				option = top;
 				thisPage = ttp;
@@ -778,7 +778,7 @@ pList paginationMenu(pList list) {
 			case d_card:		//删除
 				if (isPower(getUser()->power, 1))
 				{
-					if (!isPasswordOfCard(op->date.card))
+					if (!isPasswordOfCard(op->data.card))
 					{
 						break;
 					}
@@ -791,17 +791,17 @@ pList paginationMenu(pList list) {
 						{
 							op->next->last = op->last;
 						}
-						addHistory(D_CARD_T, op->date, 0);
-						balance = op->date.card->balance;
+						addHistory(D_CARD_T, op->data, 0);
+						balance = op->data.card->balance;
 						free(op);
 						op = temp;
 					}
 					else
 					{
-						pCard temp = op->date.card;
-						addHistory(D_CARD_T, op->date, 0);
-						balance = op->date.card->balance;
-						op->date.card = NULL;
+						pCard temp = op->data.card;
+						addHistory(D_CARD_T, op->data, 0);
+						balance = op->data.card->balance;
+						op->data.card = NULL;
 						free(temp);
 					}
 					if (0.5<balance)
@@ -827,7 +827,7 @@ pList paginationMenu(pList list) {
 				thisPage = 0;
 				finalPage = -1;
 				t = selectToHistory();
-				if (NULL == t || NULL == t->date.history)
+				if (NULL == t || NULL == t->data.history)
 				{
 					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
 					getch();
@@ -839,7 +839,7 @@ pList paginationMenu(pList list) {
 					pList q = t->next;
 					while (NULL != q)
 					{
-						t->date.history = NULL;
+						t->data.history = NULL;
 						free(t);
 						t = q;
 						q = q->next;
@@ -891,10 +891,10 @@ pList paginationMenu(pList list) {
 			switch (type)		
 			{
 			case d_pc:			//详细
-				showPC(op->date.pc);
+				showPC(op->data.pc);
 				break;
 			case d_card:		//充值
-				recharge(op->date.card);
+				recharge(op->data.card);
 				break;
 			case d_history:		//退出
 			case d_statistics:
@@ -921,7 +921,7 @@ pList paginationMenu(pList list) {
 				index = 0;
 				option = 0;
 				t = selectToPC();
-				if (NULL==t||NULL==t->date.pc)
+				if (NULL==t||NULL==t->data.pc)
 				{
 					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
 					getch();
@@ -933,7 +933,7 @@ pList paginationMenu(pList list) {
 					pList q = t->next;
 					while (NULL != q)
 					{
-						t->date.pc = NULL;
+						t->data.pc = NULL;
 						free(t);
 						t = q;
 						q = q->next;
@@ -946,28 +946,28 @@ pList paginationMenu(pList list) {
 			case d_card:		//详细
 			{
 				pList typeList = getCardTypeList();
-				while (0 != strcmp(op->date.card->type, typeList->date.cardType->name) && NULL != typeList->next)
+				while (0 != strcmp(op->data.card->type, typeList->data.cardType->name) && NULL != typeList->next)
 				{
 					typeList = typeList->next;
 				}
 
 				char *pass1 = (char *)malloc(sizeof(char) * 16);
 				char *pass2 = (char *)malloc(sizeof(char) * 16);
-				strcpy(pass1, op->date.card->password);
-				strcpy(pass2, op->date.card->password);
-				showCard(0, op->date.card, "", pass1, pass2);
+				strcpy(pass1, op->data.card->password);
+				strcpy(pass2, op->data.card->password);
+				showCard(0, op->data.card, "", pass1, pass2);
 				strcpy(pass1, "***************");
 				strcpy(pass2, "***************");
 				free(pass1);
 				free(pass2);
 
 				pList typeList2 = getCardTypeList();
-				while (0 != strcmp(op->date.card->type, typeList2->date.cardType->name) && NULL != typeList2->next)
+				while (0 != strcmp(op->data.card->type, typeList2->data.cardType->name) && NULL != typeList2->next)
 				{
 					typeList2 = typeList2->next;
 				}
 				char *money = (char *)malloc(sizeof(char) * 64);
-				int iMoney = typeList2->date.cardType->price - typeList->date.cardType->price;
+				int iMoney = typeList2->data.cardType->price - typeList->data.cardType->price;
 				if (iMoney>0)
 				{
 					sprintf(money, "请收取%.2lf注册费用\n(非充值)\n按任意键继续", iMoney / 100.0);
@@ -1007,7 +1007,7 @@ pList paginationMenu(pList list) {
 				index = 0;
 				option = 0;
 				t = selectToCard();
-				if (NULL == t || NULL == t->date.card)
+				if (NULL == t || NULL == t->data.card)
 				{
 					prPrompt("注意", "当前筛选结果为空\n将显示全部结果\n按任意键继续");
 					getch();
@@ -1019,7 +1019,7 @@ pList paginationMenu(pList list) {
 					pList q = t->next;
 					while (NULL != q)
 					{
-						t->date.card = NULL;
+						t->data.card = NULL;
 						free(t);
 						t = q;
 						q = q->next;
@@ -1085,7 +1085,7 @@ pList paginationMenu(pList list) {
 
 //滚动菜单
 pList scrollMenu(pList list) {
-	dateType type = list->type;
+	dataType type = list->type;
 	static int option = 0;
 	if (NULL==list)
 	{
@@ -1162,7 +1162,7 @@ pList scrollMenu(pList list) {
 	{
 		if (NULL != p)
 		{
-			if (NULL != p->date.admin)
+			if (NULL != p->data.admin)
 			{
 				if (3 == i)
 				{
@@ -1175,7 +1175,7 @@ pList scrollMenu(pList list) {
 					{
 						printf("               ------------------+----------------+------------------         \n");
 					}
-					prPCtype(p->date.pcType);
+					prPCtype(p->data.pcType);
 					if (3 == i)
 					{
 						printf("               ------------------+----------------+------------------         \n");
@@ -1186,7 +1186,7 @@ pList scrollMenu(pList list) {
 					{
 						printf("               --------------------------+---------------------------         \n");
 					}
-					prCardType(p->date.cardType);
+					prCardType(p->data.cardType);
 					if (3 == i)
 					{
 						printf("               --------------------------+---------------------------         \n");
@@ -1197,7 +1197,7 @@ pList scrollMenu(pList list) {
 					{
 						printf("               --------+---------------------------------------------         \n");
 					}
-					prUser(p->date.admin);
+					prUser(p->data.admin);
 					if (3 == i)
 					{
 						printf("               --------+---------------------------------------------         \n");
@@ -1208,7 +1208,7 @@ pList scrollMenu(pList list) {
 					{
 						printf("               ----------------+--------------------+----------------         \n");
 					}
-					prRate(p->date.rate);
+					prRate(p->data.rate);
 					if (3 == i)
 					{
 						printf("               ----------------+--------------------+----------------         \n");
@@ -1404,16 +1404,16 @@ pList scrollMenu(pList list) {
 					switch (type)
 					{
 					case d_pcType:
-						addHistory(D_PC_TYPE_T, list->date, 0);
+						addHistory(D_PC_TYPE_T, list->data, 0);
 						break;
 					case d_cardType:
-						addHistory(D_CARD_T, list->date, 0);
+						addHistory(D_CARD_T, list->data, 0);
 						break;
 					case d_admin:
-						addHistory(D_ADMIN_T, list->date, 0);
+						addHistory(D_ADMIN_T, list->data, 0);
 						break;
 					case d_rate:
-						addHistory(D_RATE_T, list->date, 0);
+						addHistory(D_RATE_T, list->data, 0);
 						break;
 					default:
 						break;
@@ -1488,35 +1488,35 @@ pList scrollMenu(pList list) {
 					break;
 				}
 				setEdit(1);
-				editPCtype(0, list->date.pcType);
-				addHistory(U_PC_TYPE_T, list->date, 0);
+				editPCtype(0, list->data.pcType);
+				addHistory(U_PC_TYPE_T, list->data, 0);
 				break;
 			case  d_cardType:
-				editCardType(0, list->date.cardType);
-				addHistory(U_CARD_TYPE_T, list->date, 0);
+				editCardType(0, list->data.cardType);
+				addHistory(U_CARD_TYPE_T, list->data, 0);
 				break;
 			case d_admin:
 			{
 				char *pass1 = (char *)malloc(sizeof(char) * 16);
 				char *pass2 = (char *)malloc(sizeof(char) * 16);
-				strcpy(pass1, list->date.admin->password);
-				strcpy(pass2, list->date.admin->password);
-				editUser(0, list->date.admin,pass1,pass2);
+				strcpy(pass1, list->data.admin->password);
+				strcpy(pass2, list->data.admin->password);
+				editUser(0, list->data.admin,pass1,pass2);
 				free(pass1);
 				free(pass2);
-				addHistory(U_ADMIN_T, list->date, 0);
+				addHistory(U_ADMIN_T, list->data, 0);
 				if (NULL==list->last)
 				{
-					list->date.admin->power = ~0;
-					strcpy(list->date.admin->name, "root");
+					list->data.admin->power = ~0;
+					strcpy(list->data.admin->name, "root");
 				}
 				break;
 			}
 			case d_rate:
 			{
 				int a[] = { 0,0 };
-				editRate(0, a, list->date.rate);
-				addHistory(U_RATE_T, list->date, 0);
+				editRate(0, a, list->data.rate);
+				addHistory(U_RATE_T, list->data, 0);
 				break;
 			}
 			default:

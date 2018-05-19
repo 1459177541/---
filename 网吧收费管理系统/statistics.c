@@ -4,7 +4,7 @@ pList statLists = NULL;
 void initStat() {
 	prPrompt("正在生成", "正在生成统计信息");
 	pList history = getHistorys();
-	if (NULL == history || NULL == history->date.history)
+	if (NULL == history || NULL == history->data.history)
 	{
 		return;
 	}
@@ -13,49 +13,49 @@ void initStat() {
 	p->last = NULL;
 	p->next = NULL;
 	p->type = d_statistics;
-	p->date.statistics = (pStat)malloc(sizeof(stat));
-	p->date.statistics->startHistory = history;
-	p->date.statistics->time = history->date.history->time;
-	p->date.statistics->stat_card_login = 0;
-	p->date.statistics->stat_card_logout = 0;
-	p->date.statistics->stat_recharge_money = 0;
-	p->date.statistics->stat_up = 0;
-	p->date.statistics->stat_up_money = 0;
+	p->data.statistics = (pStat)malloc(sizeof(stat));
+	p->data.statistics->startHistory = history;
+	p->data.statistics->time = history->data.history->time;
+	p->data.statistics->stat_card_login = 0;
+	p->data.statistics->stat_card_logout = 0;
+	p->data.statistics->stat_recharge_money = 0;
+	p->data.statistics->stat_up = 0;
+	p->data.statistics->stat_up_money = 0;
 	while (NULL!=history)
 	{
-		if (history->date.history->time.tm_mon!=p->date.statistics->time.tm_mon)
+		if (history->data.history->time.tm_mon!=p->data.statistics->time.tm_mon)
 		{
 			pList q = (pList)malloc(sizeof(List));
 			q->last = p;
 			q->type = d_statistics;
 			p->next = q;
 			p = p->next;
-			p->date.statistics = (pStat)malloc(sizeof(stat));
-			p->date.statistics->startHistory = history;
-			p->date.statistics->time = history->date.history->time;
-			p->date.statistics->stat_card_login = 0;
-			p->date.statistics->stat_card_logout = 0;
-			p->date.statistics->stat_recharge_money = 0;
-			p->date.statistics->stat_up = 0;
-			p->date.statistics->stat_up_money = 0;
+			p->data.statistics = (pStat)malloc(sizeof(stat));
+			p->data.statistics->startHistory = history;
+			p->data.statistics->time = history->data.history->time;
+			p->data.statistics->stat_card_login = 0;
+			p->data.statistics->stat_card_logout = 0;
+			p->data.statistics->stat_recharge_money = 0;
+			p->data.statistics->stat_up = 0;
+			p->data.statistics->stat_up_money = 0;
 		}
-		double num = history->date.history->money;
-		switch (history->date.history->type)
+		double num = history->data.history->money;
+		switch (history->data.history->type)
 		{
 		case C_CARD_T:
-			p->date.statistics->stat_card_login++;
+			p->data.statistics->stat_card_login++;
 			break;
 		case D_CARD_T:
-			p->date.statistics->stat_card_logout++;
+			p->data.statistics->stat_card_logout++;
 			break;
 		case RECHARGE_T:
-			p->date.statistics->stat_recharge_money += num;
+			p->data.statistics->stat_recharge_money += num;
 			break;
 		case UP_T:
-			p->date.statistics->stat_up++;
+			p->data.statistics->stat_up++;
 			break;
 		case DOWN_T:
-			p->date.statistics->stat_up_money += num;
+			p->data.statistics->stat_up_money += num;
 			break;
 		default:
 			break;
@@ -69,11 +69,11 @@ pList getMoreStat(pList start) {
 	{
 		return NULL;
 	}
-	pList history = start->date.statistics->startHistory;
+	pList history = start->data.statistics->startHistory;
 	pStat ps = (pStat)malloc(sizeof(stat));
 	pList ret = (pList)malloc(sizeof(pList));
 	ps->startHistory = history;
-	ps->time = history->date.history->time;
+	ps->time = history->data.history->time;
 	ps->stat_card_login = 0;
 	ps->stat_card_logout = 0;
 	ps->stat_recharge_money = 0;
@@ -83,43 +83,43 @@ pList getMoreStat(pList start) {
 	p->last = NULL;
 	p->next = NULL;
 	p->type = d_statistics_more;
-	p->date.statistics = ps;
+	p->data.statistics = ps;
 	while (NULL != history
-		&& history->date.history->time.tm_yday != p->date.statistics->time.tm_yday)
+		&& history->data.history->time.tm_yday != p->data.statistics->time.tm_yday)
 	{
-		if (history->date.history->time.tm_yday != p->date.statistics->time.tm_yday)
+		if (history->data.history->time.tm_yday != p->data.statistics->time.tm_yday)
 		{
 			pList q = (pList)malloc(sizeof(List));
 			q->last = p;
 			q->type = d_statistics_more;
 			p->next = q;
 			p = p->next;
-			p->date.statistics = (pStat)malloc(sizeof(stat));
-			p->date.statistics->startHistory = history;
-			p->date.statistics->time = history->date.history->time;
-			p->date.statistics->stat_card_login = 0;
-			p->date.statistics->stat_card_logout = 0;
-			p->date.statistics->stat_recharge_money = 0;
-			p->date.statistics->stat_up = 0;
-			p->date.statistics->stat_up_money = 0;
+			p->data.statistics = (pStat)malloc(sizeof(stat));
+			p->data.statistics->startHistory = history;
+			p->data.statistics->time = history->data.history->time;
+			p->data.statistics->stat_card_login = 0;
+			p->data.statistics->stat_card_logout = 0;
+			p->data.statistics->stat_recharge_money = 0;
+			p->data.statistics->stat_up = 0;
+			p->data.statistics->stat_up_money = 0;
 		}
-		double money = history->date.history->money;
-		switch (history->date.history->type)
+		double money = history->data.history->money;
+		switch (history->data.history->type)
 		{
 		case C_CARD_T:
-			p->date.statistics->stat_card_login++;
+			p->data.statistics->stat_card_login++;
 			break;
 		case D_CARD_T:
-			p->date.statistics->stat_card_logout++;
+			p->data.statistics->stat_card_logout++;
 			break;
 		case RECHARGE_T:
-			p->date.statistics->stat_recharge_money += money;
+			p->data.statistics->stat_recharge_money += money;
 			break;
 		case UP_T:
-			p->date.statistics->stat_up++;
+			p->data.statistics->stat_up++;
 			break;
 		case DOWN_T:
-			p->date.statistics->stat_up_money += money;
+			p->data.statistics->stat_up_money += money;
 			break;
 		default:
 			break;

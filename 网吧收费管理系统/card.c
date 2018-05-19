@@ -23,7 +23,7 @@ int initCard() {
 			cardLists->next = NULL;
 			cardLists->last = NULL;
 			cardLists->type = d_card;
-			cardLists->date.card = p;
+			cardLists->data.card = p;
 		}
 		else
 		{
@@ -42,7 +42,7 @@ int initCard() {
 			maxCardId = p->id;
 		}
 		o->type = d_card;
-		o->date.card = p;
+		o->data.card = p;
 		o->last = q;
 		o->next = NULL;
 		q->next = o;
@@ -62,7 +62,7 @@ pList getCards() {
 		if (initCard())
 		{
 			cardLists = (pList)malloc(sizeof(List));
-			cardLists->date.card = NULL;
+			cardLists->data.card = NULL;
 			cardLists->last = NULL;
 			cardLists->next = NULL;
 			cardLists->type = d_card;
@@ -75,9 +75,9 @@ pCard getCard(int id) {
 	pList p = getCards();
 	while (NULL!=p)
 	{
-		if (id==p->date.card->id)
+		if (id==p->data.card->id)
 		{
-			return p->date.card;
+			return p->data.card;
 		}
 	}
 	return NULL;
@@ -196,7 +196,7 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	case enter:
 		if (4 == type)
 		{
-			if (strcmp(getCardTypeList()->date.card->type,p->type)==0)
+			if (strcmp(getCardTypeList()->data.card->type,p->type)==0)
 			{
 				showCard(type, p, "[ err:无法使用默认的类型 ]", password, password2);
 				return;
@@ -235,7 +235,7 @@ void showCard(int type, pCard p,char * text, char *password, char *password2) {
 				getch();
 				ct = scrollMenu(getCardTypeList());
 			}
-			strcpy(p->type, ct->date.cardType->name);
+			strcpy(p->type, ct->data.cardType->name);
 			showCard(type, p, text, password, password2);
 			break;
 		}
@@ -276,10 +276,10 @@ pList newCard(pList list) {
 	p->password[0] = '\0';
 	p->type[0] = '\0';
 	pList ql;
-	if (NULL == list->date.card)
+	if (NULL == list->data.card)
 	{
 		ql = list;
-		ql->date.card = p;
+		ql->data.card = p;
 	}
 	else
 	{
@@ -289,7 +289,7 @@ pList newCard(pList list) {
 			pl = pl->next;
 		}
 		ql = (pList)malloc(sizeof(List));
-		ql->date.card = p;
+		ql->data.card = p;
 		ql->next = NULL;
 		ql->last = pl;
 		ql->type = d_card;
@@ -301,16 +301,16 @@ pList newCard(pList list) {
 	free(pass1);
 	free(pass2);
 	pList typeList = getCardTypeList();
-	while (0 != strcmp(p->type, typeList->date.cardType->name) && NULL != typeList->next)
+	while (0 != strcmp(p->type, typeList->data.cardType->name) && NULL != typeList->next)
 	{
 		typeList = typeList->next;
 	}
 	char *money = (char *)malloc(sizeof(char) * 64);
-	sprintf(money, "请收取%.2lf注册费用\n(非充值)\n按任意键继续", typeList->date.cardType->price / 100.0);
+	sprintf(money, "请收取%.2lf注册费用\n(非充值)\n按任意键继续", typeList->data.cardType->price / 100.0);
 	prPrompt("注册", money);
 	free(money);
 	getch();
-	addHistory(C_CARD_T, ql->date, 0);
+	addHistory(C_CARD_T, ql->data, 0);
 	return list;
 }
 
@@ -318,7 +318,7 @@ pList newCard(pList list) {
 pCriteria getDefaultCriteriaCard() {
 	pCriteria p = (pCriteria)malloc(sizeof(Criteria));
 	p->type = condition;
-	p->condition.card = getCardTypeList()->date.cardType;
+	p->condition.card = getCardTypeList()->data.cardType;
 	p->Criteria[0] = '\0';
 	return p;
 }
@@ -337,9 +337,9 @@ pList getListFromCardCriteria(pCriteria criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->condition.card->name,getCardTypeList()->date.cardType->name))
+			if (0 != strcmp(criteria->condition.card->name,getCardTypeList()->data.cardType->name))
 			{
-				if (0 != strcmp(criteria->condition.card->name, p->date.cardType->name))
+				if (0 != strcmp(criteria->condition.card->name, p->data.cardType->name))
 				{
 					isAdd = 0;
 				}
@@ -347,19 +347,19 @@ pList getListFromCardCriteria(pCriteria criteria) {
 			break;
 		case 1:
 			isAdd = 0;
-			if (NULL != strstr(p->date.card->idcardNum,criteria->Criteria))
+			if (NULL != strstr(p->data.card->idcardNum,criteria->Criteria))
 			{
 				isAdd = 1;
 			}
-			if (NULL != strstr(intToString(p->date.card->id),criteria->Criteria))
+			if (NULL != strstr(intToString(p->data.card->id),criteria->Criteria))
 			{
 				isAdd = 1;
 			}
-			if (NULL != strstr(p->date.card->masterName,criteria->Criteria))
+			if (NULL != strstr(p->data.card->masterName,criteria->Criteria))
 			{
 				isAdd = 1;
 			}
-			if (NULL != strstr(p->date.card->type, criteria->Criteria))
+			if (NULL != strstr(p->data.card->type, criteria->Criteria))
 			{
 				isAdd = 1;
 			}
@@ -372,7 +372,7 @@ pList getListFromCardCriteria(pCriteria criteria) {
 			pList q = (pList)malloc(sizeof(List));
 			q->next = NULL;
 			q->last = o;
-			q->date = p->date;
+			q->data = p->data;
 			q->type = p->type;
 			o->next = q;
 			o = o->next;
@@ -475,7 +475,7 @@ pList selectCard(int type, pCriteria criteria) {
 			if (condition==criteria->type)
 			{
 				pList cardType = scrollMenu(getCardTypeList());
-				criteria->condition.card = cardType->date.cardType;
+				criteria->condition.card = cardType->data.cardType;
 				break;
 			}
 			else
@@ -522,7 +522,7 @@ void recharge(pCard p) {
 	{
 		double mon = atof(money);
 		p->balance += mon;
-		date d;
+		data d;
 		d.card = p;
 		addHistory(RECHARGE_T, d, mon);
 	}
@@ -563,11 +563,11 @@ int isPasswordOfCard(pCard p) {
 }
 
 int _sortCardByBalance(pList a, pList b) {
-	return a->date.card->balance > b->date.card->balance;
+	return a->data.card->balance > b->data.card->balance;
 }
 
 int _sortCardById(pList a, pList b) {
-	return a->date.card->id > b->date.card->id;
+	return a->data.card->id > b->data.card->id;
 }
 
 //排序

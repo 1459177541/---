@@ -18,7 +18,7 @@ int initCardType() {
 			cardTypeLists->next = NULL;
 			cardTypeLists->last = NULL;
 			cardTypeLists->type = d_cardType;
-			cardTypeLists->date.cardType = p;
+			cardTypeLists->data.cardType = p;
 		}
 		else
 		{
@@ -33,7 +33,7 @@ int initCardType() {
 	while (fread(p, sizeof(cardType), 1, fp)>0)
 	{
 		o->type = d_cardType;
-		o->date.cardType = p;
+		o->data.cardType = p;
 		o->last = q;
 		o->next = NULL;
 		q->next = o;
@@ -60,7 +60,7 @@ pList getCardTypeList() {
 			cardTypeLists->type = d_cardType;
 			cardTypeLists->last = NULL;
 			cardTypeLists->next = NULL;
-			cardTypeLists->date.cardType = cardTypeHeard;
+			cardTypeLists->data.cardType = cardTypeHeard;
 		}
 	}
 	return cardTypeLists;
@@ -162,10 +162,10 @@ pList newCardType(pList list) {
 	pList pl = (pList)malloc(sizeof(List));
 	pl->last = q;
 	pl->next = NULL;
-	pl->date.cardType = p;
+	pl->data.cardType = p;
 	pl->type = d_cardType;
 	q->next = pl;
 	editCardType(0, p);
-	addHistory(C_CARD_TYPE_T, pl->date, 0);
+	addHistory(C_CARD_TYPE_T, pl->data, 0);
 	return list;
 }

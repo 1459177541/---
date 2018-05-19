@@ -30,7 +30,7 @@ int initPCType() {
 			pcTypeList->next = NULL;
 			pcTypeList->last = NULL;
 			pcTypeList->type = d_pcType;
-			pcTypeList->date.pcType = p;
+			pcTypeList->data.pcType = p;
 		}
 		else
 		{
@@ -46,7 +46,7 @@ int initPCType() {
 	{
 		length += p->num;
 		o->type = d_pcType;
-		o->date.pcType = p;
+		o->data.pcType = p;
 		o->last = q;
 		o->next = NULL;
 		q->next = o;
@@ -74,7 +74,7 @@ pList getPCtypeList() {
 			strcpy(pctype->type, "所有类型");
 			pctype->num = 0;
 			pctype->startId = 0;
-			pcTypeList->date.pcType = pctype;
+			pcTypeList->data.pcType = pctype;
 		}
 	}
 	return pcTypeList;
@@ -127,7 +127,7 @@ void editPCtype(int type, pPCtype p) {
 		key = input(x + 27, 10, in, 0, INTER, NULL);
 		p->num = '\0' == in[0] ? p->num : stringToInt(in);
 		length += p->num;
-		getPCtypeList()->date.pcType->num = length;
+		getPCtypeList()->data.pcType->num = length;
 	}
 	else
 	{
@@ -235,17 +235,17 @@ pList newPCType(pList list) {
 		q = q->next;
 	}
 	pPCtype p = (pPCtype)malloc(sizeof(PCtype));
-	p->startId = getPCtypeList()->date.pcType->num;
+	p->startId = getPCtypeList()->data.pcType->num;
 	p->num = 0;
 	p->type[0] = '\0';
 	pList pl = (pList)malloc(sizeof(List));
 	pl->last = q;
 	pl->next = NULL;
-	pl->date.pcType = p;
+	pl->data.pcType = p;
 	pl->type = d_pcType;
 	q->next = pl;
 	editPCtype(0, p);
 	setEdit(1);
-	addHistory(C_PC_TYPE_T, pl->date, 0);
+	addHistory(C_PC_TYPE_T, pl->data, 0);
 	return list;
 }

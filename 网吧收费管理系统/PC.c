@@ -16,7 +16,7 @@ void initPCToArray() {
 		pcList = (pList)malloc(sizeof(List));
 		pcList->last = NULL;
 		pcList->next = NULL;
-		pcList->date.pc = NULL;
+		pcList->data.pc = NULL;
 		pcList->type = d_pc;
 	}
 	pList pcTypeList = getPCtypeList()->next;
@@ -24,18 +24,18 @@ void initPCToArray() {
 	pList q;
 	while (NULL!=pcTypeList)
 	{
-		pPCtype pcType = pcTypeList->date.pcType;
+		pPCtype pcType = pcTypeList->data.pcType;
 		for (int i = 0; i < pcType->num; i++)
 		{
 			pPC pc = (pPC)malloc(sizeof(PC));
 			pc->id = pcType->startId + i;
 			pc->user = NULL;
-			strcpy(pc->type, pcTypeList->date.pcType->type);
+			strcpy(pc->type, pcTypeList->data.pcType->type);
 			q = (pList)malloc(sizeof(List));
 			q->type = d_pc;
 			q->last = p;
 			q->next = NULL;
-			q->date.pc = pc;
+			q->data.pc = pc;
 			p->next = q;
 			p = p->next;
 			pcLength++;
@@ -138,7 +138,7 @@ void showPC(pPC p) {
 pCriteria getDefaultCriteriaPC() {
 	pCriteria p = (pCriteria)malloc(sizeof(Criteria));
 	p->type = condition;
-	p->condition.pc.pcType = getPCtypeList()->date.pcType;
+	p->condition.pc.pcType = getPCtypeList()->data.pcType;
 	p->condition.pc.isUse = C_PC_ALL;
 	p->Criteria[0] = '\0';
 	return p;
@@ -159,20 +159,20 @@ pList getListFromPcCriteria(pCriteria criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->condition.pc.pcType->type, getPCtypeList()->date.pcType))
+			if (0 != strcmp(criteria->condition.pc.pcType->type, getPCtypeList()->data.pcType))
 			{
-				if (0 != strcmp(criteria->condition.pc.pcType->type, p->date.pcType))
+				if (0 != strcmp(criteria->condition.pc.pcType->type, p->data.pcType))
 				{
 					isAdd = 0;
 				}
 			}
 			if (C_PC_ALL != criteria->condition.pc.isUse)
 			{
-				if (C_PC_IS != criteria->condition.pc.isUse && NULL != p->date.pc->user)
+				if (C_PC_IS != criteria->condition.pc.isUse && NULL != p->data.pc->user)
 				{
 					isAdd = 0;
 				}
-				else if (C_PC_NOT != criteria->condition.pc.isUse && NULL == p->date.pc->user)
+				else if (C_PC_NOT != criteria->condition.pc.isUse && NULL == p->data.pc->user)
 				{
 					isAdd = 0;
 				}
@@ -182,22 +182,22 @@ pList getListFromPcCriteria(pCriteria criteria) {
 			isAdd = 0;
 			char *user = (char *)malloc(16 * sizeof(char));
 			char *time = (char *)malloc(16 * sizeof(char));
-			if (NULL != p->date.pc->user)
+			if (NULL != p->data.pc->user)
 			{
-				strcpy(user, p->date.pc->user->masterName);
+				strcpy(user, p->data.pc->user->masterName);
 				sprintf(time, "%2d日 %2d时%2d分"
-					, p->date.pc->startTime.tm_mday, p->date.pc->startTime.tm_hour, p->date.pc->startTime.tm_min);
+					, p->data.pc->startTime.tm_mday, p->data.pc->startTime.tm_hour, p->data.pc->startTime.tm_min);
 			}
 			else
 			{
 				time[0] = '\0';
 				user[0] = '\0';
 			}
-			if (NULL!=strstr(itoa(p->date.pc->id,temp,10),criteria->Criteria))
+			if (NULL!=strstr(itoa(p->data.pc->id,temp,10),criteria->Criteria))
 			{
 				isAdd = 1;
 			}
-			if (NULL!=strstr(p->date.pc->type,criteria->Criteria))
+			if (NULL!=strstr(p->data.pc->type,criteria->Criteria))
 			{
 				isAdd = 1;
 			}
@@ -220,7 +220,7 @@ pList getListFromPcCriteria(pCriteria criteria) {
 			pList q = (pList)malloc(sizeof(List));
 			q->next = NULL;
 			q->last = o;
-			q->date = p->date;
+			q->data = p->data;
 			q->type = p->type;
 			o->next = q;
 			o = o->next;
@@ -379,7 +379,7 @@ pList selectPC(int type, pCriteria criteria) {
 			case 1:
 			{
 				pList pcType = scrollMenu(getPCtypeList());
-				criteria->condition.pc.pcType = pcType->date.pcType;
+				criteria->condition.pc.pcType = pcType->data.pcType;
 				break;
 			}
 			case 2:
@@ -496,7 +496,7 @@ void logPC(pPC p) {
 		Sleep(100);
 	}
 	lock = 1;
-	date d;
+	data d;
 	d.pc = p;
 	if (NULL == p->user)
 	{
@@ -507,7 +507,7 @@ void logPC(pPC p) {
 			startCheck();
 		}
 		system("title 选择上机用户");
-		p->user = paginationMenu(getCards())->date.card;
+		p->user = paginationMenu(getCards())->data.card;
 		system("title 上/下机");
 		if (NULL==p->user)
 		{
@@ -526,7 +526,7 @@ void logPC(pPC p) {
 			pl->next = NULL;
 			pl->last = loginPcListFinal;
 			pl->type = d_pc;
-			pl->date.pc = p;
+			pl->data.pc = p;
 			loginPcListFinal->next = pl;
 		}
 		else
@@ -535,7 +535,7 @@ void logPC(pPC p) {
 			loginPcList->last = NULL;
 			loginPcList->next = NULL;
 			loginPcList->type = d_pc;
-			loginPcList->date.pc = p;
+			loginPcList->data.pc = p;
 			loginPcListFinal = loginPcList;
 		}
 		loginPcNum++;
@@ -561,7 +561,7 @@ void logPC(pPC p) {
 		addHistory(DOWN_T, d, money);
 		p->user = NULL;
 		pList pl = loginPcList;
-		while (pl!=NULL && pl->date.pc!=p)
+		while (pl!=NULL && pl->data.pc!=p)
 		{
 			pl = pl->next;
 		}
@@ -583,7 +583,7 @@ void logPC(pPC p) {
 			pl->last->next = pl->next;
 			pl->next->last = pl->last;
 		}
-		pl->date.pc = NULL;
+		pl->data.pc = NULL;
 		free(pl);
 		loginPcNum--;
 	}
@@ -605,9 +605,9 @@ void logoutPCAll() {
 		}
 		i++;
 		pList p = list->next;
-		if (NULL != list->date.pc->user)
+		if (NULL != list->data.pc->user)
 		{
-			logPC(list->date.pc);
+			logPC(list->data.pc);
 		}
 		list = p;
 	}
@@ -634,24 +634,24 @@ DWORD WINAPI check(LPVOID pM) {
 		while (pl != NULL)
 		{
 			next = pl->next;
-			time_t time_t1 = time(NULL) - mktime(&(pl->date.pc->startTime)) + iTime/1000;
-			time_t time_t2 = time(NULL) - mktime(&(pl->date.pc->startTime));
-			double money = results(pl->date.pc, pl->date.pc->user, localtime(&time_t1));
-			double money2 = results(pl->date.pc, pl->date.pc->user, localtime(&time_t2));
-			if (money2>=pl->date.pc->user->balance)
+			time_t time_t1 = time(NULL) - mktime(&(pl->data.pc->startTime)) + iTime/1000;
+			time_t time_t2 = time(NULL) - mktime(&(pl->data.pc->startTime));
+			double money = results(pl->data.pc, pl->data.pc->user, localtime(&time_t1));
+			double money2 = results(pl->data.pc, pl->data.pc->user, localtime(&time_t2));
+			if (money2>=pl->data.pc->user->balance)
 			{
 				char body[96];
-				sprintf(body, "%d号电脑余额不足\n已自动下机\n按任意键关闭", pl->date.pc->id);
+				sprintf(body, "%d号电脑余额不足\n已自动下机\n按任意键关闭", pl->data.pc->id);
 				lock = 0;
-				logPC(pl->date.pc);
+				logPC(pl->data.pc);
 				lock = 1;
 				prPrompt("提示", body);
 				getch();
 			}
-			else if (money>=pl->date.pc->user->balance)
+			else if (money>=pl->data.pc->user->balance)
 			{
 				char body[96];
-				sprintf(body, "%d号电脑余额不足\n将在%s分钟内自动下机\n按任意键关闭", pl->date.pc->id, getAttri("checkTime"));
+				sprintf(body, "%d号电脑余额不足\n将在%s分钟内自动下机\n按任意键关闭", pl->data.pc->id, getAttri("checkTime"));
 				prPrompt("提示", body);
 				getch();
 			}

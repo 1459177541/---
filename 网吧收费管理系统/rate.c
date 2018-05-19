@@ -18,7 +18,7 @@ int initRate() {
 			rateLists->last = NULL;
 			rateLists->next = NULL;
 			rateLists->type = d_rate;
-			rateLists->date.rate = p;
+			rateLists->data.rate = p;
 		}
 		else
 		{
@@ -33,7 +33,7 @@ int initRate() {
 	while (fread(p, sizeof(rate), 1, fp)>0)
 	{
 		o->type = d_rate;
-		o->date.rate = p;
+		o->data.rate = p;
 		o->last = q;
 		o->next = NULL;
 		q->next = o;
@@ -54,11 +54,11 @@ pList getRateList() {
 		if (initRate())
 		{
 			pRate p = (pRate)malloc(sizeof(rate));
-			strcpy(p->card, getCardTypeList()->date.cardType->name);
-			strcpy(p->pc, getPCtypeList()->date.pcType->type);
+			strcpy(p->card, getCardTypeList()->data.cardType->name);
+			strcpy(p->pc, getPCtypeList()->data.pcType->type);
 			strcpy(p->rule, "x*0+t*0");
 			rateLists = (pList)malloc(sizeof(List));
-			rateLists->date.rate = p;
+			rateLists->data.rate = p;
 			rateLists->last = NULL;
 			rateLists->next = NULL;
 			rateLists->type = d_rate;
@@ -215,7 +215,7 @@ void editRate(int type,int option[], pRate p) {
 		{
 			system("title 选择关联电脑");
 			pList op = scrollMenu(getPCtypeList());
-			strcpy(p->pc, op->date.pcType->type);
+			strcpy(p->pc, op->data.pcType->type);
 			system("title 收费标准管理");
 			editRate(type, option, p);
 			break;
@@ -224,7 +224,7 @@ void editRate(int type,int option[], pRate p) {
 		{
 			system("title 选择关联会员卡类型");
 			pList op = scrollMenu(getCardTypeList());
-			strcpy(p->card, op->date.cardType->name);
+			strcpy(p->card, op->data.cardType->name);
 			system("title 收费标准管理");
 			editRate(type, option, p);
 			break;
@@ -259,12 +259,12 @@ pList newRate(pList list) {
 	pList pl = (pList)malloc(sizeof(List));
 	pl->last = q;
 	pl->next = NULL;
-	pl->date.rate = p;
+	pl->data.rate = p;
 	pl->type = d_rate;
 	q->next = pl;
 	int a[] = { 0,0 };
 	editRate(0, a, p);
-	addHistory(C_RATE_T, pl->date, 0);
+	addHistory(C_RATE_T, pl->data, 0);
 	return list;
 }
 
@@ -349,7 +349,7 @@ double results(pPC pc, pCard user, pTm time) {
 	double money = 0;
 	while (NULL!=p)
 	{
-		money = result(pc, user, p->date.rate, time, money);
+		money = result(pc, user, p->data.rate, time, money);
 		p = p->next;
 	}
 	return money;

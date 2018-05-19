@@ -118,15 +118,15 @@ typedef union {
 	pHistory history;
 	pStat statistics;
 	pAttribute attri;
-}date,* pDate;
+}data,* pData;
 
 typedef enum {
 	d_admin, d_pc, d_card, d_pcType, d_cardType, d_rate, d_history, d_statistics, d_statistics_more, d_attri
-}dateType;
+}dataType;
 
 typedef struct List{
-	dateType type;
-	date date;
+	dataType type;
+	data data;
 	struct List *last;
 	struct List *next;
 }List,* pList;
@@ -283,12 +283,12 @@ pList getHistorys();
 void prHistory(pHistory p, int isOption);
 void showHistory(pHistory p);
 pList selectToHistory();
-void addHistory(historyType type, date date, double other);
+void addHistory(historyType type, data data, double other);
 
 //list
-void save(dateType type);
+void save(dataType type);
 void saveAll();
-void close(dateType type);
+void close(dataType type);
 void closeAll();
 pList sort(pList list, int(*isUP)(pList a, pList b), int isNot);
 pList paginationMenu(pList list);	//上/下机、会员卡、历史记录
