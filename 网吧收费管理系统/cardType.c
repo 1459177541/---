@@ -9,27 +9,27 @@ int initCardType() {
 	{
 		return 1;
 	}
-	pCardType p = (pCardType)malloc(sizeof(cardType));
+	pCardType t = (pCardType)malloc(sizeof(cardType));
 	if (NULL==cardTypeLists)
 	{
-		if (fread(p,sizeof(cardType),1,fp)>0)
+		if (fread(t,sizeof(cardType),1,fp)>0)
 		{
 			cardTypeLists = (pList)malloc(sizeof(pList));
 			cardTypeLists->next = NULL;
 			cardTypeLists->last = NULL;
 			cardTypeLists->type = d_cardType;
-			cardTypeLists->data.cardType = p;
+			cardTypeLists->data.cardType = t;
 		}
 		else
 		{
-			free(p);
+			free(t);
 			fclose(fp);
 			return 1;
 		}
 	}
 	pList q = cardTypeLists;
 	pList o = (pList)malloc(sizeof(List));
-	p = (pCardType)malloc(sizeof(cardType));
+	pCardType p = (pCardType)malloc(sizeof(cardType));
 	while (fread(p, sizeof(cardType), 1, fp)>0)
 	{
 		o->type = d_cardType;
