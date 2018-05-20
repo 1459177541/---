@@ -385,6 +385,7 @@ pList paginationMenu(pList list) {
 		Length = initFinalPage(list);
 		finalPage = (Length - 1) / 10;
 	}
+	thisPage = finalPage < thisPage ? finalPage : thisPage;
 	if (thisPage == finalPage && (Length-1)%10<index)
 	{
 		index = (Length-1) % 10;
@@ -744,6 +745,7 @@ pList paginationMenu(pList list) {
 				if (isPower(getUser()->power, 0))
 				{
 					list = newCard(list);
+					finalPage = -1;
 				}
 				else
 				{
@@ -795,8 +797,7 @@ pList paginationMenu(pList list) {
 					pList temp = (NULL != op->next) ? op->next : op->last;
 					delCard(op);
 					op = temp;
-					finalPage = initFinalPage(list);
-					thisPage = finalPage < thisPage ? finalPage : thisPage;
+					finalPage = -1;
 				}
 				else
 				{
@@ -1412,6 +1413,7 @@ pList scrollMenu(pList list) {
 					switch (type)
 					{
 					case d_pcType:
+						getPCtypeList()->data.pcType->num -= list->data.pcType->num;						
 						addHistory(D_PC_TYPE_T, list->data, 0);
 						break;
 					case d_cardType:

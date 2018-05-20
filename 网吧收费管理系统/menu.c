@@ -2,11 +2,11 @@
 
 //≥ı ºªØ
 void init() {
-	getAttriList();
-	getAdminHead();
-
 	getCardTypeList();
 	getCards();
+
+	getAttriList();
+	getAdminHead();
 
 	getRateList();
 
