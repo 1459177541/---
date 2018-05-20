@@ -142,7 +142,29 @@ void editCardType(int type, pCardType p) {
 		}
 		break;
 	case enter:
-		break;
+		if (2!=type)
+		{
+			editCardType(2, p);
+			return;
+		}
+		pList q = getPCtypeList();
+		while (NULL != q)
+		{
+			if (p == q->data.cardType)
+			{
+				q = q->next;
+				continue;
+			}
+			if (0 == strcmp(p->name, q->data.cardType->name))
+			{
+				prPrompt("警告！", "已存在该类型\n按任意键继续");
+				getch();
+				editPCtype(0, p);
+				return;
+			}
+			q = q->next;
+		}
+		return;
 	default:
 		editCardType(type, p);
 		break;

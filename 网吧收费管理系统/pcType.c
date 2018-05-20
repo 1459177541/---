@@ -160,6 +160,24 @@ void editPCtype(int type, pPCtype p) {
 		if (3 != type)
 		{
 			editPCtype(3, p);
+			return;
+		}
+		pList q = getPCtypeList();
+		while (NULL!=q)
+		{
+			if (p==q->data.pcType)
+			{
+				q = q->next;
+				continue;
+			}
+			if (0==strcmp(p->type,q->data.pcType->type))
+			{
+				prPrompt("警告！", "已存在该类型\n按任意键继续");
+				getch();
+				editPCtype(0, p);
+				return;
+			}
+			q = q->next;
 		}
 		return;
 	default:

@@ -275,6 +275,23 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 		case 21:
 			if (!strcmp(password1, password2)&&'/0'!= password1[0])
 			{
+				pList q = getAdminHead();
+				while (NULL != q)
+				{
+					if (p == q->data.admin)
+					{
+						q = q->next;
+						continue;
+					}
+					if (0 == strcmp(p->name, q->data.admin->name))
+					{
+						prPrompt("警告！", "已存在该管理员\n按任意键继续");
+						getch();
+						editUser(0, p, password1, password2);
+						return;
+					}
+					q = q->next;
+				}
 				strcpy(p->password, password1);
 				return;
 			}
@@ -282,6 +299,9 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 			{
 				password1[0] = '\0';
 				password2[0] = '\0';
+				prPrompt("警告", "两次密码不一样\n按任意键继续");
+				getch();
+				type = 1;
 			}
 		default:
 			break;
