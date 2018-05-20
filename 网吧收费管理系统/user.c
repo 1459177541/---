@@ -117,13 +117,14 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 		, 16 == type ? '>' : ' ', isPower(p->power, 9) ? getAttri("is") : getAttri("isNot")
 		, 17 == type ? '>' : ' ', isPower(p->power, 10) ? getAttri("is") : getAttri("isNot")
 	);
-	printf("                  %c %3s 上/下机   %c %3s 查询记录   %c %3s 查询统计\n\n"
+	printf("        %c %3s 上/下机   %c %3s 查询记录   %c %3s 查询统计   %c %3s 充值\n\n"
 		, 18 == type ? '>' : ' ', isPower(p->power, 6) ? getAttri("is") : getAttri("isNot")
 		, 19== type ? '>' : ' ', isPower(p->power, 7) ? getAttri("is") : getAttri("isNot")
 		, 20 == type ? '>' : ' ', isPower(p->power, 17) ? getAttri("is") : getAttri("isNot")
+		, 21 == type ? '>' : ' ', isPower(p->power, 18) ? getAttri("is") : getAttri("isNot")
 	);
 	printf("                                  ");
-	OPTION_OK(21 == type);
+	OPTION_OK(22 == type);
 	free(pass1);
 	free(pass2);
 	key k;
@@ -148,7 +149,7 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 	case up:
 		if (0==type)
 		{
-			type = 21;
+			type = 22;
 		}
 		else if (3>type)
 		{
@@ -168,7 +169,7 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 		{
 			type++;
 		}
-		else if (17<type)
+		else if (22==type)
 		{
 			type = 0;
 		}
@@ -180,7 +181,7 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 	case left:
 		if (0==type)
 		{
-			type = 21;
+			type = 22;
 		}
 		else
 		{
@@ -188,7 +189,7 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 		}
 		break;
 	case right:
-		if (21==type)
+		if (22==type)
 		{
 			type=0;
 		}
@@ -273,6 +274,9 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 			p->power ^= STATISTICS;
 			break;
 		case 21:
+			p->power ^= RECHARGE;
+			break;
+		case 22:
 			if (!strcmp(password1, password2)&&'/0'!= password1[0])
 			{
 				pList q = getAdminHead();

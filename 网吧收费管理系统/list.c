@@ -719,17 +719,25 @@ pList paginationMenu(pList list) {
 			switch (type)		
 			{
 			case d_pc:			//网吧规模
-				prPrompt("即将进入网吧规模", "按任意键继续");
-				getch();
-				system("title 网吧规模管理");
-				scrollMenu(getPCtypeList());
-				if (isEditPCType())
+				if ((isPower(getUser()->power, 14) || isPower(getUser()->power, 15) || isPower(getUser()->power, 16)))
 				{
-					thisPage = 0;
-					finalPage = -1;
-					list = getPCs();
+					prPrompt("即将进入网吧规模", "按任意键继续");
+					getch();
+					system("title 网吧规模管理");
+					scrollMenu(getPCtypeList());
+					if (isEditPCType())
+					{
+						thisPage = 0;
+						finalPage = -1;
+						list = getPCs();
+					}
+					system("title 上/下机");
 				}
-				system("title 上/下机");
+				else
+				{
+					prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+					getch();
+				}
 				break;
 			case d_card:		//新建
 			{
@@ -1294,23 +1302,47 @@ pList scrollMenu(pList list) {
 	case symbol:
 		if ('+' == in && d_rate == type)
 		{
-			if (NULL!=list->last)
+			if (isPower(getUser()->power, 5))
 			{
-				swap(list, list->last);
-				list = list->last;
+				if (NULL != list->last)
+				{
+					if (NULL == list->last->last)
+					{
+						prPrompt("警告", "默认的计费方案必须是第一个\n按任意键继续");
+						getch();
+					}
+					else
+					{
+						swap(list, list->last);
+						list = list->last;
+					}
+				}
+			}
+			else
+			{
+				prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+				getch();
 			}
 		}
 		if ('-' == in && d_rate == type)
 		{
-			if (NULL==list->last)
+			if (isPower(getUser()->power, 5))
 			{
-				prPrompt("警告", "默认的计费方案必须是第一个\n按任意键继续");
-				getch();
+				if (NULL==list->last)
+				{
+					prPrompt("警告", "默认的计费方案必须是第一个\n按任意键继续");
+					getch();
+				}
+				else if (NULL!=list->next)
+				{
+					swap(list, list->next);
+					list = list->next;
+				}
 			}
-			else if (NULL!=list->next)
+			else
 			{
-				swap(list, list->next);
-				list = list->next;
+				prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+				getch();
 			}
 		}
 		ret = scrollMenu(list);
@@ -1544,23 +1576,48 @@ pList scrollMenu(pList list) {
 			option = 0;
 			return ret;
 		case 5:
-			if (NULL == list->last)
+			if (isPower(getUser()->power, 5))
 			{
-				prPrompt("警告", "默认的计费方案必须是第一个\n按任意键继续");
-				getch();
+				if (NULL != list->last)
+				{
+					if (NULL == list->last->last)
+					{
+						prPrompt("警告", "默认的计费方案必须是第一个\n按任意键继续");
+						getch();
+					}
+					else
+					{
+						swap(list, list->last);
+						list = list->last;
+					}
+				}
 			}
-			else if (NULL != list->last)
+			else
 			{
-				swap(list, list->last);
-				list = list->last;
+				prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+				getch();
 			}
 			break;
 		case 6:
-			if (NULL != list->next)
+			if (isPower(getUser()->power, 5))
 			{
-				swap(list, list->next);
-				list = list->next;
+				if (NULL == list->last)
+				{
+					prPrompt("警告", "默认的计费方案必须是第一个\n按任意键继续");
+					getch();
+				}
+				else if (NULL != list->next)
+				{
+					swap(list, list->next);
+					list = list->next;
+				}
 			}
+			else
+			{
+				prPrompt("权限不足", "请尝试联系超级管理员\n按任意键返回");
+				getch();
+			}
+			break;
 		default:
 			break;
 		}

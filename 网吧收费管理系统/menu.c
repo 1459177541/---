@@ -35,11 +35,11 @@ pAdmin isCanLogin(pAdmin user) {
 int toMenu(int power) {
 	int menu = 0;
 	//判断并用或运算修改对应位置的值
-	if ((isPower(power, 0) || isPower(power, 1) || isPower(power, 2)))
+	if ((isPower(power, 0) || isPower(power, 1) || isPower(power, 2)) || isPower(power,6))
 	{
 		menu |= SHL(0);
 	}
-	if ((isPower(power, 11) || isPower(power, 12) || isPower(power, 13)))
+	if ((isPower(power, 11) || isPower(power, 12) || isPower(power, 13)) || isPower(power,18))
 	{
 		menu |= SHL(1);
 	}

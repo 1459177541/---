@@ -223,6 +223,7 @@ void setting();
 	#define D_PC_TYPE SHL(15)
 	#define U_PC_TYPE SHL(16)
 	#define STATISTICS SHL(17)
+	#define RECHARGE SHL(18)
 int initAdminList();
 pList getAdminHead();
 void setRoot(pAdmin root);
