@@ -255,7 +255,7 @@ void mainMenu(int type) {
 		mainMenu(type);
 		break;
 	case esc:
-		if (!saveExit(0))
+		if (!saveExit())
 		{
 			mainMenu(type);
 			return;
@@ -330,7 +330,7 @@ void mainMenu(int type) {
 			return;
 		}
 		case 11:
-			if (!saveExit(0))
+			if (!saveExit())
 			{
 				mainMenu(type);
 				return;
@@ -405,7 +405,7 @@ void login(pAdmin user, int type, char* text) {
 		return;
 		break;
 	case esc:
-		if (!saveExit(0))
+		if (!saveExit())
 		{
 			 login(user, type, "");
 			 return;

@@ -88,6 +88,34 @@ void prCard(pCard p, int isOption) {
 		, isOption ? getAttri("L") : getAttri("NL"), p->id, p->type, p->masterName, p->balance, isOption ? getAttri("R") : getAttri("NR"));
 }
 
+//验证密码
+int isPasswordOfCard(pCard p) {
+	prPrompt("请输入会员卡密码", "\n按enter键确认，按esc键取消");
+	char * pass = (char*)malloc(sizeof(char) * 16);
+	key k = input(21, 12, pass, 1, INTER | LETTER | SYMBOL, NULL);
+	if (enter == k)
+	{
+		if (0 == strcmp(pass, p->password) && '\0' != pass[0])
+		{
+			free(pass);
+			return 1;
+		}
+		else
+		{
+			free(pass);
+			return isPasswordOfCard(p);
+		}
+	}
+	else if (esc == k)
+	{
+		return 0;
+	}
+	else
+	{
+		return isPasswordOfCard(p);
+	}
+}
+
 void showCard(int type, pCard p,char * text, char *password, char *password2) {
 	char *pass1 = (char *)malloc(sizeof(char) * 16);
 	char *pass2 = (char *)malloc(sizeof(char) * 16);
@@ -314,6 +342,42 @@ pList newCard(pList list) {
 	return list;
 }
 
+//删除
+void delCard(pList op) {
+	if (!isPasswordOfCard(op->data.card))
+	{
+		return;
+	}
+	double balance = 0;
+	if (NULL != op->last)
+	{
+		op->last->next = op->next;
+		if (NULL != op->next)
+		{
+			op->next->last = op->last;
+		}
+		addHistory(D_CARD_T, op->data, 0);
+		balance = op->data.card->balance;
+		free(op);
+	}
+	else
+	{
+		pList temp = op;
+		addHistory(D_CARD_T, op->data, 0);
+		balance = op->data.card->balance;
+		cardLists = cardLists->next;
+		free(temp);
+	}
+	if (0.5<balance)
+	{
+		char *body = (char*)malloc(sizeof(char) * 32);
+		sprintf(body, "用户卡内剩余%.2lf元，请返还给用户\n按任意键关闭该对话框", balance);
+		prPrompt("注销", body);
+		free(body);
+		getch();
+	}
+}
+
 //搜索条件
 pCriteria getDefaultCriteriaCard() {
 	pCriteria p = (pCriteria)malloc(sizeof(Criteria));
@@ -533,32 +597,6 @@ void recharge(pCard p) {
 	else
 	{
 		recharge(p);
-	}
-}
-
-//验证密码
-int isPasswordOfCard(pCard p) {
-	prPrompt("请输入会员卡密码", "\n按enter键确认，按esc键取消");
-	char * pass = (char*)malloc(sizeof(char) * 16);
-	key k = input(21, 12, pass, 1, INTER | LETTER | SYMBOL, NULL);
-	if (enter==k)
-	{
-		if (0!=strcmp(pass,p->password))
-		{
-			return 1;
-		}
-		else
-		{
-			return isPasswordOfCard(p);
-		}
-	}
-	else if (esc==k)
-	{
-		return 0;
-	}
-	else
-	{
-		return isPasswordOfCard(p);
 	}
 }
 

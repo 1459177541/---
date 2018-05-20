@@ -459,7 +459,8 @@ key input(int x,int y,char *in,int isPassword,int power,char * other) {
 }
 
 //退出
-int saveExit(int type) {
+int saveExit() {
+	static int type = 0;
 	int x = 16;
 	gotoxy(x, 8);
 	printf("=================================================");
@@ -488,18 +489,20 @@ int saveExit(int type) {
 	case down:
 	case right:
 	case tab:
-		if (2==type)
+		type++;
+		if (3==type)
 		{
-			type = -1;
+			type = 0;
 		}
-		return saveExit(type + 1);
+		return saveExit();
 	case left:
 	case up:
-		if (0==type)
+		type--;
+		if (-1==type)
 		{
-			type = 3;
+			type = 2;
 		}
-		return saveExit(type - 1);
+		return saveExit();
 	case enter:
 		switch (type)
 		{
@@ -509,8 +512,10 @@ int saveExit(int type) {
 			prPrompt("退出中", "正在结算金额");
 			logoutPCAll();
 //			exit(0);
+			type = 0;
 			return 1;
 		case 2:
+			type = 0;
 			return 0;
 		default:
 			break;
@@ -518,6 +523,6 @@ int saveExit(int type) {
 	case esc:
 		return 0;
 	default:
-		return saveExit(type);
+		return saveExit();
 	}
 }

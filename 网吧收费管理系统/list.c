@@ -792,41 +792,11 @@ pList paginationMenu(pList list) {
 			case d_card:		//删除
 				if (isPower(getUser()->power, 1))
 				{
-					if (!isPasswordOfCard(op->data.card))
-					{
-						break;
-					}
-					int balance = 0;
-					if (NULL != op->last)
-					{
-						pList temp = (NULL != op->next) ? op->next : op->last;
-						op->last->next = op->next;
-						if (NULL != op->next)
-						{
-							op->next->last = op->last;
-						}
-						addHistory(D_CARD_T, op->data, 0);
-						balance = op->data.card->balance;
-						free(op);
-						op = temp;
-					}
-					else
-					{
-						pCard temp = op->data.card;
-						addHistory(D_CARD_T, op->data, 0);
-						balance = op->data.card->balance;
-						op->data.card = NULL;
-						free(temp);
-					}
-					if (0.5<balance)
-					{
-						char *body = (char*)malloc(sizeof(char) * 32);
-						sprintf(body, "用户卡内剩余%.2lf元，请返还给用户\n按任意键关闭该对话框",balance/100.0);
-						prPrompt("注销", body);
-						free(body);
-						getch();
-					}
+					pList temp = (NULL != op->next) ? op->next : op->last;
+					delCard(op);
+					op = temp;
 					finalPage = initFinalPage(list);
+					thisPage = finalPage < thisPage ? finalPage : thisPage;
 				}
 				else
 				{

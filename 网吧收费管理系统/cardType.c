@@ -159,7 +159,7 @@ void editCardType(int type, pCardType p) {
 			{
 				prPrompt("警告！", "已存在该类型\n按任意键继续");
 				getch();
-				editPCtype(0, p);
+				editCardType(0, p);
 				return;
 			}
 			q = q->next;

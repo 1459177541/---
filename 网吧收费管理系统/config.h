@@ -189,7 +189,7 @@ int isPower(int powerCode, int point);
 void prOption(char * name, int isOption, int length);
 void prPrompt(char *title, char *body);
 key input(int x, int y, char *in, int isPassword, int power, char * other);
-int saveExit(int type);
+int saveExit();
 
 //config
 int initAttri();
@@ -269,8 +269,8 @@ void showCard(int type, pCard p, char * text, char *password, char *password2);
 pList newCard(pList list);
 pList selectToCard();
 void recharge(pCard p);
-int isPasswordOfCard(pCard p);
 void sortCard();
+void delCard(pList op);
 
 //rate
 pList getRateList();

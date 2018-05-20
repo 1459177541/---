@@ -224,7 +224,8 @@ void addHistory(historyType type, data data, double other) {
 	}
 	pHistory d = (pHistory)malloc(sizeof(history));
 	pl->data.history = d;
-	time_t timer = time(NULL);
+	time_t timer;
+	timer = time(&timer);
 	pTm tt = localtime(&timer);
 	d->time = *tt;
 	strcpy(d->editor, getUser()->name);
