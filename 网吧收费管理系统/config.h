@@ -116,7 +116,7 @@ typedef union {
 	pCardType cardType;
 	pRate rate;
 	pHistory history;
-	pStat statistics;
+	pStat statisticsByTime;
 	pAttribute attri;
 }data,* pData;
 

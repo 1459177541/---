@@ -458,10 +458,10 @@ pList paginationMenu(pList list) {
 					prHistory(p->data.history, i == index);
 					break;
 				case d_statistics:
-					prStatByTime(p->data.statistics, i == index);
+					prStatByTime(p->data.statisticsByTime, i == index);
 					break;
 				case d_statistics_more:
-					prStatMoreByTime(p->data.statistics, i == index);
+					prStatMoreByTime(p->data.statisticsByTime, i == index);
 					break;
 				case d_attri:
 					prAttri(p->data.attri, i == index);
@@ -758,10 +758,10 @@ pList paginationMenu(pList list) {
 				showHistory(op->data.history);
 				break;
 			case d_statistics:			//更多信息
-				showStatByTime(op->data.statistics, 0);
+				showStatByTime(op->data.statisticsByTime, 0);
 				break;
 			case d_statistics_more:		//更多信息
-				showStatByTime(op->data.statistics, 1);
+				showStatByTime(op->data.statisticsByTime, 1);
 				break;
 			case d_attri:
 				editAttri(op->data.attri);

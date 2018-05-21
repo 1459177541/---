@@ -159,9 +159,9 @@ pList getListFromPcCriteria(pCriteria criteria) {
 		{
 		case 0:
 			isAdd = 1;
-			if (0 != strcmp(criteria->condition.pc.pcType->type, getPCtypeList()->data.pcType))
+			if (0 != strcmp(criteria->condition.pc.pcType->type, getPCtypeList()->data.pcType->type))
 			{
-				if (0 != strcmp(criteria->condition.pc.pcType->type, p->data.pcType))
+				if (0 != strcmp(criteria->condition.pc.pcType->type, p->data.pcType->type))
 				{
 					isAdd = 0;
 				}
@@ -300,7 +300,7 @@ void setIsUseFormCriteria(pCriteria p, int type) {
 	default:
 		break;
 	}
-	return setIsUseFormCriteria(p, type);
+	setIsUseFormCriteria(p, type);
 }
 
 //ɸѡ

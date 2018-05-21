@@ -1,5 +1,5 @@
 #include"config.h"
-pList statLists = NULL;
+pList statListsByTime = NULL;
 
 void initStatByTime() {
 	prPrompt("正在生成", "正在生成统计信息");
@@ -8,22 +8,22 @@ void initStatByTime() {
 	{
 		return;
 	}
-	statLists = (pList)malloc(sizeof(List));
-	pList p = statLists;
+	statListsByTime = (pList)malloc(sizeof(List));
+	pList p = statListsByTime;
 	p->last = NULL;
 	p->next = NULL;
 	p->type = d_statistics;
-	p->data.statistics = (pStat)malloc(sizeof(stat));
-	p->data.statistics->startHistory = history;
-	p->data.statistics->time = history->data.history->time;
-	p->data.statistics->stat_card_login = 0;
-	p->data.statistics->stat_card_logout = 0;
-	p->data.statistics->stat_recharge_money = 0;
-	p->data.statistics->stat_up = 0;
-	p->data.statistics->stat_up_money = 0;
+	p->data.statisticsByTime = (pStat)malloc(sizeof(stat));
+	p->data.statisticsByTime->startHistory = history;
+	p->data.statisticsByTime->time = history->data.history->time;
+	p->data.statisticsByTime->stat_card_login = 0;
+	p->data.statisticsByTime->stat_card_logout = 0;
+	p->data.statisticsByTime->stat_recharge_money = 0;
+	p->data.statisticsByTime->stat_up = 0;
+	p->data.statisticsByTime->stat_up_money = 0;
 	while (NULL!=history)
 	{
-		if (history->data.history->time.tm_mon!=p->data.statistics->time.tm_mon)
+		if (history->data.history->time.tm_mon!=p->data.statisticsByTime->time.tm_mon)
 		{
 			pList q = (pList)malloc(sizeof(List));
 			q->last = p;
@@ -31,32 +31,32 @@ void initStatByTime() {
 			q->type = d_statistics;
 			p->next = q;
 			p = p->next;
-			p->data.statistics = (pStat)malloc(sizeof(stat));
-			p->data.statistics->startHistory = history;
-			p->data.statistics->time = history->data.history->time;
-			p->data.statistics->stat_card_login = 0;
-			p->data.statistics->stat_card_logout = 0;
-			p->data.statistics->stat_recharge_money = 0;
-			p->data.statistics->stat_up = 0;
-			p->data.statistics->stat_up_money = 0;
+			p->data.statisticsByTime = (pStat)malloc(sizeof(stat));
+			p->data.statisticsByTime->startHistory = history;
+			p->data.statisticsByTime->time = history->data.history->time;
+			p->data.statisticsByTime->stat_card_login = 0;
+			p->data.statisticsByTime->stat_card_logout = 0;
+			p->data.statisticsByTime->stat_recharge_money = 0;
+			p->data.statisticsByTime->stat_up = 0;
+			p->data.statisticsByTime->stat_up_money = 0;
 		}
 		double num = history->data.history->money;
 		switch (history->data.history->type)
 		{
 		case C_CARD_T:
-			p->data.statistics->stat_card_login++;
+			p->data.statisticsByTime->stat_card_login++;
 			break;
 		case D_CARD_T:
-			p->data.statistics->stat_card_logout++;
+			p->data.statisticsByTime->stat_card_logout++;
 			break;
 		case RECHARGE_T:
-			p->data.statistics->stat_recharge_money += num;
+			p->data.statisticsByTime->stat_recharge_money += num;
 			break;
 		case UP_T:
-			p->data.statistics->stat_up++;
+			p->data.statisticsByTime->stat_up++;
 			break;
 		case DOWN_T:
-			p->data.statistics->stat_up_money += num;
+			p->data.statisticsByTime->stat_up_money += num;
 			break;
 		default:
 			break;
@@ -70,7 +70,7 @@ pList getMoreStatByTime(pList start) {
 	{
 		return NULL;
 	}
-	pList history = start->data.statistics->startHistory;
+	pList history = start->data.statisticsByTime->startHistory;
 	pStat ps = (pStat)malloc(sizeof(stat));
 	pList ret = (pList)malloc(sizeof(pList));
 	ps->startHistory = history;
@@ -84,11 +84,11 @@ pList getMoreStatByTime(pList start) {
 	p->last = NULL;
 	p->next = NULL;
 	p->type = d_statistics_more;
-	p->data.statistics = ps;
+	p->data.statisticsByTime = ps;
 	while (NULL != history
-		&& history->data.history->time.tm_mon == p->data.statistics->time.tm_mon)
+		&& history->data.history->time.tm_mon == p->data.statisticsByTime->time.tm_mon)
 	{
-		if (history->data.history->time.tm_yday != p->data.statistics->time.tm_yday)
+		if (history->data.history->time.tm_yday != p->data.statisticsByTime->time.tm_yday)
 		{
 			pList q = (pList)malloc(sizeof(List));
 			q->last = p;
@@ -96,32 +96,32 @@ pList getMoreStatByTime(pList start) {
 			q->type = d_statistics_more;
 			p->next = q;
 			p = p->next;
-			p->data.statistics = (pStat)malloc(sizeof(stat));
-			p->data.statistics->startHistory = history;
-			p->data.statistics->time = history->data.history->time;
-			p->data.statistics->stat_card_login = 0;
-			p->data.statistics->stat_card_logout = 0;
-			p->data.statistics->stat_recharge_money = 0;
-			p->data.statistics->stat_up = 0;
-			p->data.statistics->stat_up_money = 0;
+			p->data.statisticsByTime = (pStat)malloc(sizeof(stat));
+			p->data.statisticsByTime->startHistory = history;
+			p->data.statisticsByTime->time = history->data.history->time;
+			p->data.statisticsByTime->stat_card_login = 0;
+			p->data.statisticsByTime->stat_card_logout = 0;
+			p->data.statisticsByTime->stat_recharge_money = 0;
+			p->data.statisticsByTime->stat_up = 0;
+			p->data.statisticsByTime->stat_up_money = 0;
 		}
 		double money = history->data.history->money;
 		switch (history->data.history->type)
 		{
 		case C_CARD_T:
-			p->data.statistics->stat_card_login++;
+			p->data.statisticsByTime->stat_card_login++;
 			break;
 		case D_CARD_T:
-			p->data.statistics->stat_card_logout++;
+			p->data.statisticsByTime->stat_card_logout++;
 			break;
 		case RECHARGE_T:
-			p->data.statistics->stat_recharge_money += money;
+			p->data.statisticsByTime->stat_recharge_money += money;
 			break;
 		case UP_T:
-			p->data.statistics->stat_up++;
+			p->data.statisticsByTime->stat_up++;
 			break;
 		case DOWN_T:
-			p->data.statistics->stat_up_money += money;
+			p->data.statisticsByTime->stat_up_money += money;
 			break;
 		default:
 			break;
@@ -132,11 +132,11 @@ pList getMoreStatByTime(pList start) {
 }
 
 pList getStatByTime() {
-	if (NULL == statLists)
+	if (NULL == statListsByTime)
 	{
 		initStatByTime();
 	}
-	return statLists;
+	return statListsByTime;
 }
 
 void showStatByTime(pStat p,int isMore) {
@@ -162,7 +162,7 @@ void showStatByTime(pStat p,int isMore) {
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
-	printf("|            充值金额: %-13.2lf            |", p->stat_recharge_money);
+	printf("|          充值总金额: %-13.2lf            |", p->stat_recharge_money);
 	gotoxy(x, y++);
 	printf("|                                               |");
 	gotoxy(x, y++);
