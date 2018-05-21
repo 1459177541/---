@@ -296,8 +296,8 @@ pList paginationMenu(pList list);	//上/下机、会员卡、历史记录
 pList scrollMenu(pList list);		//电脑类型、会员卡类型、管理员、收费标准
 
 //stztistics
-void prStat(pStat p, int isOption);
-void prStatMore(pStat p, int isOption);
-pList getStat();
-pList getMoreStat(pList start);
-void showStat(pStat p,int isMore);
+void prStatByTime(pStat p, int isOption);
+void prStatMoreByTime(pStat p, int isOption);
+pList getStatByTime();
+pList getMoreStatByTime(pList start);
+void showStatByTime(pStat p,int isMore);

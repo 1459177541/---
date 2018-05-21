@@ -11,7 +11,7 @@ void init() {
 	getRateList();
 
 	getHistorys();
-	getStat();
+	getStatByTime();
 
 	getPCtypeList();
 	getPCs();
@@ -124,11 +124,6 @@ void mainMenu(int type) {
 	while (!isPower(menuOption, type)){
 		type++;
 	}
-	char *title = NULL;
-	title = (char *)malloc(64 * sizeof(char));
-	sprintf(title, "title %s : 主菜单", getUser()->name);
-	system(title);
-	free(title);
 	myCls();
 	printf("\n");
 	printf("                     //||   //||                                     \n");
@@ -305,7 +300,7 @@ void mainMenu(int type) {
 			break;
 		case 7:
 			system("title 统计");
-			paginationMenu(getStat());
+			paginationMenu(getStatByTime());
 			break;
 		case 8:
 			system("title 设置");
@@ -350,7 +345,7 @@ void mainMenu(int type) {
 
 //登录
 void login(pAdmin user, int type, char* text) {
-	char *pass = (char *)malloc(sizeof(char) * 16);
+	char *pass = (char *)malloc(sizeof(char) * 32);
 	printfPassword(user->password, pass);
 	myCls();
 	printf("                                                             \n");
@@ -397,7 +392,12 @@ void login(pAdmin user, int type, char* text) {
 				setUser(p);
 				init();
 				system("mode con cols=80 lines=24");
+				char *title = NULL;
+				title = (char *)malloc(64 * sizeof(char));
+				sprintf(title, "title %s : 主菜单", getUser()->name);
+				system(title);
 				mainMenu(0);
+				free(title);
 				return;
 			}
 		}

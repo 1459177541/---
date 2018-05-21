@@ -156,7 +156,7 @@ void close(dataType type) {
 		p = getRateList();
 		break;
 	case d_statistics:
-		p = getStat();
+		p = getStatByTime();
 		break;
 	default:
 		p = NULL;
@@ -458,10 +458,10 @@ pList paginationMenu(pList list) {
 					prHistory(p->data.history, i == index);
 					break;
 				case d_statistics:
-					prStat(p->data.statistics, i == index);
+					prStatByTime(p->data.statistics, i == index);
 					break;
 				case d_statistics_more:
-					prStatMore(p->data.statistics, i == index);
+					prStatMoreByTime(p->data.statistics, i == index);
 					break;
 				case d_attri:
 					prAttri(p->data.attri, i == index);
@@ -758,10 +758,10 @@ pList paginationMenu(pList list) {
 				showHistory(op->data.history);
 				break;
 			case d_statistics:			//更多信息
-				showStat(op->data.statistics, 0);
+				showStatByTime(op->data.statistics, 0);
 				break;
 			case d_statistics_more:		//更多信息
-				showStat(op->data.statistics, 1);
+				showStatByTime(op->data.statistics, 1);
 				break;
 			case d_attri:
 				editAttri(op->data.attri);
@@ -844,7 +844,7 @@ pList paginationMenu(pList list) {
 				option = 0;
 				thisPage = 0;
 				finalPage = -1;
-				pList ms = getMoreStat(op);
+				pList ms = getMoreStatByTime(op);
 				paginationMenu(ms);
 				index = tin;
 				option = top;

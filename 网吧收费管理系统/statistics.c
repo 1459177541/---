@@ -1,7 +1,7 @@
 #include"config.h"
 pList statLists = NULL;
 
-void initStat() {
+void initStatByTime() {
 	prPrompt("正在生成", "正在生成统计信息");
 	pList history = getHistorys();
 	if (NULL == history || NULL == history->data.history)
@@ -27,6 +27,7 @@ void initStat() {
 		{
 			pList q = (pList)malloc(sizeof(List));
 			q->last = p;
+			q->next = NULL;
 			q->type = d_statistics;
 			p->next = q;
 			p = p->next;
@@ -64,7 +65,7 @@ void initStat() {
 	}
 }
 
-pList getMoreStat(pList start) {
+pList getMoreStatByTime(pList start) {
 	if (d_statistics!= start->type)
 	{
 		return NULL;
@@ -85,12 +86,13 @@ pList getMoreStat(pList start) {
 	p->type = d_statistics_more;
 	p->data.statistics = ps;
 	while (NULL != history
-		&& history->data.history->time.tm_yday != p->data.statistics->time.tm_yday)
+		&& history->data.history->time.tm_mon == p->data.statistics->time.tm_mon)
 	{
 		if (history->data.history->time.tm_yday != p->data.statistics->time.tm_yday)
 		{
 			pList q = (pList)malloc(sizeof(List));
 			q->last = p;
+			q->next = NULL;
 			q->type = d_statistics_more;
 			p->next = q;
 			p = p->next;
@@ -129,15 +131,15 @@ pList getMoreStat(pList start) {
 	return ret;
 }
 
-pList getStat() {
+pList getStatByTime() {
 	if (NULL == statLists)
 	{
-		initStat();
+		initStatByTime();
 	}
 	return statLists;
 }
 
-void showStat(pStat p,int isMore) {
+void showStatByTime(pStat p,int isMore) {
 	int x = 16;
 	int y = 2;
 	gotoxy(x, y++);
@@ -189,16 +191,16 @@ void showStat(pStat p,int isMore) {
 	}
 	else
 	{
-		showStat(p, isMore);
+		showStatByTime(p, isMore);
 	}
 }
 
-void prStat(pStat p, int isOption) {
-	printf(" %6s %4d年%2d月    | %17.2lf | %20.2lf %-6s"
+void prStatByTime(pStat p, int isOption) {
+	printf("\n %6s %4d年%2d月    | %17.2lf | %20.2lf %-6s"
 		, isOption ? getAttri("L") : getAttri("NL"), p->time.tm_year+1900, p->time.tm_mon, p->stat_up_money, p->stat_recharge_money, isOption ? getAttri("R") : getAttri("NR"));
 }
 
-void prStatMore(pStat p, int isOption) {
-	printf(" %6s   %2d月%2d日    | %17.2lf | %20.2lf %-6s"
+void prStatMoreByTime(pStat p, int isOption) {
+	printf("\n %6s   %2d月%2d日    | %17.2lf | %20.2lf %-6s"
 		, isOption ? getAttri("L") : getAttri("NL"), p->time.tm_mon, p->time.tm_mday, p->stat_up_money, p->stat_recharge_money, isOption ? getAttri("R") : getAttri("NR"));
 }
