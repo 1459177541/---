@@ -92,36 +92,36 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 	printf("                                密码：%s\n\n", 1 == type ? "" : pass1);
 	printf("                            确认密码：%s\n\n", 2 == type ? "" : pass2);
 	printf("                                 -----权限-----                                \n\n");
-	printf("                    电脑类型： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 3 == type ? '>' : ' ', isPower(p->power, 14) ? getAttri("is") : getAttri("isNot")
-		, 4 == type ? '>' : ' ', isPower(p->power, 15) ? getAttri("is") : getAttri("isNot")
-		, 5 == type ? '>' : ' ', isPower(p->power, 16) ? getAttri("is") : getAttri("isNot")
+	printf("                  电脑类型： %2s %3s 添加  %2s %3s 删除  %2s %3s 修改\n\n"
+		, 3 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 14) ? getAttri("is") : getAttri("isNot")
+		, 4 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 15) ? getAttri("is") : getAttri("isNot")
+		, 5 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 16) ? getAttri("is") : getAttri("isNot")
 	);
-	printf("                  会员卡类型： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 6 == type ? '>' : ' ', isPower(p->power, 11) ? getAttri("is") : getAttri("isNot")
-		, 7 == type ? '>' : ' ', isPower(p->power, 12) ? getAttri("is") : getAttri("isNot")
-		, 8 == type ? '>' : ' ', isPower(p->power, 13) ? getAttri("is") : getAttri("isNot")
+	printf("                会员卡类型： %2s %3s 添加  %2s %3s 删除  %2s %3s 修改\n\n"
+		, 6 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 11) ? getAttri("is") : getAttri("isNot")
+		, 7 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 12) ? getAttri("is") : getAttri("isNot")
+		, 8 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 13) ? getAttri("is") : getAttri("isNot")
 	);
-	printf("                  会员卡管理： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 9 == type ? '>' : ' ', isPower(p->power, 0) ? getAttri("is") : getAttri("isNot")
-		, 10 == type ? '>' : ' ', isPower(p->power, 1) ? getAttri("is") : getAttri("isNot")
-		, 11 == type ? '>' : ' ', isPower(p->power, 2) ? getAttri("is") : getAttri("isNot")
+	printf("                会员卡管理： %2s %3s 添加  %2s %3s 删除  %2s %3s 修改\n\n"
+		, 9 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 0) ? getAttri("is") : getAttri("isNot")
+		, 10 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 1) ? getAttri("is") : getAttri("isNot")
+		, 11 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 2) ? getAttri("is") : getAttri("isNot")
 	);
-	printf("                    计费标准： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 12 == type ? '>' : ' ', isPower(p->power, 3) ? getAttri("is") : getAttri("isNot")
-		, 13 == type ? '>' : ' ', isPower(p->power, 4) ? getAttri("is") : getAttri("isNot")
-		, 14 == type ? '>' : ' ', isPower(p->power, 5) ? getAttri("is") : getAttri("isNot")
+	printf("                 计费标准： %2s %3s 添加  %2s %3s 删除  %2s %3s 修改\n\n"
+		, 12 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 3) ? getAttri("is") : getAttri("isNot")
+		, 13 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 4) ? getAttri("is") : getAttri("isNot")
+		, 14 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 5) ? getAttri("is") : getAttri("isNot")
 	);
-	printf("                  管理员管理： %c %3s 添加  %c %3s 删除  %c %3s 修改\n\n"
-		, 15 == type ? '>' : ' ', isPower(p->power, 8) ? getAttri("is") : getAttri("isNot")
-		, 16 == type ? '>' : ' ', isPower(p->power, 9) ? getAttri("is") : getAttri("isNot")
-		, 17 == type ? '>' : ' ', isPower(p->power, 10) ? getAttri("is") : getAttri("isNot")
+	printf("                管理员管理： %2s %3s 添加  %2s %3s 删除  %2s %3s 修改\n\n"
+		, 15 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 8) ? getAttri("is") : getAttri("isNot")
+		, 16 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 9) ? getAttri("is") : getAttri("isNot")
+		, 17 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 10) ? getAttri("is") : getAttri("isNot")
 	);
-	printf("        %c %3s 上/下机   %c %3s 查询记录   %c %3s 查询统计   %c %3s 充值\n\n"
-		, 18 == type ? '>' : ' ', isPower(p->power, 6) ? getAttri("is") : getAttri("isNot")
-		, 19== type ? '>' : ' ', isPower(p->power, 7) ? getAttri("is") : getAttri("isNot")
-		, 20 == type ? '>' : ' ', isPower(p->power, 17) ? getAttri("is") : getAttri("isNot")
-		, 21 == type ? '>' : ' ', isPower(p->power, 18) ? getAttri("is") : getAttri("isNot")
+	printf("      %2s %3s 上/下机   %2s %3s 查询记录   %2s %3s 查询统计   %2s %3s 充值\n\n"
+		, 18 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 6) ? getAttri("is") : getAttri("isNot")
+		, 19== type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 7) ? getAttri("is") : getAttri("isNot")
+		, 20 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 17) ? getAttri("is") : getAttri("isNot")
+		, 21 == type ? getAttri("select") : getAttri("nSelect"), isPower(p->power, 18) ? getAttri("is") : getAttri("isNot")
 	);
 	printf("                                  ");
 	OPTION_OK(22 == type);
@@ -176,6 +176,10 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 		else
 		{
 			type += 3;
+			if (22<type)
+			{
+				type = 22;
+			}
 		}
 		break;
 	case left:

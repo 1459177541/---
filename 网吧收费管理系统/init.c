@@ -100,6 +100,7 @@ void setting() {
 	setAttri("is", "[X]", "“选中”时的样式");
 	setAttri("isNot", "[ ]", "“未选中”时的样式");
 	setAttri("select", ">", "“选中”时简单的样式");
+	setAttri("nSelect", " ", "“未选中”时简单的样式");
 	setAttri("checkTime", "10", "检查余额的时间间隔(min)");
 }
 

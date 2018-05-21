@@ -1465,7 +1465,8 @@ pList scrollMenu(pList list) {
 						key key = input(32, 12, pass, 1, NUM | LETTER | SYMBOL, NULL);
 						if (enter==key)
 						{
-							while (strcmp(pass,getUser()->password)!=0)
+							while (strcmp(pass,getUser()->password)!=0 
+								&& enter != key && esc != key)
 							{
 								prPrompt("密码错误，请重新输入", "\n按enter键确认，按esc取消");
 								key = input(32, 12, pass, 1, NUM | LETTER | SYMBOL, NULL);
@@ -1481,6 +1482,12 @@ pList scrollMenu(pList list) {
 						}
 						prPrompt("提示", "除密码外的任何修改都不会保存\n按任意键继续");
 						getch();
+					}
+					else
+					{
+						prPrompt("禁止！", "只有超级管理员可以修改超级管理员\n按任意键继续");
+						getch();
+						break;
 					}
 				}
 				else
