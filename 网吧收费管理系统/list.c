@@ -433,7 +433,7 @@ pList paginationMenu(pList list) {
 		printf("\n----------------------------------+---------------------------------------------");
 		printf("\n                    设置项        |               设置值                        ");
 		printf("\n----------------------------------+---------------------------------------------");
-		optionLength += 5;
+		optionLength = 6;
 		break;
 	default:
 		return NULL;
@@ -593,10 +593,12 @@ pList paginationMenu(pList list) {
 		prOption("完成", 5 == option, 6);
 		break;
 	case d_attri:
-		printf("\n\n                         ");
+		printf("\n\n                    ");
 		prOption("修改", 4 == option, 6);
-		printf("                  ");
-		prOption("完成", 5 == option, 6);
+		printf("            ");
+		prOption("重置", 5 == option, 6);
+		printf("            ");
+		prOption("完成", 6 == option, 6);
 		break;
 	default:
 		break;
@@ -860,13 +862,15 @@ pList paginationMenu(pList list) {
 				break;
 			}
 			case d_statistics_more:	//退出
-			case d_attri:
 				index = 0;
 				option = 0;
 				finalPage = -1;
 				thisPage = 0;
 				isFirst = 1;
 				return op;
+			case d_attri:
+				setting();
+				break;
 			default:
 				break;
 			}
@@ -883,6 +887,7 @@ pList paginationMenu(pList list) {
 				break;
 			case d_history:		//退出
 			case d_statistics:
+			case d_attri:
 				index = 0;
 				option = 0;
 				finalPage = -1;
