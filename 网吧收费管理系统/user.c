@@ -220,7 +220,7 @@ void editUser(int type, pAdmin p,char *password1,char *password2) {
 		case 0:
 		case 1:
 		case 2:
-			type = 21;
+			type = 22;
 			break;
 		//使用异或运算改变选择状态
 		case 3:	

@@ -200,7 +200,7 @@ void prAttri(pAttribute p, int isOption);
 void editAttri(pAttribute p);
 
 //init
-int initialization();
+void initialization();
 void setting();
 
 //user

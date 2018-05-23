@@ -105,7 +105,7 @@ void setting() {
 }
 
 //初始化流程控制
-int initialization() {
+void initialization() {
 	mkdir("data");
 	char *pass1 = (char *)malloc(sizeof(char)*16);
 	char *pass2 = (char *)malloc(sizeof(char)*16);
@@ -182,5 +182,5 @@ int initialization() {
 	save(d_cardType);
 	save(d_rate);
 	save(d_history);
-	return 0;
+	return;
 }

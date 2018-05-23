@@ -253,9 +253,9 @@ pList newRate(pList list) {
 		q = q->next;
 	}
 	pRate p = (pRate)malloc(sizeof(rate));
-	p->card[0] = '\0';
-	p->pc[0] = '\0';
-	p->rule[0] = '\0';
+	strcpy(p->card, getCardTypeList()->data.cardType->name);
+	strcpy(p->pc, getPCtypeList()->data.pcType->type);
+	strcpy(p->rule, "x");
 	pList pl = (pList)malloc(sizeof(List));
 	pl->last = q;
 	pl->next = NULL;

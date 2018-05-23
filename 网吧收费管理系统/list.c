@@ -201,7 +201,7 @@ void swap(pList a, pList b) {
 	b->data = t;
 }
 
-//ÅÅÐò---¿ÉÄÜ³ö´í
+//ÅÅÐò
 pList _sort(pList start, pList end, int length, int(*isUP)(pList a, pList b), int isNot) {
 	if (0>=length)
 	{
