@@ -72,8 +72,8 @@ pList getPCs() {
 
 //输出PC信息（列表）
 void prPC(pPC p, int isOption) {
-	char *user = (char *)malloc(16 * sizeof(char));
-	char *time = (char *)malloc(16 * sizeof(char));
+	char *user = (char *)malloc(32 * sizeof(char));
+	char *time = (char *)malloc(32 * sizeof(char));
 	if (NULL != p->user)
 	{
 		strcpy(user, p->user->masterName);
@@ -539,6 +539,16 @@ void logPC(pPC p) {
 			loginPcListFinal = loginPcList;
 		}
 		loginPcNum++;
+		if (0.5>p->user->balance)
+		{
+			char body[96];
+			sprintf(body, "%d号电脑余额不足\n已自动下机\n按任意键关闭", p->id);
+			lock = 0;
+			logPC(p);
+			prPrompt("提示", body);
+			getch();
+			return;			
+		}
 	}
 	else
 	{
@@ -626,7 +636,7 @@ DWORD WINAPI check(LPVOID pM) {
 		if (NULL == loginPcList)
 		{
 			lock = 0;
-			Sleep(iTime);
+			Sleep(500);
 			continue;
 		}
 		pList pl = loginPcList;
