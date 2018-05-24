@@ -757,7 +757,15 @@ pList paginationMenu(pList list) {
 				break;
 			}
 			case d_history:		//详细
-				showHistory(op->data.history);
+				if (1)
+				{
+					prPrompt("BUG", "此功能存在BUG且暂未修复\n按任意键继续");
+					getch();
+				}
+				else
+				{
+					showHistory(op->data.history);
+				}
 				break;
 			case d_statistics:			//更多信息
 				showStatByTime(op->data.statisticsByTime, 0);
